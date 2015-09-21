@@ -1043,7 +1043,8 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="txtCurrencyCode" runat="server" Width="106px" TabIndex="9"></asp:TextBox><asp:DropDownList
-                                            ID="cmbCurrencyType" runat="server" Width="100px" TabIndex="12">
+                                            ID="cmbCurrencyType" runat="server" Width="100px" TabIndex="12" 
+                                            AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Currency Type"></asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:CustomValidator ID="csValidateCurrencyType" runat="server" ErrorMessage="Please Select the Currency Type">*</asp:CustomValidator>

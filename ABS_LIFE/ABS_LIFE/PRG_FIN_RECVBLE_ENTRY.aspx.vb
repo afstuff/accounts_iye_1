@@ -467,6 +467,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
         txtMode.Text = String.Empty
         txtBranchCode.Text = String.Empty
         txtCurrencyCode.Text = String.Empty
+        txtDeptCode.Text = String.Empty
         txtBatchDate.Text = String.Empty
         txtBatchNo.Text = String.Empty
         'cmbBranchCode.SelectedIndex = 0
@@ -776,6 +777,12 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     Protected Sub cmbDept_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbDept.SelectedIndexChanged
         If cmbDept.SelectedIndex <> 0 Then
             txtDeptCode.Text = cmbDept.SelectedValue
+        End If
+    End Sub
+
+    Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
+        If cmbCurrencyType.SelectedIndex <> 0 Then
+            txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
         End If
     End Sub
 End Class
