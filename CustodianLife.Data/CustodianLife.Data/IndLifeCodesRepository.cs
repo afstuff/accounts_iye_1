@@ -7,6 +7,8 @@ using System.Text;
 using CustodianLife.Model;
 using CustodianLife.Repositories;
 using NHibernate;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace CustodianLife.Data
 {
@@ -115,8 +117,32 @@ namespace CustodianLife.Data
                 return session.Get<LifeCodes>(id);
             }
         }
-        
 
+        public String GetDeptInfo(String _deptcode)
+        {
+            //queries the generic lifecodes table and extract info for the branches only -- L02, 003
+            string query = "SELECT * "
+                          + "FROM TBIL_LIFE_CODES WHERE (TBIL_COD_TAB_ID='L02' AND TBIL_COD_TYP='005'"
+                           + "AND TBIL_COD_ITEM='" + _deptcode + "')";
+
+
+            return GetDataSet(query).GetXml();
+        }
+        private static DataSet GetDataSet(string qry)
+        {
+            using (var session = GetSession())
+            {
+                using (var conn = session.Connection as SqlConnection)
+                {
+                    var adapter = new SqlDataAdapter(qry, conn);
+                    var dataSet = new System.Data.DataSet();
+
+                    adapter.Fill(dataSet);
+
+                    return dataSet;
+                }
+            }
+        }
 
 
     }

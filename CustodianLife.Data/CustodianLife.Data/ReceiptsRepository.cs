@@ -324,6 +324,17 @@ namespace CustodianLife.Data
             return GetDataSet(query).GetXml();
         }
 
+        public String GetCurrencyType(String _currencycode)
+        {
+            //queries the generic lifecodes table and extract info for the branches only -- L02, 003
+            string query = "SELECT * "
+                          + "FROM TBIL_LIFE_CODES WHERE (TBIL_COD_TAB_ID='L02' AND TBIL_COD_TYP='017'"
+                           + "AND TBIL_COD_ITEM='"+ _currencycode +"')";
+         
+
+            return GetDataSet(query).GetXml();
+        }
+
 
         public Receipts GetById(Int32? id)
         {

@@ -400,7 +400,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
         toBind.DataSource = dataSource
         toBind.DataBind()
     End Sub
-    
+
     Private Sub fillValues()
 
         strKey = CType(Session("gtId"), String)
@@ -464,10 +464,13 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
 
     End Sub
     Protected Sub initializeFields()
-
+        txtMode.Text = String.Empty
+        txtBranchCode.Text = String.Empty
+        txtCurrencyCode.Text = String.Empty
         txtBatchDate.Text = String.Empty
         txtBatchNo.Text = String.Empty
-        cmbBranchCode.SelectedIndex = 0
+        'cmbBranchCode.SelectedIndex = 0
+        cmbBranchCode.Text = "1501"
         txtChequeDate.Text = String.Empty
         txtChequeNo.Text = String.Empty
         txtPayeeName.Text = String.Empty
@@ -577,7 +580,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
         'End If
         prgKey = Session("prgKey")
 
-       
+
         Response.Redirect("ReceiptOthersList.aspx?prgKey=" & prgKey)
     End Sub
 
@@ -592,7 +595,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             End If
             TotTransAmt = (TotTransAmt + TransAmt)
 
-            End If
+        End If
         If (e.Row.RowType = DataControlRowType.Footer) Then
             Dim lblTotal As Label = CType(e.Row.FindControl("lbltxtTotal"), Label)
             lblTotal.Text = Math.Round(TotTransAmt, 2).ToString
@@ -639,7 +642,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
 
         Try
             polinfos = recRepo.GetGroupDRNoteInfo(_brokercode, _policynum, _transno)
-          
+
         Catch ex As ApplicationException
 
         Finally
@@ -739,5 +742,40 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     Protected Sub butPrint_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butPrint.Click
         Response.Redirect("prg_fin_othr_recpt_print.aspx?id=" & txtReceiptNo.Text)
 
+    End Sub
+
+    Protected Sub cmbMode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbMode.SelectedIndexChanged
+        If cmbMode.SelectedIndex <> 0 Then
+            txtMode.Text = cmbMode.SelectedValue
+        End If
+    End Sub
+
+    <System.Web.Services.WebMethod()> _
+        Public Shared Function GetDeptInformation(ByVal _deptcode As String) As String
+        Dim deptinfo As String = String.Empty
+        Dim codesRepo As New IndLifeCodesRepository()
+        'Dim crit As String = 
+
+        Try
+            deptinfo = codesRepo.GetDeptInfo(_deptcode)
+            Return deptinfo
+        Finally
+            If deptinfo = "<NewDataSet />" Then
+                Throw New Exception()
+            End If
+        End Try
+
+    End Function
+
+    Protected Sub cmbBranchCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbBranchCode.SelectedIndexChanged
+        If cmbBranchCode.SelectedIndex <> 0 Then
+            txtBranchCode.Text = cmbBranchCode.SelectedValue
+        End If
+    End Sub
+
+    Protected Sub cmbDept_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbDept.SelectedIndexChanged
+        If cmbDept.SelectedIndex <> 0 Then
+            txtDeptCode.Text = cmbDept.SelectedValue
+        End If
     End Sub
 End Class

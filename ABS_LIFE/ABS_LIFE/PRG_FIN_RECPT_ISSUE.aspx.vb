@@ -118,7 +118,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.CommissionApplicable = cmbCommissions.SelectedValue
                     Rceipt.CompanyCode = txtCompanyCode.Text
 
-                    Rceipt.CurrencyType = cmbReceiptType.SelectedValue
+                    Rceipt.CurrencyType = cmbReceiptCode.SelectedValue
                     Rceipt.EntryDate = Now.Date
                     Rceipt.InsuredCode = txtInsuredCode.Text
 
@@ -129,7 +129,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.PolicyRegularContribution = CType(txtPolRegularContrib.Text, Decimal)
 
                     Rceipt.PolicyPaymentMode = txtMOP.Text
-                    Rceipt.ReceiptType = cmbReceiptType.SelectedValue
+                    Rceipt.ReceiptType = cmbReceiptCode.SelectedValue
                     Rceipt.ReferenceNo = txtReceiptRefNo.Text
 
                     Dim docMonth As String = Right(txtBatchNo.Text, 2)
@@ -236,7 +236,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.CommissionApplicable = cmbCommissions.SelectedValue
                     Rceipt.CompanyCode = txtCompanyCode.Text
 
-                    Rceipt.CurrencyType = cmbReceiptType.SelectedValue
+                    Rceipt.CurrencyType = cmbReceiptCode.SelectedValue
                     '  Rceipt.EntryDate = CType(txtEntryDate.Text, Date)
                     Rceipt.InsuredCode = txtInsuredCode.Text
 
@@ -248,7 +248,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.PolicyRegularContribution = CType(txtPolRegularContrib.Text, Decimal)
 
                     Rceipt.PolicyPaymentMode = txtMOP.Text
-                    Rceipt.ReceiptType = cmbReceiptType.SelectedValue
+                    Rceipt.ReceiptType = cmbReceiptCode.SelectedValue
                     Rceipt.ReferenceNo = txtReceiptRefNo.Text
                     Rceipt.SubAccountCredit = txtSubAcctCredit.Text
                     Rceipt.SubAccountDebit = txtSubAcctDebit.Text
@@ -358,7 +358,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             cmbCommissions.SelectedValue = Rceipt.CommissionApplicable
             txtCompanyCode.Text = Rceipt.CompanyCode
 
-            cmbReceiptType.SelectedValue = Rceipt.CurrencyType
+            cmbReceiptCode.SelectedValue = Rceipt.CurrencyType
             txtEntryDate.Text = ValidDateFromDB(Rceipt.EntryDate)
             txtInsuredCode.Text = Rceipt.InsuredCode
 
@@ -369,7 +369,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtPolRegularContrib.Text = Math.Round(Rceipt.PolicyRegularContribution, 2)
 
             txtMOP.Text = Rceipt.PolicyPaymentMode
-            cmbReceiptType.SelectedValue = Rceipt.ReceiptType
+            cmbReceiptCode.SelectedValue = Rceipt.ReceiptType
             txtReceiptRefNo.Text = Rceipt.ReferenceNo
             txtReceiptNo.Text = Rceipt.DocNo
 
@@ -402,7 +402,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
         txtBankGLCode.Text = String.Empty
         txtBatchNo.Text = String.Empty
-        cmbBranchCode.SelectedIndex = 0
+        'cmbBranchCode.SelectedIndex = 0
+        cmbBranchCode.Text = "1501"
         txtChequeDate.Text = String.Empty
 
 
@@ -411,7 +412,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         cmbCommissions.SelectedIndex = 0
         txtCompanyCode.Text = "001"
 
-        cmbReceiptType.Text = String.Empty
+        cmbReceiptCode.SelectedIndex = 0
+        'cmbReceiptCode.Text = String.Empty
         txtReceiptRefNo.Text = String.Empty
         ' txtEntryDate.Text = String.Empty
         txtInsuredCode.Text = String.Empty
@@ -423,7 +425,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtPolRegularContrib.Text = String.Empty
 
         txtMOP.Text = String.Empty
-        cmbReceiptType.SelectedIndex = 0
+        cmbReceiptCode.SelectedIndex = 0
         txtReceiptRefNo.Text = String.Empty
         txtSerialNo.Text = String.Empty
         txtSubAcctCredit.Text = String.Empty
@@ -440,9 +442,13 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtSubAcctDebitDesc.Text = String.Empty
         txtSubAcctCreditDesc.Text = String.Empty
 
+        txtMode.Text = String.Empty
+        txtBranchCode.Text = String.Empty
+        txtReceiptCode.Text = String.Empty
+        txtCurrencyCode.Text = String.Empty
         updateFlag = False
         Session("updateFlag") = updateFlag 'ready for a new record
-
+        
         ' grdData.DataBind()
 
     End Sub
@@ -515,6 +521,23 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     End Function
 
     <System.Web.Services.WebMethod()> _
+     Public Shared Function GetCurrencyInformation(ByVal _currencycode As String) As String
+        Dim currencycode As String = String.Empty
+        Dim recRepo As New ReceiptsRepository()
+        'Dim crit As String = 
+
+        Try
+            currencycode = recRepo.GetCurrencyType(_currencycode)
+            Return currencycode
+        Finally
+            If currencycode = "<NewDataSet />" Then
+                Throw New Exception()
+            End If
+        End Try
+
+    End Function
+
+    <System.Web.Services.WebMethod()> _
     Public Shared Function GetPolicyInformation(ByVal _polnum As String, ByVal _type As String) As String
         Dim polinfos As String = String.Empty
         Dim recRepo As New ReceiptsRepository()
@@ -552,7 +575,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected Sub csValidateCommissions_ServerValidate(ByVal source As Object, _
                                                        ByVal args As System.Web.UI.WebControls.ServerValidateEventArgs) _
                                                        Handles csValidateCommissions.ServerValidate
-        If (cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D") Then
+        If (cmbReceiptCode.SelectedValue = "P" Or cmbReceiptCode.SelectedValue = "D") Then
             If cmbCommissions.SelectedValue = "0" Then
                 args.IsValid = False
             End If
@@ -607,5 +630,21 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected Sub butNew_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butNew.Click
         txtReceiptNo.Text = String.Empty
         initializeFields()
+    End Sub
+
+    Protected Sub cmbReceiptCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbReceiptCode.SelectedIndexChanged
+        txtReceiptCode.Text = cmbReceiptCode.SelectedValue
+    End Sub
+
+    Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
+        txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
+    End Sub
+
+    Protected Sub cmbBranchCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbBranchCode.SelectedIndexChanged
+        txtBranchCode.Text = cmbBranchCode.Text
+    End Sub
+
+    Protected Sub cmbMode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbMode.SelectedIndexChanged
+        txtMode.Text = cmbMode.SelectedValue
     End Sub
 End Class
