@@ -777,6 +777,14 @@ txtEffectiveDate control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.txtMode">
+	<summary>
+txtMode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
 </member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.cmbMode">
 	<summary>
 cmbMode control.
@@ -785,9 +793,17 @@ cmbMode control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
-</member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.cmbReceiptType">
+</member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.txtReceiptCode">
 	<summary>
-cmbReceiptType control.
+txtReceiptCode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.cmbReceiptCode">
+	<summary>
+cmbReceiptCode control.
 </summary>
 	<remarks>
 Auto-generated field.
@@ -844,6 +860,14 @@ To modify move field declaration from designer file to code-behind file.
 </member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.txtProductCode">
 	<summary>
 txtProductCode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.txtCurrencyCode">
+	<summary>
+txtCurrencyCode control.
 </summary>
 	<remarks>
 Auto-generated field.
@@ -1353,6 +1377,14 @@ cmbTransType control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.txtDeptCode">
+	<summary>
+txtDeptCode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
 </member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.cmbDept">
 	<summary>
 cmbDept control.
@@ -1364,6 +1396,14 @@ To modify move field declaration from designer file to code-behind file.
 </member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.lblMode">
 	<summary>
 lblMode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.txtMode">
+	<summary>
+txtMode control.
 </summary>
 	<remarks>
 Auto-generated field.
@@ -1433,6 +1473,14 @@ txtChequeDate control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.txtCurrencyCode">
+	<summary>
+txtCurrencyCode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
 </member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.cmbCurrencyType">
 	<summary>
 cmbCurrencyType control.
@@ -1444,14 +1492,6 @@ To modify move field declaration from designer file to code-behind file.
 </member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.csValidateCurrencyType">
 	<summary>
 csValidateCurrencyType control.
-</summary>
-	<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.cmbBranchCode">
-	<summary>
-cmbBranchCode control.
 </summary>
 	<remarks>
 Auto-generated field.
@@ -1492,6 +1532,22 @@ To modify move field declaration from designer file to code-behind file.
 </member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.txtPayeeName">
 	<summary>
 txtPayeeName control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.txtBranchCode">
+	<summary>
+txtBranchCode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.cmbBranchCode">
+	<summary>
+cmbBranchCode control.
 </summary>
 	<remarks>
 Auto-generated field.

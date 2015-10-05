@@ -555,13 +555,13 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     End Function
 
     <System.Web.Services.WebMethod()> _
-    Public Shared Function GetAccountChartDetails(ByVal _accountcode As String, ByVal _type As String) As String
+    Public Shared Function GetAccountChartDetails(ByVal _accountsubcode As String, ByVal _accountmaincode As String) As String
         Dim acodes As String = String.Empty
         Dim recRepo As New ReceiptsRepository()
         'Dim crit As String = 
 
         Try
-            acodes = recRepo.GetAccountChartDetails(_accountcode, _type)
+            acodes = recRepo.GetAccountChartDetails(_accountsubcode, _accountmaincode)
             Return acodes
         Finally
             If acodes = "<NewDataSet />" Then

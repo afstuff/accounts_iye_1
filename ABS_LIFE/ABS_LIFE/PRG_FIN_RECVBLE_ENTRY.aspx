@@ -189,14 +189,14 @@
             $("#txtMainAcct").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtMainAcct").val() != "")
-                    LoadChartInfo("txtMainAcct", "Main", "DR");
+                    LoadChartInfo("txtSubAcct", "txtMainAcct", "DR");
                 //return false;
             });
             //retrieve data on focus loss
             $("#txtSubAcct").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtSubAcct").val() != "")
-                    LoadChartInfo("txtSubAcct", "Sub", "DR");
+                    LoadChartInfo("txtSubAcct", "txtMainAcct", "DR");
             });
 
             //retrieve data on focus loss branches
@@ -275,38 +275,40 @@
             }
 
             // ajax call to load account chart information
-            function LoadChartInfo(accountcode, ctype, drcr) {
+            function LoadChartInfo(accountsubcode, accountmaincode, drcr) {
                 $.ajax({
                     type: "POST",
                     url: "PRG_FIN_RECPT_ISSUE.aspx/GetAccountChartDetails",
-                    data: JSON.stringify({ _accountcode: document.getElementById(accountcode).value, _type: ctype }),
+                    data: JSON.stringify({ _accountsubcode: document.getElementById(accountsubcode).value, _accountmaincode: document.getElementById(accountmaincode).value}),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function(data) {
                         var xmlDoc = $.parseXML(data.d);
                         var xml = $(xmlDoc);
                         var accountcharts = xml.find("Table");
-                        retrieve_AccountChartInfoValues(accountcharts, ctype, drcr)
+                        retrieve_AccountChartInfoValues(accountcharts, drcr)
                     },
                     failure: OnFailure_LoadChartInfo,
                     error: OnError_LoadChartInfo
                 });
                 // this avoids page refresh on button click
+               // alert("accountsubcode: " + document.getElementById(accountsubcode).value + " accountmaincode: " + document.getElementById(accountmaincode).value);
                 return false;
             }
             // retrieve the values and
-            function retrieve_AccountChartInfoValues(accountcharts, ctype, drcr) {
+            function retrieve_AccountChartInfoValues(accountcharts, drcr) {
                 //debugger;
                 $.each(accountcharts, function() {
                     var accountchart = $(this);
 
-                    if (ctype == "Main" && drcr == "DR") {
+                    // if (ctype == "Main" && drcr == "DR") {
+                    //document.getElementById('txtMainAcctDesc').value = $(this).find("sMainDesc").text()
+                    //document.getElementById('txtLedgerType').value = $(this).find("sLedgType").text()
+                    //   }
+                    //  else
+                    if (drcr == "DR") {
+                        document.getElementById('txtMainAcct').value = $(this).find("sMainCode").text()
                         document.getElementById('txtMainAcctDesc').value = $(this).find("sMainDesc").text()
-                        document.getElementById('txtLedgerType').value = $(this).find("sLedgType").text()
-                    }
-                    else if (ctype == "Sub" && drcr == "DR") {
-                        // document.getElementById('txtMainAcct').value = $(this).find("sMainCode").text()
-                        // document.getElementById('txtMainAcctDesc').value = $(this).find("sMainDesc").text()
                         document.getElementById('txtSubAcctDesc').value = $(this).find("sSubDesc").text()
                         document.getElementById('txtLedgerType').value = $(this).find("sLedgType").text()
                     }
@@ -578,13 +580,20 @@
                     overlayCss: { backgroundColor: "black" },
                     onClose: function(dialog) {
 
-                        var resultValueDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
-                        var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
-                        $('#txtMainAcct').attr('value', resultValueDR); // Main account code
-                        $('#txtMainAcctDesc').attr('value', resultDescDR); // Main account description
-                        resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
 
-                        $('#txtLedgerType').attr('value', resultLedgType);
+                    var resultValueDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
+                    var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
+                    var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
+                    var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
+                    resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
+
+                    document.getElementById('txtMainAcct').value = resultValueDR;
+                    document.getElementById('txtMainAcctDesc').value = resultDescDR;
+
+
+
+                    document.getElementById('txtSubAcct').value = resultValSubDR;
+                    document.getElementById('txtSubAcctDesc').value = resultDescSubDR;
 
                         dialog.data.fadeOut('200', function() {
                             dialog.container.slideUp('200', function() {
@@ -649,11 +658,25 @@
                     overlayCss: { backgroundColor: "black" },
                     onClose: function(dialog) {
 
+
+
+
+                        var resultValueDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
+                        var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
                         var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
                         var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
+                        resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
 
-                        $('#txtSubAcct').attr('value', resultValSubDR);
-                        $('#txtSubAcctDesc').attr('value', resultDescSubDR);
+                        document.getElementById('txtMainAcct').value = resultValueDR;
+                        document.getElementById('txtMainAcctDesc').value = resultDescDR;
+
+                      
+
+                        document.getElementById('txtSubAcct').value = resultValSubDR;
+                        document.getElementById('txtSubAcctDesc').value = resultDescSubDR;
+                        document.getElementById('txtLedgerType').value = resultLedgType;
+
+                        //alert("Main A/C Code: " + resultValueDR + " Main A/C Desc: " + resultDescDR + " Sub A/C Code :" + resultValSubDR + " Sub A/c Desc " + resultDescSubDR)
 
                         dialog.data.fadeOut('200', function() {
                             dialog.container.slideUp('200', function() {
@@ -704,8 +727,8 @@
         }
         function OnError_LoadChartInfo(response) {
             //debugger;
-            //var errorText = response.responseText;
-            //alert('Error!!!' + '\n\n' + errorText);
+            var errorText = response.responseText;
+           // alert('Error!!!' + '\n\n' + errorText);
             alert('Error!: Account Chart Details could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
             $('#txtMainAcct').focus()
         }

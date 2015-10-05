@@ -559,15 +559,15 @@ namespace CustodianLife.Data
             return GetDataSet(query).GetXml();
         }
 
-        public String GetAccountChartDetails(string _accountcode
-                                         , String _type)
+        public String GetAccountChartDetails(string _accountsubcode
+                                         , String _accountmaincode)
         {
 
 
             string query = "SELECT * "
                           + "FROM CiFn_GetChartOfAccountDetail('"
-                          + _accountcode + "','"
-                          + _type + "',NULL,NULL,NULL)";
+                          + _accountsubcode + "','"
+                          + _accountmaincode + "',NULL,NULL,NULL)";
 
             return GetDataSet(query).GetXml();
         }

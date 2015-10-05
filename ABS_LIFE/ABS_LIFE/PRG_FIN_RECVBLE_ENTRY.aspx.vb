@@ -399,6 +399,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
         toBind.DataValueField = valueMember
         toBind.DataSource = dataSource
         toBind.DataBind()
+        toBind.Items.Insert(0, New ListItem("Select", "NA"))
     End Sub
 
     Private Sub fillValues()
