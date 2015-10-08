@@ -74,9 +74,9 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             'End If
 
 
-            SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeLongDesc", "CodeItem")
-            SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeLongDesc", "CodeItem")
-            SetComboBinding(cmbDept, indLifeEnq.GetById("L02", "005"), "CodeLongDesc", "CodeItem")
+            SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeItem_CodeLongDesc", "CodeItem")
+            SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeItem_CodeLongDesc", "CodeItem")
+            SetComboBinding(cmbDept, indLifeEnq.GetById("L02", "005"), "CodeItem_CodeLongDesc", "CodeItem")
             SetComboBinding(cmbTransDetailType, transTypeEnq.TransactionTypesDetails, "Description", "TransactionCode")
 
             cmbTransType.Attributes.Add("readonly", "readonly")
@@ -769,6 +769,23 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
 
     End Function
 
+    <System.Web.Services.WebMethod()> _
+        Public Shared Function GetTransType(ByVal _transcode As String) As String
+        Dim transinfo As String = String.Empty
+        Dim transRepo As New TransactionTypesRepository()
+        'Dim crit As String = 
+
+        Try
+            transinfo = transRepo.GetTransInfo(_transcode)
+            Return transinfo
+        Finally
+            If transinfo = "<NewDataSet />" Then
+                Throw New Exception()
+            End If
+        End Try
+
+    End Function
+
     Protected Sub cmbBranchCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbBranchCode.SelectedIndexChanged
         If cmbBranchCode.SelectedIndex <> 0 Then
             txtBranchCode.Text = cmbBranchCode.SelectedValue
@@ -784,6 +801,20 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
         If cmbCurrencyType.SelectedIndex <> 0 Then
             txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
+        End If
+    End Sub
+
+    Protected Sub cmbTransDetailType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbTransDetailType.SelectedIndexChanged
+        If cmbTransDetailType.SelectedIndex <> 0 Then
+            txtTransTypeCode.Text = cmbTransDetailType.SelectedValue
+        End If
+    End Sub
+
+    Protected Sub cmbDRCR_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbDRCR.SelectedIndexChanged
+        If cmbDRCR.SelectedIndex <> 0 Then
+            txtDRCR.Text = cmbDRCR.SelectedValue
+        Else
+            txtDRCR.Text = ""
         End If
     End Sub
 End Class

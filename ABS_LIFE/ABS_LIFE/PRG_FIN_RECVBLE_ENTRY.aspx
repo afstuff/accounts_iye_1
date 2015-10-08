@@ -241,6 +241,23 @@
                 }
                 //return false;
             });
+
+            $("#txtTransTypeCode").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtTransTypeCode").val() != "") {
+                    GetTransType();
+                }
+                //return false;
+            });
+
+            $("#txtDRCR").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtDRCR").val() != "") {
+                    GetDebitCredit();
+                }
+                //return false;
+            });
+            
             // ajax call to load policy information
             function LoadBranchInfoObject() {
                 $.ajax({
@@ -771,6 +788,13 @@
             alert('Error!: Currency Code Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
             $('#txtCurrencyCode').focus();
         }
+        function OnError_LoadTransTypeObject(response) {
+            //debugger;
+            //var errorText = response.responseText;
+            //alert('Error!!!' + '\n\n' + errorText);
+            alert('Error!: Transaction Type Code Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
+            $('#txtTransTypeCode').focus();
+        }
 
 
         function OnFailure(response) {
@@ -886,12 +910,65 @@
                 $("#cmbMode").val(0);
             }
         }
+
+        function GetDebitCredit() {
+            drcr = $('#txtDRCR').val()
+            if (drcr == "D" || drcr == "d") {
+                $("#cmbDRCR").val('D');
+            }
+            else if (drcr == "C" || drcr == "c") {
+                $("#cmbDRCR").val('C');
+            }
+            else {
+                alert("Please select either Debit or Credit");
+                $("#cmbDRCR").val(0);
+            }
+        }
+
+        function GetTransType() {
+            var code = document.getElementById('txtTransTypeCode').value
+            $.ajax({
+                type: "POST",
+                url: "PRG_FIN_RECVBLE_ENTRY.aspx/GetTransType",
+                data: JSON.stringify({ _transcode: document.getElementById('txtTransTypeCode').value }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccess_LoadTransTypeObject,
+                failure: OnFailure,
+                error: OnError_LoadTransTypeObject
+            });
+            // this avoids page refresh on button click
+            return false;
+        }
+
+        function OnSuccess_LoadTransTypeObject(response) {
+            //debugger;
+
+            var xmlDoc = $.parseXML(response.d);
+            var xml = $(xmlDoc);
+            var transtype = xml.find("Table");
+            retrieve_LoadTransTypeObject(transtype);
+
+        }
+        // retrieve the values for currency
+        function retrieve_LoadTransTypeObject(transtype) {
+            //debugger;
+            $.each(transtype, function() {
+                var transtyp = $(this);
+                $("#cmbTransDetailType").val($(this).find("TBFN_TRANS_TYP_CODE").text())
+                console.log($(this).find("TTBFN_TRANS_TYP_CODE").text())
+            });
+        }
     </script>
 
     <style type="text/css">
         .style1
         {
             height: 26px;
+        }
+        .style2
+        {
+            height: 24px;
         }
     </style>
 
@@ -991,18 +1068,18 @@
                                         Department
                                     </td>
                                     <td> 
-                                    <asp:TextBox ID="txtDeptCode" runat="server" Width="150px" Enabled="False"></asp:TextBox>
+                                    <asp:TextBox ID="txtDeptCode" runat="server" Width="30px"></asp:TextBox>
                                     
-                                        <asp:DropDownList ID="cmbDept" runat="server" Width="270px" TabIndex="5" 
+                                        <asp:DropDownList ID="cmbDept" runat="server" Width="265px" TabIndex="5" 
                                             AutoPostBack="True">
                                         </asp:DropDownList>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="style2">
                                         <asp:Label ID="lblMode" runat="server" Text="Receipt Mode"> </asp:Label>
                                     </td>
-                                    <td><asp:TextBox ID="txtMode" runat="server" Width="121px"></asp:TextBox>
+                                    <td class="style2"><asp:TextBox ID="txtMode" runat="server" Width="85px"></asp:TextBox>
                                     
                                         <asp:DropDownList ID="cmbMode" runat="server" Width="180px" TabIndex="6" AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Mode"></asp:ListItem>
@@ -1012,10 +1089,10 @@
                                             <asp:ListItem Value="T" Text="Teller"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
-                                    <td>
+                                    <td class="style2">
                                         <asp:Label ID="lblRcptDate" runat="server" Text="Receipt Date"></asp:Label>
                                     </td>
-                                    <td>
+                                    <td class="style2">
                                         <asp:TextBox ID="txtEffectiveDate" runat="server" Width="150px" TabIndex="8"></asp:TextBox>
 
                                         <script language="JavaScript" type="text/javascript" tabindex="7">
@@ -1065,7 +1142,7 @@
                                         Curr. Type
                                     </td>
                                     <td>
-                                        <asp:TextBox ID="txtCurrencyCode" runat="server" Width="106px" TabIndex="9"></asp:TextBox><asp:DropDownList
+                                        <asp:TextBox ID="txtCurrencyCode" runat="server" Width="64px" TabIndex="9"></asp:TextBox>&nbsp;<asp:DropDownList
                                             ID="cmbCurrencyType" runat="server" Width="100px" TabIndex="12" 
                                             AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Currency Type"></asp:ListItem>
@@ -1098,7 +1175,7 @@
                                         Branch
                                     </td>
                                     <td>
-                                        <asp:TextBox ID="txtBranchCode" runat="server" Width="150px" TabIndex="11"></asp:TextBox>
+                                        <asp:TextBox ID="txtBranchCode" runat="server" Width="57px" TabIndex="11"></asp:TextBox>
                                         <asp:DropDownList ID="cmbBranchCode" runat="server" Width="150px" TabIndex="13" 
                                             AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Branch Code"></asp:ListItem>
@@ -1183,12 +1260,15 @@
                                             <asp:TextBox ID="txtLedgerType" runat="server" Width="25px"></asp:TextBox>
                                         </td>
                                         <td style="white-space: nowrap">
-                                            <asp:DropDownList ID="cmbTransDetailType" runat="server" Width="150px">
+                                            <asp:TextBox ID="txtTransTypeCode" runat="server" Width="30"></asp:TextBox>
+                                            <asp:DropDownList ID="cmbTransDetailType" runat="server" Width="150px" 
+                                                AutoPostBack="True">
                                             </asp:DropDownList>
                                             <img src="img/plusimage.png" id="TranTypeAdd" alt="add record" class="searchImage" />
                                         </td>
                                         <td>
-                                            <asp:DropDownList ID="cmbDRCR" runat="server" Width="70px">
+                                       <asp:TextBox ID="txtDRCR" runat="server" Width="18px" TabIndex="17"></asp:TextBox>
+                                            <asp:DropDownList ID="cmbDRCR" runat="server" Width="59px" AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="DR/CR"></asp:ListItem>
                                                 <asp:ListItem Value="D" Text="Debit" Selected="True"></asp:ListItem>
                                                 <asp:ListItem Value="C" Text="Credit"></asp:ListItem>

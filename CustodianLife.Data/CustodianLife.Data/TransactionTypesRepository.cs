@@ -6,6 +6,8 @@ using System.Text;
 using CustodianLife.Model;
 using CustodianLife.Repositories;
 using NHibernate;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace CustodianLife.Data
 {
@@ -76,6 +78,30 @@ namespace CustodianLife.Data
             }
         }
 
+        public String GetTransInfo(String _transcode)
+        {
+            //queries the generic lifecodes table and extract info for the branches only -- L02, 003
+            string query = "SELECT * "
+                          + "FROM TBFN_TRANS_TYPE WHERE (TBFN_TRANS_TYP_CODE='" + _transcode + "')";
+
+
+            return GetDataSet(query).GetXml();
+        }
+        private static DataSet GetDataSet(string qry)
+        {
+            using (var session = GetSession())
+            {
+                using (var conn = session.Connection as SqlConnection)
+                {
+                    var adapter = new SqlDataAdapter(qry, conn);
+                    var dataSet = new System.Data.DataSet();
+
+                    adapter.Fill(dataSet);
+
+                    return dataSet;
+                }
+            }
+        }
       
     }
 }

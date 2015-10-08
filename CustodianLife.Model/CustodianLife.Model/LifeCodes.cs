@@ -14,5 +14,13 @@ namespace CustodianLife.Model
         public virtual string CodeLongDesc { get; set; }
         public virtual string CodeShortDesc { get; set; }
 
+         public virtual string CodeItem_CodeLongDesc
+    {
+        get
+        {
+            return CodeItem + "-" + CodeLongDesc;
+        }
+    }
+
     }
 }

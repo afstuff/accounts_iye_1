@@ -198,7 +198,13 @@
                 //return false;
             });
 
-
+            $("#cmbReceiptCode").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#cmbReceiptCode").val() != "")
+                    $('#txtReceiptCode').val($("#cmbReceiptCode").val())
+                GetReceiptType();
+                //return false;
+            });
 
 
 
@@ -804,52 +810,68 @@
             receiptcode = $('#txtReceiptCode').val()
             if (receiptcode == "D") {
                 $("#cmbReceiptCode").val('D');
+                $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "P") {
-                $("#cmbReceiptCode").val('P');
+            $("#cmbReceiptCode").val('P');
+            $("#lblRefNo").text('Policy Number');
             }
             else if (receiptcode == "U") {
-                $("#cmbReceiptCode").val('U');
+            $("#cmbReceiptCode").val('U');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "F") {
-                $("#cmbReceiptCode").val('F');
+            $("#cmbReceiptCode").val('F');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "C") {
-                $("#cmbReceiptCode").val('C');
+            $("#cmbReceiptCode").val('C');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "L") {
-                $("#cmbReceiptCode").val('L');
+            $("#cmbReceiptCode").val('L');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "X") {
-                $("#cmbReceiptCode").val('X');
+            $("#cmbReceiptCode").val('X');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "V") {
-                $("#cmbReceiptCode").val('V');
+            $("#cmbReceiptCode").val('V');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "R") {
-                $("#cmbReceiptCode").val('R');
+            $("#cmbReceiptCode").val('R');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "Y") {
-                $("#cmbReceiptCode").val('Y');
+            $("#cmbReceiptCode").val('Y');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "I") {
-                $("#cmbReceiptCode").val('I');
+            $("#cmbReceiptCode").val('I');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "T") {
-                $("#cmbReceiptCode").val('T');
+            $("#cmbReceiptCode").val('T');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "S") {
-                $("#cmbReceiptCode").val('S');
+            $("#cmbReceiptCode").val('S');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "G") {
-                $("#cmbReceiptCode").val('G');
+            $("#cmbReceiptCode").val('G');
+            $("#lblRefNo").text('Ref No');
             }
             else if (receiptcode == "O") {
-                $("#cmbReceiptCode").val('O');
+            $("#cmbReceiptCode").val('O');
+            $("#lblRefNo").text('Ref No');
             }
             else {
                 alert("Receipt code not found");
                 $("#cmbReceiptCode").val(0);
+                $("#lblRefNo").text('Ref No');
             }
 
         }
@@ -879,14 +901,64 @@
     </script>
 
     <style type="text/css">
-        .style1
-        {
-            height: 13px;
-            width: 235px;
-        }
         .style3
         {
             height: 29px;
+        }
+        .style4
+        {
+            height: 26px;
+        }
+        .style5
+        {
+            width: 1%;
+        }
+        .style6
+        {
+            width: 18%;
+        }
+        .style9
+        {
+            height: 29px;
+            width: 18%;
+        }
+        .style10
+        {
+            height: 29px;
+            width: 148px;
+        }
+        .style11
+        {
+            height: 29px;
+            width: 40%;
+        }
+        .style12
+        {
+            height: 13px;
+            width: 23%;
+        }
+        .style13
+        {
+            height: 26px;
+            width: 18%;
+        }
+        .style14
+        {
+            height: 26px;
+            width: 148px;
+        }
+        .style15
+        {
+            height: 26px;
+            width: 40%;
+        }
+        .style16
+        {
+            width: 148px;
+        }
+        .style17
+        {
+            width: 40%;
         }
     </style>
 </head>
@@ -922,68 +994,68 @@
                                         <td colspan="4" class="myMenu_Title" align="center">
                                             Individual Premium Reciepts Entry
                                         </td>
-                                        <td>
+                                        <td class="style5">
                                         </td>
-                                        <td>
+                                        <td class="style5">
                                         </td>
-                                        <td>
+                                        <td class="style5">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Receipt Number
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtReceiptNo" runat="server" Width="150px" Enabled="False"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Entry Date
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtEntryDate" runat="server" Width="150px" Enabled="false"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Company Code
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtCompanyCode" runat="server" Width="150px"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Serial Number
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtSerialNo" runat="server" Width="150px" Enabled="false"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="style3">
+                                        <td class="style9">
                                             Batch No
                                         </td>
                                         <td class="style3">
                                             <asp:TextBox ID="txtBatchNo" runat="server" Width="150px">0</asp:TextBox>(yyyymm)
                                         </td>
-                                        <td class="style3">
+                                        <td class="style10">
                                             Transaction Type
                                         </td>
-                                        <td class="style3">
+                                        <td class="style11">
                                             <asp:DropDownList ID="cmbTransType" runat="server" Width="150px">
                                                 <asp:ListItem Value="R" Text="Receipt" Selected="True"></asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Temp. Receipt No
                                         </td>
-                                        <td class="style1">
+                                        <td class="style12">
                                             <asp:TextBox ID="txtTempReceiptNo" runat="server" Width="150px"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Effective Date
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtEffectiveDate" runat="server" Width="150px"></asp:TextBox>
 
                                             <script language="JavaScript" type="text/javascript">
@@ -993,12 +1065,12 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style13">
                                             Receipt Mode
                                         </td>
-                                        <td>
-                                            <asp:TextBox ID="txtMode" runat="server" Width="90px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbMode" runat="server" Width="150px" AutoPostBack="True">
+                                        <td class="style4">
+                                            <asp:TextBox ID="txtMode" runat="server" Width="26px"></asp:TextBox>
+                                            <asp:DropDownList ID="cmbMode" runat="server" Width="120px" AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="Receipt Mode"></asp:ListItem>
                                                 <asp:ListItem Value="C" Text="Cash"></asp:ListItem>
                                                 <asp:ListItem Value="Q" Text="Cheque"></asp:ListItem>
@@ -1006,12 +1078,12 @@
                                                 <asp:ListItem Value="T" Text="Teller"></asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
-                                        <td>
+                                        <td class="style14">
                                             Receipt Type
                                         </td>
-                                        <td>
-                                            <asp:TextBox ID="txtReceiptCode" runat="server" Width="100px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbReceiptCode" runat="server" Width="150px" AutoPostBack="True">
+                                        <td class="style15">
+                                            <asp:TextBox ID="txtReceiptCode" runat="server" Width="18px"></asp:TextBox>
+                                            <asp:DropDownList ID="cmbReceiptCode" runat="server" Width="126px">
                                                 <asp:ListItem Value="0" Text="Receipt Type"></asp:ListItem>
                                                 <asp:ListItem Value="D" Text="Premium Deposit"></asp:ListItem>
                                                 <asp:ListItem Value="P" Text="Regular Premium"></asp:ListItem>
@@ -1032,31 +1104,31 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <asp:Label ID="lblRefNo" runat="server" Text="Ref. No"> </asp:Label>
+                                        <td class="style6">
+                                            <asp:Label ID="lblRefNo" runat="server" EnableViewState="False" Text="Ref No."></asp:Label>
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtReceiptRefNo" runat="server" Width="250px"></asp:TextBox><img
                                                 src="img/glass1.png" id="imgReceiptRefNo" alt="search" class="searchImage" />
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Insured Code
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtInsuredCode" runat="server" Width="150px"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Teller No
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtTellerNo" runat="server" Width="150px"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Assured Address
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtAssuredAddress" runat="server" Width="290px" Enabled="false"
                                                 BorderStyle="None"></asp:TextBox>
                                             <asp:TextBox ID="txtFileNo" runat="server" Width="150px" BorderStyle="None" CssClass="popupOffset"></asp:TextBox>
@@ -1065,35 +1137,35 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Currency Type
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtCurrencyCode" runat="server" Width="100px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbCurrencyType" runat="server" Width="150px" Height="21px"
+                                            <asp:TextBox ID="txtCurrencyCode" runat="server" Width="36px"></asp:TextBox>
+                                            <asp:DropDownList ID="cmbCurrencyType" runat="server" Width="110px" Height="21px"
                                                 AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="Currency Type"></asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:CustomValidator ID="csValidateCurrencyType" runat="server" ErrorMessage="Please Select the Currency Type">*</asp:CustomValidator>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Agent Code
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtAgentCode" runat="server" Width="150px"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr id="ChequeRow">
-                                        <td>
+                                        <td class="style6">
                                             Cheque Number
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtChequeNo" runat="server" Width="150px"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Cheque Date
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtChequeDate" runat="server" Width="150px"></asp:TextBox>
 
                                             <script language="JavaScript" type="text/javascript">
@@ -1102,16 +1174,16 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             <asp:Label ID="Polyeffdate" runat="server" CssClass="popupOffset"></asp:Label>
                                         </td>
-                                        <td class="style1">
+                                        <td class="style12">
                                             <asp:TextBox ID="txtPolicyEffDate" runat="server" Width="150px" CssClass="popupOffset">
                                             </asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Receipt Amount (LC)
                                         </td>
                                         <td>
@@ -1119,27 +1191,27 @@
                                             </asp:TextBox><asp:RegularExpressionValidator ID="rvDecimal" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtLC">*</asp:RegularExpressionValidator>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Receipt Amount (FC)
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtReceiptAmtFC" runat="server" Width="150px" Text="0.00"></asp:TextBox><asp:RegularExpressionValidator
                                                 ID="RegularExpressionValidator1" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtFC">*</asp:RegularExpressionValidator>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Payee Name
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtPayeeName" runat="server" Width="270px"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Branch
                                         </td>
-                                        <td>
-                                            <asp:TextBox ID="txtBranchCode" runat="server" Width="95px"></asp:TextBox>
+                                        <td class="style17">
+                                            <asp:TextBox ID="txtBranchCode" runat="server" Width="40px"></asp:TextBox>
                                             <asp:DropDownList ID="cmbBranchCode" runat="server" Width="150px" 
                                                 AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="Branch Code"></asp:ListItem>
@@ -1147,30 +1219,30 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Trans. Desc. 1
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtTransDesc1" runat="server" Width="270px"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             <asp:Label ID="lblBankGLCode" runat="server" Text="Bank GL Code" CssClass="popupOffset"> </asp:Label>
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtBankGLCode" runat="server" Width="270px" CssClass="popupOffset"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Trans. Desc. 2
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtTransDesc2" runat="server" Width="270px"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Comm. Applicable?
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:DropDownList ID="cmbCommissions" runat="server" Width="100px">
                                                 <asp:ListItem Value="0" Text="Commissions Applicable?"></asp:ListItem>
                                                 <asp:ListItem Value="Y" Text="YES" Selected="True"></asp:ListItem>
@@ -1181,22 +1253,22 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Policy Regular Contrib.
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtPolRegularContrib" runat="server" Width="150px" Text="0.00"></asp:TextBox>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             Mode of Payment
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtMOP" runat="server" Width="20px"> </asp:TextBox><asp:TextBox
                                                 ID="txtMOPDesc" runat="server" Width="250px" BorderStyle="None"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Main Account (Debit)
                                         </td>
                                         <td>
@@ -1204,17 +1276,17 @@
                                             <img src="img/glass1.png" id="MainAccountDebitSearch" alt="search" class="searchImage" /><img
                                                 src="img/plusimage.png" id="MainAcctDebitAdd" alt="add record" class="searchImage" />
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             <asp:Label ID="lblMainAcctCR" runat="server" Text="Main A/C (Credit)"></asp:Label>
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtMainAcctCredit" runat="server" Width="150px"></asp:TextBox><img
                                                 src="img/glass1.png" id="MainAccountCreditSearch" alt="search" class="searchImage" /><img
                                                     src="img/plusimage.png" id="MainAcctCreditAdd" alt="add record" class="searchImage" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                             Sub Account (Debit)
                                         </td>
                                         <td>
@@ -1222,23 +1294,23 @@
                                             <img src="img/glass1.png" id="SubAccountDebitSearch" alt="search" class="searchImage" /><img
                                                 src="img/plusimage.png" id="SubAcctDebitAdd" alt="add record" class="searchImage" />
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                             <asp:Label ID="lblSubAcctCR" runat="server" Text="Sub A/C (Credit)"></asp:Label>
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:TextBox ID="txtSubAcctCredit" runat="server" Width="150px"></asp:TextBox><img
                                                 src="img/glass1.png" id="SubAccountCreditSearch" alt="search" class="searchImage" /><img
                                                     src="img/plusimage.png" id="SubAcctCreditAdd" alt="add record" class="searchImage" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="style6">
                                         </td>
                                         <td>
                                         </td>
-                                        <td>
+                                        <td class="style16">
                                         </td>
-                                        <td>
+                                        <td class="style17">
                                             <asp:Button ID="butSave" runat="server" Text="Save" OnClick="butSave_Click" Visible="false" />
                                             <asp:Button ID="butSaveN" runat="server" Text="Save" OnClientClick="JavaSave_Rtn()" />
                                             <asp:Button ID="butDelete" runat="server" Text="Delete" />

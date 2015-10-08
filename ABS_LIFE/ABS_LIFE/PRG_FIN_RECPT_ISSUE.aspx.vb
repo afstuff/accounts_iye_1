@@ -51,8 +51,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             lblError.Visible = False
 
 
-            SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeLongDesc", "CodeItem")
-            SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeLongDesc", "CodeItem")
+            SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeItem_CodeLongDesc", "CodeItem")
+            SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeItem_CodeLongDesc", "CodeItem")
 
             If strKey IsNot Nothing Then
                 fillValues()
@@ -631,11 +631,6 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtReceiptNo.Text = String.Empty
         initializeFields()
     End Sub
-
-    Protected Sub cmbReceiptCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbReceiptCode.SelectedIndexChanged
-        txtReceiptCode.Text = cmbReceiptCode.SelectedValue
-    End Sub
-
     Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
         txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
     End Sub
@@ -646,5 +641,9 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
     Protected Sub cmbMode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbMode.SelectedIndexChanged
         txtMode.Text = cmbMode.SelectedValue
+    End Sub
+
+    Protected Sub lblRefNo_PreRender(ByVal sender As Object, ByVal e As EventArgs)
+
     End Sub
 End Class
