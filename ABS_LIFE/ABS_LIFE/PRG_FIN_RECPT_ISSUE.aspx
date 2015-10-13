@@ -54,11 +54,17 @@
                 }
 
             }
-
+            function GetReceiptType() {
+                
+                $("#cmbReceiptType").val($("#txtReceiptCode").val());
+                }
+            
             function CheckReceiptType() {
+                $('#txtReceiptCode').val($('#cmbReceiptType').val());
                 switch ($('#cmbReceiptType').val()) {
                     case "D":
                         $('#lblRefNo').text('Proposal No');
+
                         break;
                     case "P":
                         $('#lblRefNo').text('Policy No');
@@ -157,8 +163,11 @@
             //retrieve data on focus loss
             $("#txtReceiptRefNo").on('focusout', function(e) {
                 e.preventDefault();
-                if ($("#txtReceiptRefNo").val() != "")
+                alert("empty ref # fired!");
+
+                if ($("#txtReceiptRefNo").val() != "") {
                     LoadPolicyInfoObject();
+                }
                 return false;
             });
 
@@ -188,7 +197,7 @@
                 }
                 //return false;
             });
-            
+
             //Get receipt mode description
             $("#txtMode").on('focusout', function(e) {
                 e.preventDefault();
@@ -198,11 +207,11 @@
                 //return false;
             });
 
-            $("#cmbReceiptCode").on('focusout', function(e) {
+            $("#cmbReceiptType").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#cmbReceiptCode").val() != "")
                     $('#txtReceiptCode').val($("#cmbReceiptCode").val())
-                GetReceiptType();
+
                 //return false;
             });
 
@@ -230,6 +239,7 @@
 
                         var resultPolicy = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue").val();
                         var resultProposal = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue1").val();
+                        alert(resultPolicy + "--" + resultProposal);
                         switch ($('#cmbReceiptType').val()) {
                             case "D":
                                 if (resultProposal.length > 0)
@@ -622,6 +632,7 @@
                 error: OnError_LoadPolicyInfoObject
             });
             // this avoids page refresh on button click
+
             return false;
         }
         // on sucess get the xml
@@ -806,76 +817,7 @@
             });
         }
 
-        function GetReceiptType() {
-            receiptcode = $('#txtReceiptCode').val()
-            if (receiptcode == "D") {
-                $("#cmbReceiptCode").val('D');
-                $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "P") {
-            $("#cmbReceiptCode").val('P');
-            $("#lblRefNo").text('Policy Number');
-            }
-            else if (receiptcode == "U") {
-            $("#cmbReceiptCode").val('U');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "F") {
-            $("#cmbReceiptCode").val('F');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "C") {
-            $("#cmbReceiptCode").val('C');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "L") {
-            $("#cmbReceiptCode").val('L');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "X") {
-            $("#cmbReceiptCode").val('X');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "V") {
-            $("#cmbReceiptCode").val('V');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "R") {
-            $("#cmbReceiptCode").val('R');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "Y") {
-            $("#cmbReceiptCode").val('Y');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "I") {
-            $("#cmbReceiptCode").val('I');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "T") {
-            $("#cmbReceiptCode").val('T');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "S") {
-            $("#cmbReceiptCode").val('S');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "G") {
-            $("#cmbReceiptCode").val('G');
-            $("#lblRefNo").text('Ref No');
-            }
-            else if (receiptcode == "O") {
-            $("#cmbReceiptCode").val('O');
-            $("#lblRefNo").text('Ref No');
-            }
-            else {
-                alert("Receipt code not found");
-                $("#cmbReceiptCode").val(0);
-                $("#lblRefNo").text('Ref No');
-            }
-
-        }
-
+        
         function GetReceiptMode() {
             receiptmode = $('#txtMode').val()
             if (receiptmode == "C") {
@@ -900,67 +842,7 @@
         }
     </script>
 
-    <style type="text/css">
-        .style3
-        {
-            height: 29px;
-        }
-        .style4
-        {
-            height: 26px;
-        }
-        .style5
-        {
-            width: 1%;
-        }
-        .style6
-        {
-            width: 18%;
-        }
-        .style9
-        {
-            height: 29px;
-            width: 18%;
-        }
-        .style10
-        {
-            height: 29px;
-            width: 148px;
-        }
-        .style11
-        {
-            height: 29px;
-            width: 40%;
-        }
-        .style12
-        {
-            height: 13px;
-            width: 23%;
-        }
-        .style13
-        {
-            height: 26px;
-            width: 18%;
-        }
-        .style14
-        {
-            height: 26px;
-            width: 148px;
-        }
-        .style15
-        {
-            height: 26px;
-            width: 40%;
-        }
-        .style16
-        {
-            width: 148px;
-        }
-        .style17
-        {
-            width: 40%;
-        }
-    </style>
+    
 </head>
 <body onload="<%=publicMsgs%>" onclick="return cancelEvent('onbeforeunload')">
     <form id="PRG_FIN_RECPT_ISSUE" runat="server" submitdisabledcontrols="true">
@@ -1083,7 +965,7 @@
                                         </td>
                                         <td class="style15">
                                             <asp:TextBox ID="txtReceiptCode" runat="server" Width="18px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbReceiptCode" runat="server" Width="126px">
+                                            <asp:DropDownList ID="cmbReceiptType" runat="server" Width="126px">
                                                 <asp:ListItem Value="0" Text="Receipt Type"></asp:ListItem>
                                                 <asp:ListItem Value="D" Text="Premium Deposit"></asp:ListItem>
                                                 <asp:ListItem Value="P" Text="Regular Premium"></asp:ListItem>

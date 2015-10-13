@@ -801,9 +801,9 @@ txtReceiptCode control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
-</member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.cmbReceiptCode">
+</member><member name="F:ABS_LIFE.PRG_FIN_RECPT_ISSUE.cmbReceiptType">
 	<summary>
-cmbReceiptCode control.
+cmbReceiptType control.
 </summary>
 	<remarks>
 Auto-generated field.
@@ -1705,9 +1705,25 @@ txtLedgerType control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.txtTransTypeCode">
+	<summary>
+txtTransTypeCode control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
 </member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.cmbTransDetailType">
 	<summary>
 cmbTransDetailType control.
+</summary>
+	<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member><member name="F:ABS_LIFE.PRG_FIN_RECVBLE_ENTRY.txtDRCR">
+	<summary>
+txtDRCR control.
 </summary>
 	<remarks>
 Auto-generated field.

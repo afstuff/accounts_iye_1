@@ -118,7 +118,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.CommissionApplicable = cmbCommissions.SelectedValue
                     Rceipt.CompanyCode = txtCompanyCode.Text
 
-                    Rceipt.CurrencyType = cmbReceiptCode.SelectedValue
+                    Rceipt.CurrencyType = cmbReceiptType.SelectedValue
                     Rceipt.EntryDate = Now.Date
                     Rceipt.InsuredCode = txtInsuredCode.Text
 
@@ -129,7 +129,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.PolicyRegularContribution = CType(txtPolRegularContrib.Text, Decimal)
 
                     Rceipt.PolicyPaymentMode = txtMOP.Text
-                    Rceipt.ReceiptType = cmbReceiptCode.SelectedValue
+                    Rceipt.ReceiptType = cmbReceiptType.SelectedValue
                     Rceipt.ReferenceNo = txtReceiptRefNo.Text
 
                     Dim docMonth As String = Right(txtBatchNo.Text, 2)
@@ -236,7 +236,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.CommissionApplicable = cmbCommissions.SelectedValue
                     Rceipt.CompanyCode = txtCompanyCode.Text
 
-                    Rceipt.CurrencyType = cmbReceiptCode.SelectedValue
+                    Rceipt.CurrencyType = cmbCurrencyType.SelectedValue
                     '  Rceipt.EntryDate = CType(txtEntryDate.Text, Date)
                     Rceipt.InsuredCode = txtInsuredCode.Text
 
@@ -248,7 +248,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.PolicyRegularContribution = CType(txtPolRegularContrib.Text, Decimal)
 
                     Rceipt.PolicyPaymentMode = txtMOP.Text
-                    Rceipt.ReceiptType = cmbReceiptCode.SelectedValue
+                    Rceipt.ReceiptType = cmbReceiptType.SelectedValue
                     Rceipt.ReferenceNo = txtReceiptRefNo.Text
                     Rceipt.SubAccountCredit = txtSubAcctCredit.Text
                     Rceipt.SubAccountDebit = txtSubAcctDebit.Text
@@ -358,7 +358,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             cmbCommissions.SelectedValue = Rceipt.CommissionApplicable
             txtCompanyCode.Text = Rceipt.CompanyCode
 
-            cmbReceiptCode.SelectedValue = Rceipt.CurrencyType
+            cmbCurrencyType.SelectedValue = Rceipt.CurrencyType
             txtEntryDate.Text = ValidDateFromDB(Rceipt.EntryDate)
             txtInsuredCode.Text = Rceipt.InsuredCode
 
@@ -369,7 +369,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtPolRegularContrib.Text = Math.Round(Rceipt.PolicyRegularContribution, 2)
 
             txtMOP.Text = Rceipt.PolicyPaymentMode
-            cmbReceiptCode.SelectedValue = Rceipt.ReceiptType
+            cmbReceiptType.SelectedValue = Rceipt.ReceiptType
             txtReceiptRefNo.Text = Rceipt.ReferenceNo
             txtReceiptNo.Text = Rceipt.DocNo
 
@@ -412,7 +412,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         cmbCommissions.SelectedIndex = 0
         txtCompanyCode.Text = "001"
 
-        cmbReceiptCode.SelectedIndex = 0
+        cmbReceiptType.SelectedIndex = 0
         'cmbReceiptCode.Text = String.Empty
         txtReceiptRefNo.Text = String.Empty
         ' txtEntryDate.Text = String.Empty
@@ -425,7 +425,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtPolRegularContrib.Text = String.Empty
 
         txtMOP.Text = String.Empty
-        cmbReceiptCode.SelectedIndex = 0
+        cmbReceiptType.SelectedIndex = 0
         txtReceiptRefNo.Text = String.Empty
         txtSerialNo.Text = String.Empty
         txtSubAcctCredit.Text = String.Empty
@@ -575,7 +575,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected Sub csValidateCommissions_ServerValidate(ByVal source As Object, _
                                                        ByVal args As System.Web.UI.WebControls.ServerValidateEventArgs) _
                                                        Handles csValidateCommissions.ServerValidate
-        If (cmbReceiptCode.SelectedValue = "P" Or cmbReceiptCode.SelectedValue = "D") Then
+        If (cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D") Then
             If cmbCommissions.SelectedValue = "0" Then
                 args.IsValid = False
             End If
