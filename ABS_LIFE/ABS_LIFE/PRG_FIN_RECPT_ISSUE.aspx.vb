@@ -640,7 +640,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     End Sub
 
     Protected Sub cmbMode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbMode.SelectedIndexChanged
-        txtMode.Text = cmbMode.SelectedValue
+        lblError.Text = ""
     End Sub
 
     Protected Sub lblRefNo_PreRender(ByVal sender As Object, ByVal e As EventArgs)

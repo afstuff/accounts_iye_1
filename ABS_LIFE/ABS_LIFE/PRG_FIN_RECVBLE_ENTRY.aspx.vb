@@ -77,7 +77,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeItem_CodeLongDesc", "CodeItem")
             SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeItem_CodeLongDesc", "CodeItem")
             SetComboBinding(cmbDept, indLifeEnq.GetById("L02", "005"), "CodeItem_CodeLongDesc", "CodeItem")
-            SetComboBinding(cmbTransDetailType, transTypeEnq.TransactionTypesDetails, "Description", "TransactionCode")
+            SetComboBinding(cmbTransDetailType, transTypeEnq.TransactionTypesDetails, "TransactionCode_Description", "TransactionCode")
 
             cmbTransType.Attributes.Add("readonly", "readonly")
 
@@ -747,6 +747,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     End Sub
 
     Protected Sub cmbMode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbMode.SelectedIndexChanged
+        lblError.Text = ""
         If cmbMode.SelectedIndex <> 0 Then
             txtMode.Text = cmbMode.SelectedValue
         End If
@@ -787,31 +788,40 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     End Function
 
     Protected Sub cmbBranchCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbBranchCode.SelectedIndexChanged
+        lblError.Text = ""
+
         If cmbBranchCode.SelectedIndex <> 0 Then
             txtBranchCode.Text = cmbBranchCode.SelectedValue
         End If
     End Sub
 
     Protected Sub cmbDept_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbDept.SelectedIndexChanged
+        lblError.Text = ""
+
         If cmbDept.SelectedIndex <> 0 Then
             txtDeptCode.Text = cmbDept.SelectedValue
         End If
     End Sub
 
     Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
+        lblError.Text = ""
+
         If cmbCurrencyType.SelectedIndex <> 0 Then
             txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
         End If
     End Sub
 
     Protected Sub cmbTransDetailType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbTransDetailType.SelectedIndexChanged
+        lblError.Text = ""
+
         If cmbTransDetailType.SelectedIndex <> 0 Then
             txtTransTypeCode.Text = cmbTransDetailType.SelectedValue
         End If
     End Sub
 
     Protected Sub cmbDRCR_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbDRCR.SelectedIndexChanged
-        If cmbDRCR.SelectedIndex <> 0 Then
+lblError.Text =""                
+If cmbDRCR.SelectedIndex <> 0 Then
             txtDRCR.Text = cmbDRCR.SelectedValue
         Else
             txtDRCR.Text = ""

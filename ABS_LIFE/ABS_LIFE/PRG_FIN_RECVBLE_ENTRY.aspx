@@ -1083,10 +1083,10 @@
                                     
                                         <asp:DropDownList ID="cmbMode" runat="server" Width="180px" TabIndex="6" AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Mode"></asp:ListItem>
-                                            <asp:ListItem Value="C" Text="Cash"></asp:ListItem>
-                                            <asp:ListItem Value="Q" Text="Cheque"></asp:ListItem>
-                                            <asp:ListItem Value="D" Text="Direct Payment To Bank"></asp:ListItem>
-                                            <asp:ListItem Value="T" Text="Teller"></asp:ListItem>
+                                            <asp:ListItem Value="C" Text="C-Cash"></asp:ListItem>
+                                            <asp:ListItem Value="Q" Text="Q-Cheque"></asp:ListItem>
+                                            <asp:ListItem Value="D" Text="D-Direct Payment To Bank"></asp:ListItem>
+                                            <asp:ListItem Value="T" Text="T-Teller"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
                                     <td class="style2">
@@ -1143,7 +1143,7 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="txtCurrencyCode" runat="server" Width="64px" TabIndex="9"></asp:TextBox>&nbsp;<asp:DropDownList
-                                            ID="cmbCurrencyType" runat="server" Width="100px" TabIndex="12" 
+                                            ID="cmbCurrencyType" runat="server" Width="201px" TabIndex="12" 
                                             AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Currency Type"></asp:ListItem>
                                         </asp:DropDownList>
@@ -1176,7 +1176,7 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="txtBranchCode" runat="server" Width="57px" TabIndex="11"></asp:TextBox>
-                                        <asp:DropDownList ID="cmbBranchCode" runat="server" Width="150px" TabIndex="13" 
+                                        <asp:DropDownList ID="cmbBranchCode" runat="server" Width="238px" TabIndex="13" 
                                             AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Branch Code"></asp:ListItem>
                                         </asp:DropDownList>
@@ -1270,8 +1270,8 @@
                                        <asp:TextBox ID="txtDRCR" runat="server" Width="18px" TabIndex="17"></asp:TextBox>
                                             <asp:DropDownList ID="cmbDRCR" runat="server" Width="59px" AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="DR/CR"></asp:ListItem>
-                                                <asp:ListItem Value="D" Text="Debit" Selected="True"></asp:ListItem>
-                                                <asp:ListItem Value="C" Text="Credit"></asp:ListItem>
+                                                <asp:ListItem Value="D" Text="D-Debit" Selected="True"></asp:ListItem>
+                                                <asp:ListItem Value="C" Text="C-Credit"></asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:CustomValidator ID="CustomValidator1" runat="server" ErrorMessage="Please Select the DR/CR Type"
                                                 ControlToValidate="cmbDRCR">*</asp:CustomValidator>

@@ -1072,10 +1072,10 @@
                                             <asp:TextBox ID="txtMode" runat="server" Width="26px"></asp:TextBox>
                                             <asp:DropDownList ID="cmbMode" runat="server" Width="120px" AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="Receipt Mode"></asp:ListItem>
-                                                <asp:ListItem Value="C" Text="Cash"></asp:ListItem>
-                                                <asp:ListItem Value="Q" Text="Cheque"></asp:ListItem>
-                                                <asp:ListItem Value="D" Text="Direct Payment"></asp:ListItem>
-                                                <asp:ListItem Value="T" Text="Teller"></asp:ListItem>
+                                                <asp:ListItem Value="C" Text="C-Cash"></asp:ListItem>
+                                                <asp:ListItem Value="Q" Text="Q-Cheque"></asp:ListItem>
+                                                <asp:ListItem Value="D" Text="D-Direct Payment"></asp:ListItem>
+                                                <asp:ListItem Value="T" Text="T-Teller"></asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
                                         <td class="style14">
@@ -1085,21 +1085,21 @@
                                             <asp:TextBox ID="txtReceiptCode" runat="server" Width="18px"></asp:TextBox>
                                             <asp:DropDownList ID="cmbReceiptCode" runat="server" Width="126px">
                                                 <asp:ListItem Value="0" Text="Receipt Type"></asp:ListItem>
-                                                <asp:ListItem Value="D" Text="Premium Deposit"></asp:ListItem>
-                                                <asp:ListItem Value="P" Text="Regular Premium"></asp:ListItem>
-                                                <asp:ListItem Value="U" Text="Lumpsum"></asp:ListItem>
-                                                <asp:ListItem Value="F" Text="FAC"></asp:ListItem>
-                                                <asp:ListItem Value="C" Text="Co-Insurance"></asp:ListItem>
-                                                <asp:ListItem Value="L" Text="Lease"></asp:ListItem>
-                                                <asp:ListItem Value="X" Text="Cheque Exchange"></asp:ListItem>
-                                                <asp:ListItem Value="V" Text="Dividend"></asp:ListItem>
-                                                <asp:ListItem Value="R" Text="Refund"></asp:ListItem>
-                                                <asp:ListItem Value="Y" Text="Claim Recovery"></asp:ListItem>
-                                                <asp:ListItem Value="I" Text="Interest Received"></asp:ListItem>
-                                                <asp:ListItem Value="T" Text="Investment Income"></asp:ListItem>
-                                                <asp:ListItem Value="S" Text="Share Sale"></asp:ListItem>
-                                                <asp:ListItem Value="G" Text="Salvage"></asp:ListItem>
-                                                <asp:ListItem Value="O" Text="Others"></asp:ListItem>
+                                                <asp:ListItem Value="D" Text="D-Premium Deposit"></asp:ListItem>
+                                                <asp:ListItem Value="P" Text="P-Regular Premium"></asp:ListItem>
+                                                <asp:ListItem Value="U" Text="U-Lumpsum"></asp:ListItem>
+                                                <asp:ListItem Value="F" Text="F-FAC"></asp:ListItem>
+                                                <asp:ListItem Value="C" Text="C-Co-Insurance"></asp:ListItem>
+                                                <asp:ListItem Value="L" Text="L-Lease"></asp:ListItem>
+                                                <asp:ListItem Value="X" Text="X-Cheque Exchange"></asp:ListItem>
+                                                <asp:ListItem Value="V" Text="V-Dividend"></asp:ListItem>
+                                                <asp:ListItem Value="R" Text="R-Refund"></asp:ListItem>
+                                                <asp:ListItem Value="Y" Text="Y-Claim Recovery"></asp:ListItem>
+                                                <asp:ListItem Value="I" Text="I-Interest Received"></asp:ListItem>
+                                                <asp:ListItem Value="T" Text="T-Investment Income"></asp:ListItem>
+                                                <asp:ListItem Value="S" Text="S-Share Sale"></asp:ListItem>
+                                                <asp:ListItem Value="G" Text="G-Salvage"></asp:ListItem>
+                                                <asp:ListItem Value="O" Text="O-Others"></asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
                                     </tr>
