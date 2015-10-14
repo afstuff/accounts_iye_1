@@ -2,6 +2,11 @@
     Inherits="ABS_LIFE.PRG_FIN_RECPT_ISSUE" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<script runat="server">
+
+</script>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
 
@@ -163,8 +168,6 @@
             //retrieve data on focus loss
             $("#txtReceiptRefNo").on('focusout', function(e) {
                 e.preventDefault();
-                alert("empty ref # fired!");
-
                 if ($("#txtReceiptRefNo").val() != "") {
                     LoadPolicyInfoObject();
                 }
@@ -239,7 +242,7 @@
 
                         var resultPolicy = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue").val();
                         var resultProposal = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue1").val();
-                        alert(resultPolicy + "--" + resultProposal);
+//                        alert(resultPolicy + "--" + resultProposal);
                         switch ($('#cmbReceiptType').val()) {
                             case "D":
                                 if (resultProposal.length > 0)
@@ -965,7 +968,9 @@
                                         </td>
                                         <td class="style15">
                                             <asp:TextBox ID="txtReceiptCode" runat="server" Width="18px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbReceiptType" runat="server" Width="126px">
+                                            <asp:DropDownList ID="cmbReceiptType" runat="server" Width="126px" 
+                                                onselectedindexchanged="cmbReceiptType_SelectedIndexChanged" 
+                                                AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="Receipt Type"></asp:ListItem>
                                                 <asp:ListItem Value="D" Text="D-Premium Deposit"></asp:ListItem>
                                                 <asp:ListItem Value="P" Text="P-Regular Premium"></asp:ListItem>

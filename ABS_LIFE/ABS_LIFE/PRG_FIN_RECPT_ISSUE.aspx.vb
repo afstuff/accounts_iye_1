@@ -448,7 +448,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtCurrencyCode.Text = String.Empty
         updateFlag = False
         Session("updateFlag") = updateFlag 'ready for a new record
-        
+
         ' grdData.DataBind()
 
     End Sub
@@ -632,18 +632,33 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         initializeFields()
     End Sub
     Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
-        txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
+        lblError.Text = ""
+        txtCurrencyCode.Text = ""
+        If cmbCurrencyType.SelectedIndex <> 0 Then
+            txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
+        End If
     End Sub
 
     Protected Sub cmbBranchCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbBranchCode.SelectedIndexChanged
-        txtBranchCode.Text = cmbBranchCode.Text
+        lblError.Text = ""
+        txtBranchCode.Text = ""
+        If cmbBranchCode.SelectedIndex <> 0 Then
+            txtBranchCode.Text = cmbBranchCode.SelectedValue
+        End If
     End Sub
 
     Protected Sub cmbMode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbMode.SelectedIndexChanged
         lblError.Text = ""
+        txtMode.Text = ""
+        If cmbMode.SelectedIndex <> 0 Then
+            txtMode.Text = cmbMode.SelectedValue
+        End If
     End Sub
-
-    Protected Sub lblRefNo_PreRender(ByVal sender As Object, ByVal e As EventArgs)
-
+    Protected Sub cmbReceiptType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbReceiptType.SelectedIndexChanged
+        lblError.Text = ""
+        txtReceiptCode.Text = ""
+        If cmbReceiptType.SelectedIndex <> 0 Then
+            txtReceiptCode.Text = cmbReceiptType.SelectedValue
+        End If
     End Sub
 End Class
