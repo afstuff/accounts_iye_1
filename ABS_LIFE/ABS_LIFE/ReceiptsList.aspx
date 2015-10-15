@@ -50,8 +50,9 @@
     <asp:ListItem Value="All">All</asp:ListItem>
     <asp:ListItem Value="TDate">Trans Date</asp:ListItem>
     <asp:ListItem Value="Code">Policy No</asp:ListItem>
+        <asp:ListItem Value="PayerName">Payer Name</asp:ListItem>
     </asp:DropDownList>
-    </td><td><asp:TextBox ID="txtSearch" runat="server"> </asp:TextBox><span id="dtChoose">                        
+    </td><td><asp:TextBox ID="txtSearch" runat="server" Width="128px"></asp:TextBox><span id="dtChoose">                        
     <script language="JavaScript" type="text/javascript">
         new tcal({ 'formname': 'frmReceiptsList', 'controlname': 'txtSearch' });</script> </span><asp:Button ID="butGO" runat="server" Text="Go" Width="35px" Height="35px" /></td><td> 
         <asp:Button
@@ -60,8 +61,7 @@
     </table>
     
 </div>
-       
-<asp:GridView ID="grdData"  runat="server"  AutoGenerateColumns="False" 
+       <asp:GridView ID="grdData"  runat="server"  AutoGenerateColumns="False" 
         DataSourceID="ods1" AllowSorting="True" CssClass="datatable"
         CellPadding="0" BorderWidth="0px" AlternatingRowStyle-BackColor="#CDE4F1" GridLines="None" HeaderStyle-BackColor="#099cc" ShowFooter="True" >
         <PagerStyle CssClass="pager-row" />
@@ -121,6 +121,8 @@
                      Type="String" />
              </SelectParameters>
     </asp:ObjectDataSource>  
+       
+
     </div>
     </form>
 </body>

@@ -52,11 +52,12 @@
     <asp:ListItem Value="BatchDate">Batch Date</asp:ListItem>
     <asp:ListItem Value="TDate">Trans Date</asp:ListItem>
     <asp:ListItem Value="Code">Receipt No</asp:ListItem>
+        <asp:ListItem Value="PayerName">Payer Name</asp:ListItem>
     </asp:DropDownList>
     <asp:DropDownList ID="cmbDirection" runat="server">
     <asp:ListItem Value="0">Select</asp:ListItem>
-    <asp:ListItem Value="Begin">Beginning Only</asp:ListItem>
-    <asp:ListItem Value="Between">Anywhere</asp:ListItem>
+    <asp:ListItem Value="1">Beginning Only</asp:ListItem>
+    <asp:ListItem Value="2">Anywhere</asp:ListItem>
     </asp:DropDownList>
     </td><td><asp:TextBox ID="txtSearch" runat="server"> </asp:TextBox><span id="dtChoose">                        
     <script language="JavaScript" type="text/javascript">
