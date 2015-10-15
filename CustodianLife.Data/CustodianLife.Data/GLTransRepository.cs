@@ -112,6 +112,8 @@ namespace CustodianLife.Data
                 fCriteria = "BatchNo";
             else if (_key == "BatchDate")
                 fCriteria = "BatchDate";
+            else if (_key == "PayerName")
+                fCriteria = "ClientName";
             else if (_key == "All")
                 fCriteria = "";
 
@@ -141,30 +143,30 @@ namespace CustodianLife.Data
 
                     if (_prg == "journal" || _prg == "JV")
                     {
-                        if (_searchDirection == 0) // from the begining
+                        if (_searchDirection == 1) // from the begining
                         {
                         hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'JV'";
-                        } 
-                        else
+                        }
+                        else if (_searchDirection == 2)
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'JV'";
 
                     }
                     else if (_prg == "payment" || _prg == "PV")
                     {
-                        if (_searchDirection == 0)
+                        if (_searchDirection == 1)
                         {
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'PV'";
                         }
-                        else
+                        else if(_searchDirection == 2)
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'PV'";
                     }
                     else
                     {
-                        if (_searchDirection == 0)//display occurrence of the string only in the beginings of sentences or words
+                        if (_searchDirection == 1)//display occurrence of the string only in the beginings of sentences or words
                         {
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'R'";
                         }
-                        else
+                        else if(_searchDirection == 2)
                             //display occurrence of the string anywhere on sentences or words
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'R'";
 
@@ -195,20 +197,61 @@ namespace CustodianLife.Data
                     }
                 case "TDate":
 
+                    _value = hashHelper.DateToServerSetting(_value);
+
                     if (_prg == "journal" || _prg == "JV")
                     {
-                        hqlOptions = "from GLTrans r where r." + fCriteria + " = " + _value + " and TransType = 'JV'";
+                        hqlOptions = "from GLTrans r where r." + fCriteria + " = '" + _value + "' and TransType = 'JV'";
                     }
                     else if (_prg == "payment" || _prg == "PV")
                     {
-                        hqlOptions = "from GLTrans r where r." + fCriteria + " = " + _value + " and TransType = 'PV'";
+                        hqlOptions = "from GLTrans r where r." + fCriteria + " = '" + _value + "' and TransType = 'PV'";
                     }
                     else
                     {
-                        hqlOptions = "from GLTrans r where r." + fCriteria + " = " + _value + " and TransType = 'R'";
+                        hqlOptions = "from GLTrans r where r." + fCriteria + " = '" + _value + "' and TransType = 'R'";
                     }
 
                     
+                    using (var session = GetSession())
+                    {
+
+                        return session.CreateQuery(hqlOptions).List<GLTrans>();
+                    }
+
+
+                case "PayerName":
+
+                    if (_prg == "journal" || _prg == "JV")
+                    {
+                        if (_searchDirection == 1) // from the begining
+                        {
+                            hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'JV'";
+                        }
+                        else if (_searchDirection == 2)
+                            hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'JV'";
+
+                    }
+                    else if (_prg == "payment" || _prg == "PV")
+                    {
+                        if (_searchDirection == 1)
+                        {
+                            hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'PV'";
+                        }
+                        else if (_searchDirection == 2)
+                            hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'PV'";
+                    }
+                    else
+                    {
+                        if (_searchDirection == 1)//display occurrence of the string only in the beginings of sentences or words
+                        {
+                            hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'R'";
+                        }
+                        else if (_searchDirection == 2)
+                            //display occurrence of the string anywhere on sentences or words
+                            hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'R'";
+
+                    }
                     using (var session = GetSession())
                     {
 

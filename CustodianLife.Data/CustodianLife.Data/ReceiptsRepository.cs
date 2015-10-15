@@ -13,7 +13,7 @@ using NHibernate;
 
 namespace CustodianLife.Data
 {
-    public class ReceiptsRepository:IReceiptsRepository
+    public class ReceiptsRepository : IReceiptsRepository
     {
         private static ISession GetSession()
         {
@@ -94,6 +94,8 @@ namespace CustodianLife.Data
                 fCriteria = "ReferenceNo";
             else if (_key == "TDate")
                 fCriteria = "TransDate";
+            else if (_key == "PayerName")
+                fCriteria = "PayeeName";
             else if (_key == "All")
                 fCriteria = "";
 
@@ -101,11 +103,12 @@ namespace CustodianLife.Data
             {
                 case "Code":
                     hqlOptions = "from Receipts r where r." + fCriteria + " like '%" + _value + "%' Order by EntryDate Desc";
+                    // hqlOptions = "from Receipts r where r.ReferenceNo like '%" + _value + "%' Order by EntryDate Desc";
                     using (var session = GetSession())
                     {
-
                         return session.CreateQuery(hqlOptions).List<Receipts>();
                     }
+
                 case "TDate":
                     //change user date to server format
                     _value = hashHelper.DateToServerSetting(_value);
@@ -117,11 +120,18 @@ namespace CustodianLife.Data
                         return session.CreateQuery(hqlOptions).List<Receipts>();
                     }
 
+                case "PayerName":
+                    hqlOptions = "from Receipts r where r." + fCriteria + " like '%" + _value + "%' Order by EntryDate Desc";
+                    using (var session = GetSession())
+                    {
+                        return session.CreateQuery(hqlOptions).List<Receipts>();
+                    }
                 case "All":
 
                     hqlOptions = "from Receipts r order by EntryDate Desc";
                     using (var session = GetSession())
                     {
+                        var r = session.CreateQuery(hqlOptions).List<Receipts>().Count();
                         return session.CreateQuery(hqlOptions).List<Receipts>();
                     }
 
@@ -235,8 +245,8 @@ namespace CustodianLife.Data
 
             return GetDataSet(query);
 
-        }        
-        
+        }
+
         public IList<Agents> GetAgentsAccountList(String _key, String _value)
         {
             String fCriteria = string.Empty;
@@ -329,8 +339,8 @@ namespace CustodianLife.Data
             //queries the generic lifecodes table and extract info for the branches only -- L02, 003
             string query = "SELECT * "
                           + "FROM TBIL_LIFE_CODES WHERE (TBIL_COD_TAB_ID='L02' AND TBIL_COD_TYP='017'"
-                           + "AND TBIL_COD_ITEM='"+ _currencycode +"')";
-         
+                           + "AND TBIL_COD_ITEM='" + _currencycode + "')";
+
 
             return GetDataSet(query).GetXml();
         }
@@ -392,7 +402,7 @@ namespace CustodianLife.Data
                           + "	                    ,	(SELECT "
                           + "    [TBIL_INSRD_ADRES1] + ' ' + ISNULL([TBIL_INSRD_ADRES2],' ') "
                           + "  FROM [TBIL_INS_DETAIL] y "
-		                  + "  WHERE y.[TBIL_INSRD_CODE] = p.[TBIL_POLY_ASSRD_CD]) as Insured_Address "
+                          + "  WHERE y.[TBIL_INSRD_CODE] = p.[TBIL_POLY_ASSRD_CD]) as Insured_Address "
                           + ",[TBIL_POLY_AGCY_CODE], [TBIL_POLY_PRDCT_CD] as Product_Code "
                           + ",[TBIL_POLY_FILE_NO] as File_No"
                           + ",(SELECT [TBIL_AGCY_AGENT_NAME] FROM [TBIL_AGENCY_CD] d WHERE d.[TBIL_AGCY_AGENT_CD]= p.[TBIL_POLY_AGCY_CODE]) as Agent_Name"
@@ -400,13 +410,13 @@ namespace CustodianLife.Data
                           + ",[TBIL_POL_PRM_MODE_PAYT] as Payment_Mode "
                           + ",(SELECT CASE [TBIL_POL_PRM_MODE_PAYT] WHEN 'M' THEN 'MONTHLY' WHEN 'A' THEN 'ANNUALLY' WHEN 'H' THEN 'HALF YEARLY' WHEN 'Q' THEN 'QUARTERLY' END) as Payment_Mode_Desc"
                           + ",convert(varchar, [TBIL_POLICY_EFF_DT], 102) as TBIL_POLICY_EFF_DT"
-                          + " FROM [TBIL_POLICY_DET] p INNER JOIN [TBIL_POLICY_PREM_DETAILS] q " 
+                          + " FROM [TBIL_POLICY_DET] p INNER JOIN [TBIL_POLICY_PREM_DETAILS] q "
                           + "ON p.[TBIL_POLY_POLICY_NO] = q.[TBIL_POL_PRM_DTL_POLY_NO] "
-                          + "INNER JOIN [TBIL_POLICY_PREM_INFO] r " 
+                          + "INNER JOIN [TBIL_POLICY_PREM_INFO] r "
                           + "ON p.[TBIL_POLY_POLICY_NO] = r.TBIL_POL_PRM_POLY_NO "
                           + " WHERE p." + fld + " = '" + criteriaValue + "'";
             return GetDataSet(query).GetXml();
-            
+
         }
         /// <summary>
         /// this returns a dataset to be converted to XML for serialization into a Json object 
@@ -552,7 +562,7 @@ namespace CustodianLife.Data
                           + "FROM CiFn_ReceiptCoverPeriods('"
                           + _polnum + "','"
                           + _mop + "',(SELECT REPLACE(CONVERT(VARCHAR(10), '"
-                          +  _effdate + "', 102), '/', '-')),"
+                          + _effdate + "', 102), '/', '-')),"
                           + _contrib + ","
                           + _amtpaid + ",NULL,NULL,NULL)";
 
@@ -588,8 +598,8 @@ namespace CustodianLife.Data
 
         }
 
-       
-        
+
+
         //public String GetPaymentCover1(string _polnum
         //                                 , String _mop
         //                                 , String _effdate
