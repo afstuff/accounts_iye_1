@@ -145,11 +145,12 @@ namespace CustodianLife.Data
                     {
                         if (_searchDirection == 1) // from the begining
                         {
-                        hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'JV'";
+                            hqlOptions = "from GLTrans r where r." + fCriteria + " like '" + _value + "%' and TransType = 'JV'";
                         }
                         else if (_searchDirection == 2)
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'JV'";
-
+                        else if (_searchDirection == 0)
+                            return null;
                     }
                     else if (_prg == "payment" || _prg == "PV")
                     {
@@ -159,6 +160,8 @@ namespace CustodianLife.Data
                         }
                         else if(_searchDirection == 2)
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'PV'";
+                        else if (_searchDirection == 0)
+                            return null;
                     }
                     else
                     {
@@ -169,6 +172,8 @@ namespace CustodianLife.Data
                         else if(_searchDirection == 2)
                             //display occurrence of the string anywhere on sentences or words
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'R'";
+                        else if (_searchDirection == 0)
+                            return null;
 
                     }
                     using (var session = GetSession())
@@ -230,6 +235,8 @@ namespace CustodianLife.Data
                         }
                         else if (_searchDirection == 2)
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'JV'";
+                        else if (_searchDirection == 0)
+                            return null;
 
                     }
                     else if (_prg == "payment" || _prg == "PV")
@@ -240,6 +247,8 @@ namespace CustodianLife.Data
                         }
                         else if (_searchDirection == 2)
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'PV'";
+                        else if (_searchDirection == 0)
+                            return null;
                     }
                     else
                     {
@@ -250,6 +259,9 @@ namespace CustodianLife.Data
                         else if (_searchDirection == 2)
                             //display occurrence of the string anywhere on sentences or words
                             hqlOptions = "from GLTrans r where r." + fCriteria + " like '%" + _value + "%' and TransType = 'R'";
+                        else if (_searchDirection == 0)
+                            return null;
+
 
                     }
                     using (var session = GetSession())
