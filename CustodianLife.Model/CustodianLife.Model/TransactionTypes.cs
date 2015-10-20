@@ -18,6 +18,14 @@ namespace CustodianLife.Model
         public virtual DateTime EntryDate { get; set; }
         public virtual string OperatorId { get; set; }
 
+        public virtual string TransactionCode_Description
+        {
+            get
+            {
+                return TransactionCode + "-" + Description;
+            }
+        }
+
     }
 
 }
