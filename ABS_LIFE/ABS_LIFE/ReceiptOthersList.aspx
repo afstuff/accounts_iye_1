@@ -45,7 +45,10 @@
                 <div class="mid">     
 <!-- grid end here-->
 <div id="fram">
-    <table class="datatable"><tr><td>Search</td><td><asp:DropDownList ID="cmbSearch" runat="server">
+    <table class="datatable"><tr><td colspan="4">
+        <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
+        </td></tr>
+        <tr><td>Search</td><td><asp:DropDownList ID="cmbSearch" runat="server">
     <asp:ListItem Value="0">Select</asp:ListItem>
     <asp:ListItem Value="All">All</asp:ListItem>
     <asp:ListItem Value="BatchNo">Batch No</asp:ListItem>
@@ -134,11 +137,11 @@
 
 
                 <asp:BoundField DataField="DocNo" HeaderText="Recpt No"/>
-                <asp:BoundField DataField="TransDate" HeaderText="Trans Date"/>
+                <asp:BoundField DataField="TransDate" HeaderText="Trans Date" DataFormatString="{0:dd/MM/yy}"/>
                 <asp:BoundField DataField="ClientName" HeaderText="Payee Name"/>
                 <asp:BoundField DataField="TransDescription" HeaderText="Description"/>
                 <asp:BoundField DataField="TransType" HeaderText="Type"/>
-                <asp:BoundField DataField="GLAmountLC" HeaderText="Amount" />
+                <asp:BoundField DataField="GLAmountLC" HeaderText="Amount" DataFormatString="{0:n}" />
             </Columns>
             
         <HeaderStyle HorizontalAlign="Justify" VerticalAlign="Top" />

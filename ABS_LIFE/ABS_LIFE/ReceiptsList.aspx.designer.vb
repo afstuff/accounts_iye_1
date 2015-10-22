@@ -70,15 +70,6 @@ Partial Public Class ReceiptsList
     Protected WithEvents butClose As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''ods1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ods1 As Global.System.Web.UI.WebControls.ObjectDataSource
-
-    '''<summary>
     '''grdData control.
     '''</summary>
     '''<remarks>
@@ -86,4 +77,13 @@ Partial Public Class ReceiptsList
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents grdData As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
+    '''ods1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ods1 As Global.System.Web.UI.WebControls.ObjectDataSource
 End Class

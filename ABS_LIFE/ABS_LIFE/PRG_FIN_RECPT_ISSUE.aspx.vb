@@ -314,8 +314,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 End If
 
                 initializeFields()
-
-
+                txtReceiptNo.Enabled = False
             End If
         Catch ex As Exception
             msg = ex.Message
@@ -341,11 +340,14 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
         Session("Rceipt") = Rceipt
         If Rceipt IsNot Nothing Then
-            txtReceiptNo.Enabled = True
+            'txtReceiptNo.Enabled = True
 
             txtAgentCode.Text = Rceipt.AgentCode
-            txtReceiptAmtFC.Text = Math.Round(Rceipt.AmountFC, 2).ToString()
-            txtReceiptAmtLC.Text = Math.Round(Rceipt.AmountLC, 2).ToString()
+            'txtReceiptAmtFC.Text = Math.Round(Rceipt.AmountFC, 2).ToString()
+            'txtReceiptAmtLC.Text = Math.Round(Rceipt.AmountLC, 2).ToString()
+
+            txtReceiptAmtFC.Text = Format(Rceipt.AmountFC, "Standard")
+            txtReceiptAmtLC.Text = Format(Rceipt.AmountLC, "Standard")
 
             txtBankGLCode.Text = Rceipt.BankCode
             txtBatchNo.Text = Rceipt.BatchNo
@@ -375,8 +377,16 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
 
             txtSerialNo.Text = Rceipt.SerialNo
-            txtSubAcctCredit.Text = Rceipt.SubAccountCredit
-            txtSubAcctDebit.Text = Rceipt.SubAccountDebit
+            If Rceipt.SubAccountCredit = "" Then
+                txtSubAcctCredit.Text = "000000"
+            Else
+                txtSubAcctCredit.Text = Rceipt.SubAccountCredit
+            End If
+            If Rceipt.SubAccountDebit = "" Then
+                txtSubAcctDebit.Text = "000000"
+            Else
+                txtSubAcctDebit.Text = Rceipt.SubAccountDebit
+            End If
 
             txtTempReceiptNo.Text = Rceipt.TempTransNo
             txtTransDesc1.Text = Rceipt.TranDescription1
@@ -394,7 +404,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
     End Sub
     Protected Sub initializeFields()
-        txtReceiptNo.Enabled = False
+        'txtReceiptNo.Enabled = False
 
         txtAgentCode.Text = String.Empty
         txtReceiptAmtFC.Text = String.Empty
@@ -468,6 +478,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             publicMsgs = "javascript:alert('" + msg + "')"
         End Try
         initializeFields()
+        txtReceiptNo.Enabled = False
 
 
     End Sub
@@ -620,7 +631,66 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     End Sub
 
     Protected Sub txtReceiptNo_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtReceiptNo.TextChanged
+        If txtReceiptNo.Text <> "" Then
+            initializeFields()
+            rcRepo = CType(Session("rcRepo"), ReceiptsRepository)
+            Rceipt = rcRepo.GetByReceiptNo(Trim(txtReceiptNo.Text))
 
+            Session("Rceipt") = Rceipt
+            If Rceipt IsNot Nothing Then
+                'txtReceiptNo.Enabled = True
+                txtReceiptNo.Enabled = False
+                chkReceiptNo.Checked = False
+                txtAgentCode.Text = Rceipt.AgentCode
+                txtReceiptAmtFC.Text = Math.Round(Rceipt.AmountFC, 2).ToString()
+                txtReceiptAmtLC.Text = Math.Round(Rceipt.AmountLC, 2).ToString()
+
+                txtBankGLCode.Text = Rceipt.BankCode
+                txtBatchNo.Text = Rceipt.BatchNo
+                cmbBranchCode.SelectedValue = Rceipt.BranchCode
+                txtChequeDate.Text = ValidDateFromDB(Rceipt.ChequeDate)
+
+
+                txtChequeNo.Text = Rceipt.ChequeInwardNo
+                txtTellerNo.Text = Rceipt.ChequeTellerNo
+                cmbCommissions.SelectedValue = Rceipt.CommissionApplicable
+                txtCompanyCode.Text = Rceipt.CompanyCode
+
+                cmbCurrencyType.SelectedValue = Rceipt.CurrencyType
+                txtEntryDate.Text = ValidDateFromDB(Rceipt.EntryDate)
+                txtInsuredCode.Text = Rceipt.InsuredCode
+
+                txtMainAcctCredit.Text = Rceipt.MainAccountCredit
+                txtMainAcctDebit.Text = Rceipt.MainAccountDebit
+                txtPayeeName.Text = Rceipt.PayeeName
+                'cmbMode.SelectedValue = Rceipt.PolicyPaymentMode
+                'cmbMode.Text = Rceipt.PolicyPaymentMode
+                txtPolRegularContrib.Text = Math.Round(Rceipt.PolicyRegularContribution, 2)
+
+                txtMOP.Text = Rceipt.PolicyPaymentMode
+                cmbReceiptType.SelectedValue = Rceipt.ReceiptType
+                txtReceiptRefNo.Text = Rceipt.ReferenceNo
+                txtReceiptNo.Text = Rceipt.DocNo
+
+
+                txtSerialNo.Text = Rceipt.SerialNo
+                txtSubAcctCredit.Text = Rceipt.SubAccountCredit
+                txtSubAcctDebit.Text = Rceipt.SubAccountDebit
+
+                txtTempReceiptNo.Text = Rceipt.TempTransNo
+                txtTransDesc1.Text = Rceipt.TranDescription1
+                txtTransDesc2.Text = Rceipt.TranDescription2
+                txtEffectiveDate.Text = ValidDateFromDB(Rceipt.TransDate)
+                cmbMode.SelectedValue = Rceipt.TransMode
+                cmbTransType.SelectedValue = Rceipt.TransType
+                cmbCurrencyType.SelectedValue = Rceipt.CurrencyType
+
+                txtFileNo.Text = Rceipt.FileNo
+                txtProductCode.Text = Rceipt.ProductCode
+                updateFlag = True
+                Session("updateFlag") = updateFlag
+            End If
+        End If
     End Sub
 
     Protected Sub butPrint_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butPrint.Click
@@ -630,6 +700,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected Sub butNew_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butNew.Click
         txtReceiptNo.Text = String.Empty
         initializeFields()
+        txtReceiptNo.Enabled = False
     End Sub
     Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
         lblError.Text = ""
@@ -659,6 +730,24 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtReceiptCode.Text = ""
         If cmbReceiptType.SelectedIndex <> 0 Then
             txtReceiptCode.Text = cmbReceiptType.SelectedValue
+        End If
+    End Sub
+
+    Protected Sub chkReceiptNo_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles chkReceiptNo.CheckedChanged
+        If chkReceiptNo.Checked Then
+            txtReceiptNo.Enabled = True
+        Else
+            txtReceiptNo.Enabled = False
+        End If
+    End Sub
+    Protected Sub txtSerialNo_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtSerialNo.TextChanged
+
+    End Sub
+
+    Protected Sub txtReceiptAmtLC_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtReceiptAmtLC.TextChanged
+        If ((txtReceiptAmtLC.Text <> "") And IsNumeric(txtReceiptAmtLC.Text)) Then
+            txtReceiptAmtLC.Text = Format(txtReceiptAmtLC.Text, "Standard")
+            txtReceiptAmtFC.Text = txtReceiptAmtLC.Text
         End If
     End Sub
 End Class

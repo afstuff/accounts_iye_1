@@ -32,6 +32,13 @@
     </script>
     
     <title></title>
+    
+    <style type="text/css">
+    .NumberAlign
+    {
+    	text-align:right;
+    }
+    </style>
 </head>
 <body>
     <form id="frmReceiptsList" runat="server">
@@ -92,18 +99,20 @@
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
 
-<HeaderStyle CssClass="first"></HeaderStyle>
+<%--<HeaderStyle CssClass="first"></HeaderStyle>--%>
 
-<ItemStyle CssClass="first"></ItemStyle>
+<%--<ItemStyle CssClass="first"></ItemStyle>--%>
                 </asp:HyperLinkField>
                 <asp:BoundField DataField="ReferenceNo" HeaderText="Policy No"/>
                 <asp:BoundField DataField="PayeeName" HeaderText="Payee Name"/>
-                <asp:BoundField DataField="TransDate" HeaderText="Eff. Date"/>
+                <asp:BoundField DataField="TransDate" HeaderText="Eff. Date" DataFormatString="{0:dd/MM/yy}"/>
                 <asp:BoundField DataField="TranDescription1" HeaderText="Description"/>
                 <asp:BoundField DataField="TranDescription2" HeaderText="Tenure"/>
-                <asp:BoundField DataField="AmountLC" HeaderText="Amount" />
+                <asp:BoundField DataField="AmountLC" HeaderText="Amount" DataFormatString="{0:n}">
+                <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
+                 <ItemStyle CssClass="NumberAlign"/>
+                 </asp:BoundField>
             </Columns>
-            
         <HeaderStyle HorizontalAlign="Justify" VerticalAlign="Top" />
                 <AlternatingRowStyle BackColor="#CDE4F1" />
         </asp:GridView>

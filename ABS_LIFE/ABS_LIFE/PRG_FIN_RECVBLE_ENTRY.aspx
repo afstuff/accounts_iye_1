@@ -190,6 +190,7 @@
                 e.preventDefault();
                 if ($("#txtMainAcct").val() != "")
                     LoadChartInfo("txtSubAcct", "txtMainAcct", "DR");
+
                 //return false;
             });
             //retrieve data on focus loss
@@ -257,7 +258,7 @@
                 }
                 //return false;
             });
-            
+
             // ajax call to load policy information
             function LoadBranchInfoObject() {
                 $.ajax({
@@ -296,7 +297,7 @@
                 $.ajax({
                     type: "POST",
                     url: "PRG_FIN_RECPT_ISSUE.aspx/GetAccountChartDetails",
-                    data: JSON.stringify({ _accountsubcode: document.getElementById(accountsubcode).value, _accountmaincode: document.getElementById(accountmaincode).value}),
+                    data: JSON.stringify({ _accountsubcode: document.getElementById(accountsubcode).value, _accountmaincode: document.getElementById(accountmaincode).value }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function(data) {
@@ -309,7 +310,7 @@
                     error: OnError_LoadChartInfo
                 });
                 // this avoids page refresh on button click
-               // alert("accountsubcode: " + document.getElementById(accountsubcode).value + " accountmaincode: " + document.getElementById(accountmaincode).value);
+                // alert("accountsubcode: " + document.getElementById(accountsubcode).value + " accountmaincode: " + document.getElementById(accountmaincode).value);
                 return false;
             }
             // retrieve the values and
@@ -598,19 +599,19 @@
                     onClose: function(dialog) {
 
 
-                    var resultValueDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
-                    var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
-                    var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
-                    var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
-                    resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
+                        var resultValueDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
+                        var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
+                        var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
+                        var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
+                        resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
 
-                    document.getElementById('txtMainAcct').value = resultValueDR;
-                    document.getElementById('txtMainAcctDesc').value = resultDescDR;
+                        document.getElementById('txtMainAcct').value = resultValueDR;
+                        document.getElementById('txtMainAcctDesc').value = resultDescDR;
 
 
 
-                    document.getElementById('txtSubAcct').value = resultValSubDR;
-                    document.getElementById('txtSubAcctDesc').value = resultDescSubDR;
+                        document.getElementById('txtSubAcct').value = resultValSubDR;
+                        document.getElementById('txtSubAcctDesc').value = resultDescSubDR;
 
                         dialog.data.fadeOut('200', function() {
                             dialog.container.slideUp('200', function() {
@@ -687,7 +688,7 @@
                         document.getElementById('txtMainAcct').value = resultValueDR;
                         document.getElementById('txtMainAcctDesc').value = resultDescDR;
 
-                      
+
 
                         document.getElementById('txtSubAcct').value = resultValSubDR;
                         document.getElementById('txtSubAcctDesc').value = resultDescSubDR;

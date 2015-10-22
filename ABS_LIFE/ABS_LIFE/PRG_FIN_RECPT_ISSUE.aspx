@@ -60,10 +60,10 @@
 
             }
             function GetReceiptType() {
-                
+
                 $("#cmbReceiptType").val($("#txtReceiptCode").val());
-                }
-            
+            }
+
             function CheckReceiptType() {
                 $('#txtReceiptCode').val($('#cmbReceiptType').val());
                 switch ($('#cmbReceiptType').val()) {
@@ -114,6 +114,9 @@
 
             $('#txtReceiptAmtLC').on('focusout', function(e) {
                 e.preventDefault();
+                //                var currency = $('#txtReceiptAmtLC').val();
+                //                var number = Number(currency.replace(/[^0-9\.]+/g, ""));
+                //                $("#txtReceiptAmtLC").val(number);
                 $('#txtReceiptAmtFC').attr('value', $('#txtReceiptAmtLC').val());
             });
 
@@ -134,7 +137,7 @@
             $("#txtMainAcctDebit").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtMainAcctDebit").val() != "")
-                    LoadChartInfo("txtMainAcctDebit", "Main", "DR");
+                    LoadChartInfo("txtSubAcctDebit", "txtMainAcctDebit", "Main", "DR");
                 //return false;
             });
 
@@ -143,7 +146,7 @@
                 e.preventDefault();
 
                 if ($("#txtSubAcctDebit").val() != "")
-                    LoadChartInfo("txtSubAcctDebit", "Sub", "DR");
+                    LoadChartInfo("txtSubAcctDebit", "txtMainAcctDebit", "Sub", "DR");
                 //return false;
             });
 
@@ -152,7 +155,7 @@
             $("#txtMainAcctCredit").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtMainAcctCredit").val() != "")
-                    LoadChartInfo("txtMainAcctCredit", "Main", "CR");
+                    LoadChartInfo("txtSubAcctDebit", "txtMainAcctCredit", "Main", "CR");
                 //return false;
             });
 
@@ -161,7 +164,7 @@
                 e.preventDefault();
 
                 if ($("#txtSubAcctCredit").val() != "")
-                    LoadChartInfo("txtSubAcctCredit", "Sub", "CR");
+                    LoadChartInfo("txtSubAcctCredit", "txtMainAcctDebit", "Sub", "CR");
                 //return false;
             });
 
@@ -242,7 +245,8 @@
 
                         var resultPolicy = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue").val();
                         var resultProposal = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue1").val();
-//                        alert(resultPolicy + "--" + resultProposal);
+                        //                       alert(resultPolicy + "--" + resultProposal);
+
                         switch ($('#cmbReceiptType').val()) {
                             case "D":
                                 if (resultProposal.length > 0)
@@ -350,8 +354,10 @@
 
                         var resultValueDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
                         var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
+
                         if (resultValueDR.length > 0)
-                            $('#txtMainAcctDebit').attr('value', resultValueDR); // Main account code
+                        //$('#txtMainAcctDebit').attr('value', resultValueDR); // Main account code
+                            $('#txtMainAcctDebit').val(resultValueDR)
                         if (resultDescDR.length > 0)
                             $('#txtMainAcctDebitDesc').attr('value', resultDescDR); // Main account description
 
@@ -370,7 +376,9 @@
             //call popup to browse the sub account
             $('#SubAccountDebitSearch').click(function(e) {
                 e.preventDefault();
-                var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcctDebit').val();
+                //var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcctDebit').val();
+                //               var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcctDebit').val();
+                var src = "\AccountChartBrowse.aspx";
                 $.modal('<iframe id="simplemodal-container" src="' + src + '" height="500" width="830" style="border:0">', {
                     closeHTML: "<a  class='modalCloseImg' href='#'></a>",
                     containerCss: {
@@ -387,10 +395,11 @@
                     overlayCss: { backgroundColor: "black" },
                     onClose: function(dialog) {
 
-                        var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
+                    var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
+                        
                         var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
                         if (resultValSubDR.length > 0)
-                            $('#txtSubAcctDebit').attr('value', resultValSubDR);
+                        document.getElementById('txtSubAcctDebit').value = resultValSubDR
                         if (resultDescSubDR.length > 0)
                             $('#txtSubAcctDebitDesc').attr('value', resultDescSubDR);
 
@@ -402,6 +411,7 @@
                             });
                         });
                     }
+
                 });
             });
 
@@ -465,8 +475,8 @@
             //call popup to browse the sub account
             $('#SubAccountCreditSearch').click(function(e) {
                 e.preventDefault();
-                var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcctCredit').val();
-                // var src = "\AccountChartBrowse.aspx";
+               // var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcctCredit').val();
+                var src = "\AccountChartBrowse.aspx";
                 $.modal('<iframe id="simplemodal-container" src="' + src + '" height="500" width="830" style="border:0">', {
                     closeHTML: "<a  class='modalCloseImg' href='#'></a>", containerCss: {
                         backgroundColor: "#fff",
@@ -506,8 +516,8 @@
             $("#txtTransDesc1").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtTransDesc1").val() != "")
-                // LoadPeriodsCover();
-                    return false;
+                    LoadPeriodsCover();
+                return false;
             });
 
             //retrieve data on focus
@@ -533,11 +543,14 @@
         });
 
         // ajax call to load account chart information
-        function LoadChartInfo(accountcode, ctype, drcr) {
+        function LoadChartInfo(subaccountcode, mainaccountcode, ctype, drcr) {
+            console.log(document.getElementById(subaccountcode).value)
+            console.log(document.getElementById(mainaccountcode).value)
             $.ajax({
                 type: "POST",
                 url: "PRG_FIN_RECPT_ISSUE.aspx/GetAccountChartDetails",
-                data: JSON.stringify({ _accountcode: document.getElementById(accountcode).value, _type: ctype }),
+                //                data: JSON.stringify({ _accountcode: document.getElementById(accountcode).value, _type: ctype }),
+                data: JSON.stringify({ _accountsubcode: document.getElementById(subaccountcode).value, _accountmaincode: document.getElementById(mainaccountcode).value }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function(data) {
@@ -545,6 +558,7 @@
                     var xml = $(xmlDoc);
                     var accountcharts = xml.find("Table");
                     retrieve_AccountChartInfoValues(accountcharts, ctype, drcr)
+                    //retrieve_AccountChartInfoValues(accountcharts, drcr)
                 },
                 failure: OnFailure,
                 error: OnError_LoadChartInfo
@@ -563,11 +577,16 @@
                     document.getElementById('txtMainAcctDebitDesc').value = $(this).find("sMainDesc").text()
                     // document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
                     // document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
+                    document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
+                    document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
                 }
                 else if (ctype == "Main" && drcr == "CR") {
                     document.getElementById('txtMainAcctCreditDesc').value = $(this).find("sMainDesc").text()
                     //  document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
                     //  document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
+
+                    document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
+                    document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
                 }
                 else if (ctype == "Sub" && drcr == "DR") {
 
@@ -820,7 +839,7 @@
             });
         }
 
-        
+
         function GetReceiptMode() {
             receiptmode = $('#txtMode').val()
             if (receiptmode == "C") {
@@ -840,12 +859,11 @@
             }
             else {
                 alert("Receipt mode not found");
-                 $("#cmbMode").val(0);
+                $("#cmbMode").val(0);
             }
         }
     </script>
 
-    
 </head>
 <body onload="<%=publicMsgs%>" onclick="return cancelEvent('onbeforeunload')">
     <form id="PRG_FIN_RECPT_ISSUE" runat="server" submitdisabledcontrols="true">
@@ -888,10 +906,11 @@
                                     </tr>
                                     <tr>
                                         <td class="style6">
-                                            Receipt Number
+                                            <asp:CheckBox ID="chkReceiptNo" runat="server" AutoPostBack="True" Text="Receipt Number" />
+                                            &nbsp;
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtReceiptNo" runat="server" Width="150px" Enabled="False"></asp:TextBox>
+                                            <asp:TextBox ID="txtReceiptNo" runat="server" Width="150px" Enabled="False" AutoPostBack="True"></asp:TextBox>
                                         </td>
                                         <td class="style16">
                                             Entry Date
@@ -905,7 +924,7 @@
                                             Company Code
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtCompanyCode" runat="server" Width="150px"></asp:TextBox>
+                                            <asp:TextBox ID="txtCompanyCode" runat="server" Width="150px" Enabled="False"></asp:TextBox>
                                         </td>
                                         <td class="style16">
                                             Serial Number
@@ -916,7 +935,7 @@
                                     </tr>
                                     <tr>
                                         <td class="style9">
-                                            Batch No
+                                            Batch Date
                                         </td>
                                         <td class="style3">
                                             <asp:TextBox ID="txtBatchNo" runat="server" Width="150px">0</asp:TextBox>(yyyymm)
@@ -968,8 +987,7 @@
                                         </td>
                                         <td class="style15">
                                             <asp:TextBox ID="txtReceiptCode" runat="server" Width="18px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbReceiptType" runat="server" Width="126px" 
-                                                onselectedindexchanged="cmbReceiptType_SelectedIndexChanged" 
+                                            <asp:DropDownList ID="cmbReceiptType" runat="server" Width="126px" OnSelectedIndexChanged="cmbReceiptType_SelectedIndexChanged"
                                                 AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="Receipt Type"></asp:ListItem>
                                                 <asp:ListItem Value="D" Text="D-Premium Deposit"></asp:ListItem>
@@ -1074,8 +1092,8 @@
                                             Receipt Amount (LC)
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtReceiptAmtLC" runat="server" Width="150px" Text="0.00">
-                                            </asp:TextBox><asp:RegularExpressionValidator ID="rvDecimal" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
+                                            <asp:TextBox ID="txtReceiptAmtLC" runat="server" Width="150px" Text="0.00" AutoPostBack="True"></asp:TextBox><asp:RegularExpressionValidator
+                                                ID="rvDecimal" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtLC">*</asp:RegularExpressionValidator>
                                         </td>
                                         <td class="style16">
@@ -1099,8 +1117,7 @@
                                         </td>
                                         <td class="style17">
                                             <asp:TextBox ID="txtBranchCode" runat="server" Width="40px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbBranchCode" runat="server" Width="150px" 
-                                                AutoPostBack="True">
+                                            <asp:DropDownList ID="cmbBranchCode" runat="server" Width="150px" AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="Branch Code"></asp:ListItem>
                                             </asp:DropDownList>
                                         </td>

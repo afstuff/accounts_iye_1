@@ -820,8 +820,8 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     End Sub
 
     Protected Sub cmbDRCR_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbDRCR.SelectedIndexChanged
-lblError.Text =""                
-If cmbDRCR.SelectedIndex <> 0 Then
+        lblError.Text = ""
+        If cmbDRCR.SelectedIndex <> 0 Then
             txtDRCR.Text = cmbDRCR.SelectedValue
         Else
             txtDRCR.Text = ""
