@@ -53,6 +53,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
             SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeItem_CodeLongDesc", "CodeItem")
             SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeItem_CodeLongDesc", "CodeItem")
+            txtSubAcctDebit.Text = "000000"
+            txtSubAcctCredit.Text = "000000"
 
             If strKey IsNot Nothing Then
                 fillValues()
@@ -84,6 +86,11 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
     Protected Sub butSave_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butSave.Click, butSaveN.Click
         Dim msg As String = String.Empty
+        Dim Err = ""
+        ValidateFields(Err)
+        If Err = "Y" Then
+            Exit Sub
+        End If
         Try
             If Me.IsValid Then
 
@@ -505,7 +512,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         Dim rRepo As New ReceiptsRepository()
 
         Try
-            paycover = rRepo.GetPaymentCover(_polnum, _mop, _effdate, _contrib, _amtpaid)
+            paycover = rRepo.GetPaymentCover(_polnum, _mop, _effdate, _contrib, CDbl(_amtpaid))
             Return paycover
         Finally
             If paycover = "<NewDataSet />" Then
@@ -674,8 +681,19 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
 
                 txtSerialNo.Text = Rceipt.SerialNo
-                txtSubAcctCredit.Text = Rceipt.SubAccountCredit
-                txtSubAcctDebit.Text = Rceipt.SubAccountDebit
+                'txtSubAcctCredit.Text = Rceipt.SubAccountCredit
+                'txtSubAcctDebit.Text = Rceipt.SubAccountDebit
+
+                If Rceipt.SubAccountCredit = "" Then
+                    txtSubAcctCredit.Text = "000000"
+                Else
+                    txtSubAcctCredit.Text = Rceipt.SubAccountCredit
+                End If
+                If Rceipt.SubAccountDebit = "" Then
+                    txtSubAcctDebit.Text = "000000"
+                Else
+                    txtSubAcctDebit.Text = Rceipt.SubAccountDebit
+                End If
 
                 txtTempReceiptNo.Text = Rceipt.TempTransNo
                 txtTransDesc1.Text = Rceipt.TranDescription1
@@ -748,6 +766,22 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         If ((txtReceiptAmtLC.Text <> "") And IsNumeric(txtReceiptAmtLC.Text)) Then
             txtReceiptAmtLC.Text = Format(txtReceiptAmtLC.Text, "Standard")
             txtReceiptAmtFC.Text = txtReceiptAmtLC.Text
+        End If
+    End Sub
+
+    Private Sub ValidateFields(ByRef ErrorInd)
+        Dim msg
+        If Not IsNumeric(txtReceiptAmtLC.Text) Then
+            msg = "Receipt Amount LC must be numeric"
+            ErrorInd = "Y"
+            publicMsgs = "javascript:alert('" + msg + "')"
+            Exit Sub
+        End If
+        If Not IsNumeric(txtReceiptAmtFC.Text) Then
+            msg = "Receipt Amount FC must be numeric"
+            ErrorInd = "Y"
+            publicMsgs = "javascript:alert('" + msg + "')"
+            Exit Sub
         End If
     End Sub
 End Class

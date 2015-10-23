@@ -133,11 +133,26 @@
                 CheckReceiptType();
             });
 
+            //FORMAT EFFECTIVE DATE AUTOMATICALLY. Make the slashes jump into place
+
+            $("#txtEffectiveDate").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtEffectiveDate").val() != "")
+                    var effDate = $("#txtEffectiveDate").val();
+                effDateLen = effDate.length
+                if (effDateLen == 8 && $.isNumeric(effDate)) {
+                    $("#txtEffectiveDate").val(FormatDateAuto(effDate))
+                }
+                //return false;
+            });
+
+
             //retrieve data on focus loss
             $("#txtMainAcctDebit").on('focusout', function(e) {
                 e.preventDefault();
-                if ($("#txtMainAcctDebit").val() != "")
+                if ($("#txtMainAcctDebit").val() != "" && $("#txtSubAcctDebit").val() != "")
                     LoadChartInfo("txtSubAcctDebit", "txtMainAcctDebit", "Main", "DR");
+                $("#txtSubAcctDebit").focus();
                 //return false;
             });
 
@@ -145,7 +160,7 @@
             $("#txtSubAcctDebit").on('focusout', function(e) {
                 e.preventDefault();
 
-                if ($("#txtSubAcctDebit").val() != "")
+                if ($("#txtSubAcctDebit").val() != "" && $("#txtMainAcctDebit").val() != "")
                     LoadChartInfo("txtSubAcctDebit", "txtMainAcctDebit", "Sub", "DR");
                 //return false;
             });
@@ -154,8 +169,10 @@
             //retrieve data on focus loss
             $("#txtMainAcctCredit").on('focusout', function(e) {
                 e.preventDefault();
-                if ($("#txtMainAcctCredit").val() != "")
-                    LoadChartInfo("txtSubAcctDebit", "txtMainAcctCredit", "Main", "CR");
+                if ($("#txtMainAcctCredit").val() != "" && $("#txtSubAcctCredit").val() != "")
+                //LoadChartInfo("txtSubAcctDebit", "txtMainAcctCredit", "Main", "CR");
+                    LoadChartInfo("txtSubAcctCredit", "txtMainAcctCredit", "Main", "CR");
+                $("#txtSubAcctCredit").focus();
                 //return false;
             });
 
@@ -163,8 +180,9 @@
             $("#txtSubAcctCredit").on('focusout', function(e) {
                 e.preventDefault();
 
-                if ($("#txtSubAcctCredit").val() != "")
-                    LoadChartInfo("txtSubAcctCredit", "txtMainAcctDebit", "Sub", "CR");
+                if ($("#txtSubAcctCredit").val() != "" && $("#txtMainAcctCredit").val() != "")
+                //  LoadChartInfo("txtSubAcctCredit", "txtMainAcctDebit", "Sub", "CR");
+                    LoadChartInfo("txtSubAcctCredit", "txtMainAcctCredit", "Sub", "CR");
                 //return false;
             });
 
@@ -361,6 +379,14 @@
                         if (resultDescDR.length > 0)
                             $('#txtMainAcctDebitDesc').attr('value', resultDescDR); // Main account description
 
+                        var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
+
+                        var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
+                        if (resultValSubDR.length > 0)
+                            document.getElementById('txtSubAcctDebit').value = resultValSubDR
+                        if (resultDescSubDR.length > 0)
+                            $('#txtSubAcctDebitDesc').attr('value', resultDescSubDR);
+
 
                         dialog.data.fadeOut('200', function() {
                             dialog.container.slideUp('200', function() {
@@ -395,11 +421,11 @@
                     overlayCss: { backgroundColor: "black" },
                     onClose: function(dialog) {
 
-                    var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
-                        
+                        var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
+
                         var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
                         if (resultValSubDR.length > 0)
-                        document.getElementById('txtSubAcctDebit').value = resultValSubDR
+                            document.getElementById('txtSubAcctDebit').value = resultValSubDR
                         if (resultDescSubDR.length > 0)
                             $('#txtSubAcctDebitDesc').attr('value', resultDescSubDR);
 
@@ -445,7 +471,6 @@
 
                         var resultValueCR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
                         var resultDescCR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
-
                         if (resultValueCR.length > 0)
                             $('#txtMainAcctCredit').attr('value', resultValueCR);
 
@@ -475,7 +500,7 @@
             //call popup to browse the sub account
             $('#SubAccountCreditSearch').click(function(e) {
                 e.preventDefault();
-               // var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcctCredit').val();
+                // var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcctCredit').val();
                 var src = "\AccountChartBrowse.aspx";
                 $.modal('<iframe id="simplemodal-container" src="' + src + '" height="500" width="830" style="border:0">', {
                     closeHTML: "<a  class='modalCloseImg' href='#'></a>", containerCss: {
@@ -561,7 +586,18 @@
                     //retrieve_AccountChartInfoValues(accountcharts, drcr)
                 },
                 failure: OnFailure,
-                error: OnError_LoadChartInfo
+                //error: OnError_LoadChartInfo(ctype, drcr)
+                error: function() {
+                    alert('Error!: Account Chart could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
+                    if (ctype == "Sub" && drcr == "DR") {
+                        $("#txtMainAcctDebit").focus();
+                        $("#txtSubAcctDebit").val("000000");
+                    }
+                    else if (ctype == "Sub" && drcr == "CR") {
+                        $("#txtMainAcctCredit").focus();
+                        $("#txtSubAcctCredit").val("000000");
+                    }
+                }
             });
             // this avoids page refresh on button click
             return false;
@@ -734,7 +770,8 @@
             alert('Failure!: Periods Covered Failed. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
         }
 
-        function OnError_LoadChartInfo(response) {
+        // function OnError_LoadChartInfo(response) {
+        function OnError_LoadChartInfo(ctype, drcr) {
             //debugger;
             //var errorText = response.responseText;
             //alert('Error!!!' + '\n\n' + errorText);
@@ -861,6 +898,13 @@
                 alert("Receipt mode not found");
                 $("#cmbMode").val(0);
             }
+        }
+
+        function FormatDateAuto(effDate) {
+              var effDateDay = effDate.substring(0, 2);
+              var effDateMonth = effDate.substring(2, 4);
+              var effDateYear = effDate.substring(4);
+              return effDateDay + "/" + effDateMonth + "/" + effDateYear;    
         }
     </script>
 
@@ -1092,17 +1136,17 @@
                                             Receipt Amount (LC)
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtReceiptAmtLC" runat="server" Width="150px" Text="0.00" AutoPostBack="True"></asp:TextBox><asp:RegularExpressionValidator
+                                            <asp:TextBox ID="txtReceiptAmtLC" runat="server" Width="150px" Text="0.00" AutoPostBack="True"></asp:TextBox><%--<asp:RegularExpressionValidator
                                                 ID="rvDecimal" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
-                                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtLC">*</asp:RegularExpressionValidator>
+                                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtLC">*</asp:RegularExpressionValidator>--%>
                                         </td>
                                         <td class="style16">
                                             Receipt Amount (FC)
                                         </td>
                                         <td class="style17">
-                                            <asp:TextBox ID="txtReceiptAmtFC" runat="server" Width="150px" Text="0.00"></asp:TextBox><asp:RegularExpressionValidator
+                                            <asp:TextBox ID="txtReceiptAmtFC" runat="server" Width="150px" Text="0.00"></asp:TextBox><%--<asp:RegularExpressionValidator
                                                 ID="RegularExpressionValidator1" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
-                                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtFC">*</asp:RegularExpressionValidator>
+                                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtFC">*</asp:RegularExpressionValidator>--%>
                                         </td>
                                     </tr>
                                     <tr>
