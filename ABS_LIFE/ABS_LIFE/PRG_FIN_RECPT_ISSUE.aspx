@@ -188,8 +188,9 @@
 
             //retrieve data on focus loss
             $("#txtReceiptRefNo").on('focusout', function(e) {
-                e.preventDefault();
-                if ($("#txtReceiptRefNo").val() != "") {
+            e.preventDefault();
+                alert($("#lblRefNo").text())
+                if ($("#txtReceiptRefNo").val() != "" && ($("#lblRefNo").text() == "Proposal No" || $("#lblRefNo").text() == "Policy No")) {
                     LoadPolicyInfoObject();
                 }
                 return false;
@@ -720,6 +721,10 @@
                 document.getElementById('txtPolicyEffDate').value = $(this).find("TBIL_POLICY_EFF_DT").text();
                 document.getElementById('txtFileNo').value = $(this).find("File_No").text();
                 document.getElementById('txtProductCode').value = $(this).find("Product_Code").text();
+
+                if ($(this).find("TBIL_POLY_ASSRD_CD").text() == "" || $(this).find("TBIL_POLY_AGCY_CODE").text() == "" || $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text() == "0.00" || $(this).find("Payment_Mode").text() == "")
+                    alert("Please contact technical department, record not completed for policy no " + document.getElementById('txtReceiptRefNo').value);
+                $("#txtReceiptRefNo").focus();
 
 
             });
