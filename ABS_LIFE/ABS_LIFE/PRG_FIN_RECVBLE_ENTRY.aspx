@@ -748,7 +748,7 @@
             var errorText = response.responseText;
            // alert('Error!!!' + '\n\n' + errorText);
             alert('Error!: Account Chart Details could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
-            $('#txtMainAcct').focus()
+           // $('#txtMainAcct').focus()
         }
 
         function OnError_LoadInvoiceInfo(response) {
@@ -1243,7 +1243,7 @@
                                             <asp:Label ID="lblRef3" runat="server" Text="Ref. No 3"></asp:Label>
                                         </td>
                                         <td>
-                                            <asp:Label ID="lblTranAmt" runat="server" Text="Tran Amt"></asp:Label>
+                                            <asp:Label ID="lblTranAmt" runat="server" Text="Trans Amt"></asp:Label>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1288,9 +1288,9 @@
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtTransAmt" runat="server" Width="100px">0.00</asp:TextBox>
-                                            <asp:RegularExpressionValidator ID="vdamt" runat="server" ErrorMessage="Please Enter a Valid Amount"
+                                            <%--<asp:RegularExpressionValidator ID="vdamt" runat="server" ErrorMessage="Please Enter a Valid Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtTransAmt">*</asp:RegularExpressionValidator>
-                                        </td>
+                                       --%> </td>
                                     </tr>
                                     <tr>
                                         <td>

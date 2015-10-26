@@ -46,7 +46,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
             'Company code value to be filled from login
             txtCompanyCode.Text = "001"
-            txtEntryDate.Text = Now.Date.ToString()
+            '  txtEntryDate.Text = Now.Date.ToString()
+            txtEntryDate.Text = Format(Now, "dd/MM/yyyy")
             txtEntryDate.ReadOnly = True
             lblError.Visible = False
 

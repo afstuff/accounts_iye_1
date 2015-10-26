@@ -592,15 +592,6 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     Protected WithEvents txtTransAmt As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''vdamt control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents vdamt As Global.System.Web.UI.WebControls.RegularExpressionValidator
-
-    '''<summary>
     '''txtSubSerialNo control.
     '''</summary>
     '''<remarks>

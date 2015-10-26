@@ -30,6 +30,12 @@
 
         });
     </script>
+    <style type="text/css">
+    .NumberAlign
+    {
+    	text-align:right!important;
+    }
+    </style>
     
     <title>Data Entries Listing</title>
 </head>
@@ -141,7 +147,7 @@
                 <asp:BoundField DataField="ClientName" HeaderText="Payee Name"/>
                 <asp:BoundField DataField="TransDescription" HeaderText="Description"/>
                 <asp:BoundField DataField="TransType" HeaderText="Type"/>
-                <asp:BoundField DataField="GLAmountLC" HeaderText="Amount" DataFormatString="{0:n}" />
+                <asp:BoundField DataField="GLAmountLC" HeaderText="Amount" DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" ItemStyle-CssClass="NumberAlign"/>
             </Columns>
             
         <HeaderStyle HorizontalAlign="Justify" VerticalAlign="Top" />

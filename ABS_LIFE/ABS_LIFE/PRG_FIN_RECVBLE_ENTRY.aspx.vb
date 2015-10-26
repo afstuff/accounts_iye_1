@@ -66,7 +66,8 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             Session("Cum_Detail_Amount") = Cum_Detail_Amount
             'Company code value to be filled from login
             txtCompanyCode.Text = "001"
-            txtEntryDate.Text = Now.Date.ToString()
+            'txtEntryDate.Text = Now.Date.ToString()
+            txtEntryDate.Text = Format(Now, "dd/MM/yyyy")
             txtEntryDate.ReadOnly = True
             lblError.Visible = False
             'If prgKey = "journal" Or prgKey = "payment" Then
@@ -121,7 +122,11 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
         Dim msg As String = String.Empty
         Dim docMonth As String = String.Empty
         Dim docYear As String = String.Empty
-
+        Dim Err = ""
+        ValidateFields(Err)
+        If Err = "Y" Then
+            Exit Sub
+        End If
         Try
             If Me.IsValid Then
 
@@ -294,9 +299,11 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
                         '.TotalAmt = Math.Round(CType(txtTotalAmt.Text, Decimal), 2)
                         .DetailTransType = cmbTransDetailType.SelectedValue.ToString 'D
                         .DRCR = cmbDRCR.SelectedValue.ToString 'D
-                        .GLAmountLC = Math.Round(CType(txtTransAmt.Text, Decimal), 2) 'D
+                        '.GLAmountLC = Math.Round(CType(txtTransAmt.Text, Decimal), 2) 'D
+                        .GLAmountLC = Format(txtTransAmt.Text, "Standard")
+                        '.RefAmount = CType(txtRefAmt.Text, Decimal) 'D
+                        .RefAmount = Format(txtRefAmt.Text, "Standard") 'D
 
-                        .RefAmount = CType(txtRefAmt.Text, Decimal) 'D
 
                         If Trim(txtRefDate.Text).Length > 0 Then
                             .RefDate = ValidDate(txtRefDate.Text)
@@ -425,7 +432,8 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
                 cmbTransDetailType.SelectedValue = .DetailTransType
                 cmbDRCR.SelectedValue = .DRCR
                 'txtTotalAmt.Text = Math.Round(.TotalAmt, 2)
-                txtRefAmt.Text = Math.Round(.RefAmount, 2)
+                ' txtRefAmt.Text = Math.Round(.RefAmount, 2)
+                txtRefAmt.Text = Format(.RefAmount, "Standard")
                 txtRefDate.Text = ValidDateFromDB(.RefDate)
                 txtReceiptRefNo1.Text = .RefNo1
                 txtReceiptRefNo2.Text = .RefNo2
@@ -445,7 +453,8 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
                 txtReceiptNo.Text = .DocNo
                 cmbTransType.SelectedValue = .TransType
 
-                txtTransAmt.Text = Math.Round(.GLAmountLC, 2)
+                ' txtTransAmt.Text = Math.Round(.GLAmountLC, 2)
+                txtTransAmt.Text = Format(.GLAmountLC, "Standard")
 
                 cmbMode.SelectedValue = .TransMode
                 txtLedgerType.Text = .LedgerTypeCode
@@ -825,6 +834,22 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             txtDRCR.Text = cmbDRCR.SelectedValue
         Else
             txtDRCR.Text = ""
+        End If
+    End Sub
+
+    Private Sub ValidateFields(ByRef ErrorInd)
+        Dim msg
+        If Not IsNumeric(txtTransAmt.Text) Then
+            msg = "Trans Amount must be numeric"
+            ErrorInd = "Y"
+            publicMsgs = "javascript:alert('" + msg + "')"
+            Exit Sub
+        End If
+        If Not IsNumeric(txtTotalAmt.Text) Then
+            msg = "Total Amount must be numeric"
+            ErrorInd = "Y"
+            publicMsgs = "javascript:alert('" + msg + "')"
+            Exit Sub
         End If
     End Sub
 End Class

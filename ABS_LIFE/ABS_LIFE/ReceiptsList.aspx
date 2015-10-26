@@ -36,7 +36,7 @@
     <style type="text/css">
     .NumberAlign
     {
-    	text-align:right;
+    	text-align:right!important;
     }
     </style>
 </head>
@@ -72,7 +72,7 @@
         DataSourceID="ods1" AllowSorting="True" CssClass="datatable"
         CellPadding="0" BorderWidth="0px" AlternatingRowStyle-BackColor="#CDE4F1" GridLines="None" HeaderStyle-BackColor="#099cc" ShowFooter="True" >
         <PagerStyle CssClass="pager-row" />
-           <RowStyle CssClass="row" />
+           <RowStyle CssClass="row" /> 
               <PagerSettings Mode="NumericFirstLast" PageButtonCount="7" FirstPageText="«" LastPageText="»" />      
             <Columns>
             
@@ -108,10 +108,7 @@
                 <asp:BoundField DataField="TransDate" HeaderText="Eff. Date" DataFormatString="{0:dd/MM/yy}"/>
                 <asp:BoundField DataField="TranDescription1" HeaderText="Description"/>
                 <asp:BoundField DataField="TranDescription2" HeaderText="Tenure"/>
-                <asp:BoundField DataField="AmountLC" HeaderText="Amount" DataFormatString="{0:n}">
-                <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-                 <ItemStyle CssClass="NumberAlign"/>
-                 </asp:BoundField>
+                <asp:BoundField DataField="AmountLC" HeaderText="Amount" DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" ItemStyle-CssClass="NumberAlign"/>
             </Columns>
         <HeaderStyle HorizontalAlign="Justify" VerticalAlign="Top" />
                 <AlternatingRowStyle BackColor="#CDE4F1" />
