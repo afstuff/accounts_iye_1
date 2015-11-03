@@ -81,6 +81,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             SetComboBinding(cmbTransDetailType, transTypeEnq.TransactionTypesDetails, "TransactionCode_Description", "TransactionCode")
 
             cmbTransType.Attributes.Add("readonly", "readonly")
+            txtSubAcct.Text = "000000"
 
             If strKey IsNot Nothing Then
                 fillValues()
@@ -442,7 +443,17 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
                 '.OperatorId = "001"
                 ' .PostStatus = "U" 'Unposted
                 txtRemarks.Text = .Remarks
-                txtSubAcct.Text = .SubAccount
+
+                If .SubAccount = "" Then
+                    txtSubAcct.Text = "000000"
+                Else
+                    txtSubAcct.Text = .SubAccount
+                End If
+
+                'Fill Account Description
+                If txtMainAcct.Text <> "" Then
+                    GetAcctDescription()
+                End If
 
                 txtSubSerialNo.Text = .SubSerialNo
                 txtTellerDate.Text = ValidDateFromDB(.TellerDate)
@@ -850,6 +861,22 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             ErrorInd = "Y"
             publicMsgs = "javascript:alert('" + msg + "')"
             Exit Sub
+        End If
+    End Sub
+
+    Protected Sub txtTransAmt_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtTransAmt.TextChanged
+        If IsNumeric(txtTransAmt.Text) Then
+            txtTransAmt.Text = Format(txtTransAmt.Text, "Standard")
+        End If
+    End Sub
+
+    Private Sub GetAcctDescription()
+        Dim dt As DataSet = New DataSet()
+        Dim recRep As New ReceiptsRepository()
+        dt = recRep.GetAccountChartDetailsDataSet(txtSubAcct.Text, txtMainAcct.Text)
+        If dt.Tables(0).Rows().Count <> 0 Then
+            txtMainAcctDesc.Text = dt.Tables(0).Rows(0).Item("sMainDesc")
+            txtSubAcctDesc.Text = dt.Tables(0).Rows(0).Item("sSubDesc")
         End If
     End Sub
 End Class

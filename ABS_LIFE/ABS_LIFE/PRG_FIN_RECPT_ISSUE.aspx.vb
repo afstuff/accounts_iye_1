@@ -23,6 +23,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Dim newSerialNum As String
     Dim Rceipt As CustodianLife.Model.Receipts
     Protected publicMsgs As String = String.Empty
+    Dim Err As String
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         txtMOP.Attributes.Add("disabled", "disabled")
@@ -376,14 +377,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtMainAcctDebit.Text = Rceipt.MainAccountDebit
             txtPayeeName.Text = Rceipt.PayeeName
             cmbMode.SelectedValue = Rceipt.PolicyPaymentMode
-            txtPolRegularContrib.Text = Math.Round(Rceipt.PolicyRegularContribution, 2)
+            'txtPolRegularContrib.Text = Math.Round(Rceipt.PolicyRegularContribution, 2)
+            txtPolRegularContrib.Text = Format(Rceipt.PolicyRegularContribution, "Standard")
+
 
             txtMOP.Text = Rceipt.PolicyPaymentMode
             cmbReceiptType.SelectedValue = Rceipt.ReceiptType
             txtReceiptRefNo.Text = Rceipt.ReferenceNo
             txtReceiptNo.Text = Rceipt.DocNo
-
-
+            Err = ""
             txtSerialNo.Text = Rceipt.SerialNo
             If Rceipt.SubAccountCredit = "" Then
                 txtSubAcctCredit.Text = "000000"
@@ -394,6 +396,14 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 txtSubAcctDebit.Text = "000000"
             Else
                 txtSubAcctDebit.Text = Rceipt.SubAccountDebit
+            End If
+
+            If txtMainAcctDebit.Text <> "" Then
+                GetAcctDescriptionDR()
+            End If
+
+            If txtMainAcctCredit.Text <> "" Then
+                GetAcctDescriptionCR()
             End If
 
             txtTempReceiptNo.Text = Rceipt.TempTransNo
@@ -408,6 +418,12 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtProductCode.Text = Rceipt.ProductCode
             updateFlag = True
             Session("updateFlag") = updateFlag
+            If (txtReceiptNo.Text <> "" And (cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D")) Then
+                GetPolicyInfos(Err)
+                If Err = "Y" Then
+                    Exit Sub
+                End If
+            End If
         End If
 
     End Sub
@@ -464,6 +480,11 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtBranchCode.Text = String.Empty
         txtReceiptCode.Text = String.Empty
         txtCurrencyCode.Text = String.Empty
+        txtMainAcctDebitDesc.Text = String.Empty
+        txtAssuredName.Text = String.Empty
+        txtAgentName.Text = String.Empty
+        txtAssuredAddress.Text = String.Empty
+        txtMOPDesc.Text = String.Empty
         updateFlag = False
         Session("updateFlag") = updateFlag 'ready for a new record
 
@@ -650,8 +671,11 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 txtReceiptNo.Enabled = False
                 chkReceiptNo.Checked = False
                 txtAgentCode.Text = Rceipt.AgentCode
-                txtReceiptAmtFC.Text = Math.Round(Rceipt.AmountFC, 2).ToString()
-                txtReceiptAmtLC.Text = Math.Round(Rceipt.AmountLC, 2).ToString()
+                'txtReceiptAmtFC.Text = Math.Round(Rceipt.AmountFC, 2).ToString()
+                'txtReceiptAmtLC.Text = Math.Round(Rceipt.AmountLC, 2).ToString()
+
+                txtReceiptAmtFC.Text = Format(Rceipt.AmountFC, "Standard")
+                txtReceiptAmtLC.Text = Format(Rceipt.AmountLC, "Standard")
 
                 txtBankGLCode.Text = Rceipt.BankCode
                 txtBatchNo.Text = Rceipt.BatchNo
@@ -673,7 +697,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 txtPayeeName.Text = Rceipt.PayeeName
                 'cmbMode.SelectedValue = Rceipt.PolicyPaymentMode
                 'cmbMode.Text = Rceipt.PolicyPaymentMode
-                txtPolRegularContrib.Text = Math.Round(Rceipt.PolicyRegularContribution, 2)
+                ' txtPolRegularContrib.Text = Math.Round(Rceipt.PolicyRegularContribution, 2)
+                txtPolRegularContrib.Text = Format(Rceipt.PolicyRegularContribution, "Standard")
 
                 txtMOP.Text = Rceipt.PolicyPaymentMode
                 cmbReceiptType.SelectedValue = Rceipt.ReceiptType
@@ -708,6 +733,25 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 txtProductCode.Text = Rceipt.ProductCode
                 updateFlag = True
                 Session("updateFlag") = updateFlag
+
+                If txtMainAcctDebit.Text <> "" Then
+                    GetAcctDescriptionDR()
+                End If
+
+                If txtMainAcctCredit.Text <> "" Then
+                    GetAcctDescriptionCR()
+                End If
+                Err = ""
+                If (txtReceiptNo.Text <> "" And (cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D")) Then
+                    GetPolicyInfos(Err)
+                    If Err = "Y" Then
+                        Exit Sub
+                    End If
+                End If
+
+
+
+
             End If
         End If
     End Sub
@@ -783,6 +827,55 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             ErrorInd = "Y"
             publicMsgs = "javascript:alert('" + msg + "')"
             Exit Sub
+        End If
+    End Sub
+
+    Private Sub GetPolicyInfos(ByRef ErrorInd)
+        Dim dt As DataSet = New DataSet()
+        Dim recRep As New ReceiptsRepository()
+        dt = recRep.GetPolicyInfoDataSet(txtReceiptRefNo.Text, cmbReceiptType.SelectedValue)
+        If dt.Tables(0).Rows().Count <> 0 Then
+            txtInsuredCode.Text = dt.Tables(0).Rows(0).Item("TBIL_POLY_ASSRD_CD")
+            txtAgentCode.Text = dt.Tables(0).Rows(0).Item("TBIL_POLY_AGCY_CODE")
+            txtAssuredName.Text = dt.Tables(0).Rows(0).Item("Insured_Name")
+            txtAssuredAddress.Text = dt.Tables(0).Rows(0).Item("Insured_Address")
+            txtPayeeName.Text = dt.Tables(0).Rows(0).Item("Insured_Name")
+            txtPolRegularContrib.Text = Format(dt.Tables(0).Rows(0).Item("TBIL_POL_PRM_DTL_MOP_PRM_LC"), "Standard")
+            txtAgentName.Text = dt.Tables(0).Rows(0).Item("Agent_Name")
+            txtMOP.Text = dt.Tables(0).Rows(0).Item("Payment_Mode")
+            txtMOPDesc.Text = dt.Tables(0).Rows(0).Item("Payment_Mode_Desc")
+            txtFileNo.Text = dt.Tables(0).Rows(0).Item("File_No")
+            txtProductCode.Text = dt.Tables(0).Rows(0).Item("Product_Code")
+
+            If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
+                Dim message = "Please contact technical department, record not completed for policy no " & txtReceiptRefNo.Text
+                ErrorInd = "Y"
+                publicMsgs = "javascript:alert('" + message + "')"
+                txtReceiptRefNo.Focus()
+                Exit Sub
+            End If
+
+        End If
+
+    End Sub
+
+    Private Sub GetAcctDescriptionDR()
+        Dim dt As DataSet = New DataSet()
+        Dim recRep As New ReceiptsRepository()
+        dt = recRep.GetAccountChartDetailsDataSet(txtSubAcctDebit.Text, txtMainAcctDebit.Text)
+        If dt.Tables(0).Rows().Count <> 0 Then
+            txtMainAcctDebitDesc.Text = dt.Tables(0).Rows(0).Item("sMainDesc")
+            txtSubAcctDebitDesc.Text = dt.Tables(0).Rows(0).Item("sSubDesc")
+        End If
+    End Sub
+
+    Private Sub GetAcctDescriptionCR()
+        Dim dt As DataSet = New DataSet()
+        Dim recRep As New ReceiptsRepository()
+        dt = recRep.GetAccountChartDetailsDataSet(txtSubAcctCredit.Text, txtMainAcctCredit.Text)
+        If dt.Tables(0).Rows().Count <> 0 Then
+            txtMainAcctCreditDesc.Text = dt.Tables(0).Rows(0).Item("sMainDesc")
+            txtSubAcctCreditDesc.Text = dt.Tables(0).Rows(0).Item("sSubDesc")
         End If
     End Sub
 End Class

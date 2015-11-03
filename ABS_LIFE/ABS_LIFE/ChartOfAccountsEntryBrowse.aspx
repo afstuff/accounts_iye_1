@@ -39,7 +39,7 @@
       <div class="gridp">
             <div class="rounded">
                 <div class="top-outer"><div class="top-inner"><div class="top">
-                    <h2>Chadrt of Accounts Details </h2>
+                    <h2>Chart of Accounts Details </h2>
                 </div></div></div>
                 <div class="mid-outer"><div class="mid-inner">
                 <div class="mid">     

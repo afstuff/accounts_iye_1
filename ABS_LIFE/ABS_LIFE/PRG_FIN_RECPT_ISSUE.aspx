@@ -137,11 +137,53 @@
 
             $("#txtEffectiveDate").on('focusout', function(e) {
                 e.preventDefault();
-                if ($("#txtEffectiveDate").val() != "")
+                if ($("#txtEffectiveDate").val() != "") {
                     var effDate = $("#txtEffectiveDate").val();
-                effDateLen = effDate.length
-                if (effDateLen == 8 && $.isNumeric(effDate)) {
-                    $("#txtEffectiveDate").val(FormatDateAuto(effDate))
+                    effDateLen = effDate.length
+                    if (effDateLen == 8 && $.isNumeric(effDate)) {
+                        $("#txtEffectiveDate").val(FormatDateAuto(effDate))
+                    }
+                }
+                //return false;
+            });
+
+//Format Cheque date Automatically
+            $("#txtChequeDate").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtChequeDate").val() != "") {
+                    var effDate = $("#txtChequeDate").val();
+                    effDateLen = effDate.length
+                    if (effDateLen == 8 && $.isNumeric(effDate)) {
+                        $("#txtChequeDate").val(FormatDateAuto(effDate))
+                    }
+                }
+                //return false;
+            });
+
+            $("#txtBatchNo").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtBatchNo").val() != "") {
+                    var BatchNo = $("#txtBatchNo").val();
+                    BatchNoLen = BatchNo.length
+                    if ($.isNumeric(BatchNo)) {
+                        if (BatchNoLen != 6) {
+                            alert("Invalid batch date");
+                            $("#txtBatchNo").focus();
+                        }
+                        else {
+                            var lastTwoDigit = BatchNo.substring(4);
+                            if (Number(lastTwoDigit) >= 1 && Number(lastTwoDigit) <= 12) {
+                            }
+                            else {
+                                alert("Batch date month part is invalid")
+                                $("#txtBatchNo").focus();
+                            }
+                        }
+                    }
+                    else {
+                        alert("Batch date contains non numeric character")
+                        $("#txtBatchNo").focus();
+                    }
                 }
                 //return false;
             });
@@ -188,8 +230,7 @@
 
             //retrieve data on focus loss
             $("#txtReceiptRefNo").on('focusout', function(e) {
-            e.preventDefault();
-                alert($("#lblRefNo").text())
+                e.preventDefault();
                 if ($("#txtReceiptRefNo").val() != "" && ($("#lblRefNo").text() == "Proposal No" || $("#lblRefNo").text() == "Policy No")) {
                     LoadPolicyInfoObject();
                 }

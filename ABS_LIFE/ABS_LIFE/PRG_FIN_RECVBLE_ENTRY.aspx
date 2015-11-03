@@ -189,7 +189,7 @@
             $("#txtMainAcct").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtMainAcct").val() != "")
-                    LoadChartInfo("txtSubAcct", "txtMainAcct", "DR");
+                    LoadChartInfo("txtSubAcct", "txtMainAcct", "DR", "Main");
 
                 //return false;
             });
@@ -197,7 +197,7 @@
             $("#txtSubAcct").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtSubAcct").val() != "")
-                    LoadChartInfo("txtSubAcct", "txtMainAcct", "DR");
+                    LoadChartInfo("txtSubAcct", "txtMainAcct", "DR", "Sub");
             });
 
             //retrieve data on focus loss branches
@@ -259,6 +259,80 @@
                 //return false;
             });
 
+
+
+            //Format Receipt Date Automatically. Make the slashes jump into place
+
+            $("#txtEffectiveDate").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtEffectiveDate").val() != "") {
+                    var effDate = $("#txtEffectiveDate").val();
+                    effDateLen = effDate.length
+                    if (effDateLen == 8 && $.isNumeric(effDate)) {
+                        $("#txtEffectiveDate").val(FormatDateAuto(effDate))
+                    }
+                }
+                //return false;
+            });
+
+            //Format Teller Date Automatically. Make the slashes jump into place
+
+            $("#txtTellerDate").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtTellerDate").val() != "") {
+                    var effDate = $("#txtTellerDate").val();
+                    effDateLen = effDate.length
+                    if (effDateLen == 8 && $.isNumeric(effDate)) {
+                        $("#txtTellerDate").val(FormatDateAuto(effDate))
+                    }
+                }
+                //return false;
+            });
+
+            //Format Cheque Date Automatically. Make the slashes jump into place
+
+            $("#txtChequeDate").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtChequeDate").val() != "") {
+                    var effDate = $("#txtChequeDate").val();
+                    effDateLen = effDate.length
+                    if (effDateLen == 8 && $.isNumeric(effDate)) {
+                        $("#txtChequeDate").val(FormatDateAuto(effDate))
+                    }
+                }
+                //return false;
+            });
+
+//Batch Date Validation
+            $("#txtBatchNo").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtBatchNo").val() != "") {
+                    var BatchNo = $("#txtBatchNo").val();
+                    BatchNoLen = BatchNo.length
+                    if ($.isNumeric(BatchNo)) {
+                        if (BatchNoLen != 6) {
+                            alert("Invalid batch date");
+                            $("#txtBatchNo").focus();
+                        }
+                        else {
+                            var lastTwoDigit = BatchNo.substring(4);
+                            if (Number(lastTwoDigit) >= 1 && Number(lastTwoDigit) <= 12) {
+                            }
+                            else {
+                                alert("Batch date month part is invalid")
+                                $("#txtBatchNo").focus();
+                            }
+                        }
+                    }
+                    else {
+                        alert("Batch date contains non numeric character")
+                        $("#txtBatchNo").focus();
+                    }
+                }
+                //return false;
+            });
+
+            
             // ajax call to load policy information
             function LoadBranchInfoObject() {
                 $.ajax({
@@ -293,7 +367,7 @@
             }
 
             // ajax call to load account chart information
-            function LoadChartInfo(accountsubcode, accountmaincode, drcr) {
+            function LoadChartInfo(accountsubcode, accountmaincode, drcr, ctype) {
                 $.ajax({
                     type: "POST",
                     url: "PRG_FIN_RECPT_ISSUE.aspx/GetAccountChartDetails",
@@ -307,7 +381,14 @@
                         retrieve_AccountChartInfoValues(accountcharts, drcr)
                     },
                     failure: OnFailure_LoadChartInfo,
-                    error: OnError_LoadChartInfo
+                   // error: OnError_LoadChartInfo
+                    error: function() {
+                        alert('Error!: Account Chart could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
+                        if (ctype == "Sub") {
+                            $("#txtMainAcct").focus();
+                            $("#txtSubAcct").val("000000");
+                        }
+                    }
                 });
                 // this avoids page refresh on button click
                 // alert("accountsubcode: " + document.getElementById(accountsubcode).value + " accountmaincode: " + document.getElementById(accountmaincode).value);
@@ -960,6 +1041,14 @@
                 console.log($(this).find("TTBFN_TRANS_TYP_CODE").text())
             });
         }
+
+        function FormatDateAuto(effDate) {
+            var effDateDay = effDate.substring(0, 2);
+            var effDateMonth = effDate.substring(2, 4);
+            var effDateYear = effDate.substring(4);
+            return effDateDay + "/" + effDateMonth + "/" + effDateYear;
+        }
+        
     </script>
 
     <style type="text/css">
@@ -1287,7 +1376,7 @@
                                             <asp:TextBox ID="txtReceiptRefNo3" runat="server" Width="90px"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtTransAmt" runat="server" Width="100px">0.00</asp:TextBox>
+                                            <asp:TextBox ID="txtTransAmt" runat="server" Width="100px" AutoPostBack="True">0.00</asp:TextBox>
                                             <%--<asp:RegularExpressionValidator ID="vdamt" runat="server" ErrorMessage="Please Enter a Valid Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtTransAmt">*</asp:RegularExpressionValidator>
                                        --%> </td>

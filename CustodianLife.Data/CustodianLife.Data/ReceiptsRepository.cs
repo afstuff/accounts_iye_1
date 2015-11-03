@@ -75,7 +75,7 @@ namespace CustodianLife.Data
         }
         public Receipts GetByReceiptNo(String _receiptno)
         {
-            string hqlOptions = "from Receipts i where i.DocNo = " + _receiptno;
+            string hqlOptions = "from Receipts i where i.DocNo = '" + _receiptno +"'";
             using (var session = GetSession())
             {
 
@@ -96,6 +96,8 @@ namespace CustodianLife.Data
                 fCriteria = "TransDate";
             else if (_key == "PayerName")
                 fCriteria = "PayeeName";
+            else if (_key == "Receipt")
+                fCriteria = "DocNo";
             else if (_key == "All")
                 fCriteria = "";
 
@@ -121,6 +123,13 @@ namespace CustodianLife.Data
                     }
 
                 case "PayerName":
+                    hqlOptions = "from Receipts r where r." + fCriteria + " like '%" + _value + "%' Order by EntryDate Desc";
+                    using (var session = GetSession())
+                    {
+                        return session.CreateQuery(hqlOptions).List<Receipts>();
+                    }
+
+                case "Receipt":
                     hqlOptions = "from Receipts r where r." + fCriteria + " like '%" + _value + "%' Order by EntryDate Desc";
                     using (var session = GetSession())
                     {
@@ -418,7 +427,43 @@ namespace CustodianLife.Data
             return GetDataSet(query).GetXml();
 
         }
+
+        public DataSet GetPolicyInfoDataSet(String criteriaValue, String searchType)
+        {
+            String fld = String.Empty;
+            if (criteriaValue.StartsWith("P/2/"))
+                fld = "[TBIL_POLY_PROPSAL_NO]";
+            else if (searchType == "P")
+                fld = "[TBIL_POLY_POLICY_NO]";
+            else if (searchType == "D")
+                fld = "[TBIL_POLY_PROPSAL_NO]";
+            string query = "SELECT "
+                           + " [TBIL_POLY_PROPSAL_NO]"
+                          + ",[TBIL_POLY_POLICY_NO]"
+                          + ",[TBIL_POLY_ASSRD_CD]"
+                          + ",(SELECT [TBIL_INSRD_SURNAME] + ' ' + ISNULL([TBIL_INSRD_FIRSTNAME],' ')"
+                          + " FROM [TBIL_INS_DETAIL] b WHERE b.[TBIL_INSRD_CODE] = p.[TBIL_POLY_ASSRD_CD]) as Insured_Name"
+                          + "	                    ,	(SELECT "
+                          + "    [TBIL_INSRD_ADRES1] + ' ' + ISNULL([TBIL_INSRD_ADRES2],' ') "
+                          + "  FROM [TBIL_INS_DETAIL] y "
+                          + "  WHERE y.[TBIL_INSRD_CODE] = p.[TBIL_POLY_ASSRD_CD]) as Insured_Address "
+                          + ",[TBIL_POLY_AGCY_CODE], [TBIL_POLY_PRDCT_CD] as Product_Code "
+                          + ",[TBIL_POLY_FILE_NO] as File_No"
+                          + ",(SELECT [TBIL_AGCY_AGENT_NAME] FROM [TBIL_AGENCY_CD] d WHERE d.[TBIL_AGCY_AGENT_CD]= p.[TBIL_POLY_AGCY_CODE]) as Agent_Name"
+                          + ", [TBIL_POL_PRM_DTL_MOP_PRM_LC]"
+                          + ",[TBIL_POL_PRM_MODE_PAYT] as Payment_Mode "
+                          + ",(SELECT CASE [TBIL_POL_PRM_MODE_PAYT] WHEN 'M' THEN 'MONTHLY' WHEN 'A' THEN 'ANNUALLY' WHEN 'H' THEN 'HALF YEARLY' WHEN 'Q' THEN 'QUARTERLY' END) as Payment_Mode_Desc"
+                          + ",convert(varchar, [TBIL_POLICY_EFF_DT], 102) as TBIL_POLICY_EFF_DT"
+                          + " FROM [TBIL_POLICY_DET] p INNER JOIN [TBIL_POLICY_PREM_DETAILS] q "
+                          + "ON p.[TBIL_POLY_POLICY_NO] = q.[TBIL_POL_PRM_DTL_POLY_NO] "
+                          + "INNER JOIN [TBIL_POLICY_PREM_INFO] r "
+                          + "ON p.[TBIL_POLY_POLICY_NO] = r.TBIL_POL_PRM_POLY_NO "
+                          + " WHERE p." + fld + " = '" + criteriaValue + "'";
+            return GetDataSet(query);
+
+        }
         /// <summary>
+        /// 
         /// this returns a dataset to be converted to XML for serialization into a Json object 
         /// used to retrieve data from the back end to the html page using jQuery 
         /// </summary>
@@ -561,8 +606,8 @@ namespace CustodianLife.Data
             string query = "SELECT * "
                           + "FROM CiFn_ReceiptCoverPeriods('"
                           + _polnum + "','"
-                          + _mop + "',(SELECT REPLACE(CONVERT(VARCHAR(10), '"
-                          + _effdate + "', 102), '/', '-')),"
+                          + _mop + "', '"
+                          + _effdate + "', "
                           + _contrib + ","
                           + _amtpaid + ",NULL,NULL,NULL)";
 
@@ -580,6 +625,19 @@ namespace CustodianLife.Data
                           + _accountmaincode + "',NULL,NULL,NULL)";
 
             return GetDataSet(query).GetXml();
+        }
+
+        public DataSet GetAccountChartDetailsDataSet(string _accountsubcode
+                                         , String _accountmaincode)
+        {
+
+
+            string query = "SELECT * "
+                          + "FROM CiFn_GetChartOfAccountDetail('"
+                          + _accountsubcode + "','"
+                          + _accountmaincode + "',NULL,NULL,NULL)";
+
+            return GetDataSet(query);
         }
 
 

@@ -61,6 +61,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''chkReceiptNo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkReceiptNo As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
     '''txtReceiptNo control.
     '''</summary>
     '''<remarks>
@@ -313,15 +322,6 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected WithEvents txtReceiptAmtLC As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''rvDecimal control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rvDecimal As Global.System.Web.UI.WebControls.RegularExpressionValidator
-
-    '''<summary>
     '''txtReceiptAmtFC control.
     '''</summary>
     '''<remarks>
@@ -329,15 +329,6 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtReceiptAmtFC As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''RegularExpressionValidator1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents RegularExpressionValidator1 As Global.System.Web.UI.WebControls.RegularExpressionValidator
 
     '''<summary>
     '''txtPayeeName control.
