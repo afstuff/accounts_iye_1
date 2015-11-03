@@ -17,6 +17,7 @@ Partial Public Class PRG_FIN_ACCOUNTS_CHART
     Dim accChart As CustodianLife.Model.ChartOfAccounts
     Dim coyCdEnq As CompanyCodesRepository
     Dim accGrps As AccountGroupsRepository
+    Protected publicMsgs As String = String.Empty
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not Page.IsPostBack Then
@@ -85,6 +86,8 @@ Partial Public Class PRG_FIN_ACCOUNTS_CHART
             End With
             coaRepo.Save(accChart)
             Session("accChart") = accChart
+            Status.Text = "Save Operation Successful"
+            publicMsgs = "javascript:alert('" + Status.Text + "')"
         Else
             With accChart
                 .AccountLedgerType = cmbLedgerTyp.SelectedValue
@@ -102,9 +105,10 @@ Partial Public Class PRG_FIN_ACCOUNTS_CHART
 
             End With
             coaRepo.Save(accChart)
-
+            Status.Text = "Save Operation Successful"
+            publicMsgs = "javascript:alert('" + Status.Text + "')"
         End If
-
+      
         'initializeFields()
 
 
@@ -165,7 +169,6 @@ Partial Public Class PRG_FIN_ACCOUNTS_CHART
     
     Protected Sub butClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butClose.Click
         Response.Redirect("ChartOfAccountsEntryBrowse.aspx")
-
     End Sub
     Private Sub SetComboBinding(ByVal toBind As ListControl, ByVal dataSource As Object, ByVal displayMember As String, ByVal valueMember As String)
         toBind.DataTextField = displayMember

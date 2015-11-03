@@ -14,13 +14,33 @@
     <title></title>
     
     
+    <style type="text/css">
+        .style1
+        {
+            width: 275px;
+        }
+        .style2
+        {
+            width: 188px;
+        }
+        .style4
+        {
+            width: 449px;
+        }
+        .style5
+        {
+            width: 235px;
+        }
+    </style>
+    
+    
 </head>
-<body>
+<body onload="<%= publicMsgs %>">
   
  <asp:Label runat="server" ID="lblError" Font-Bold="true" ForeColor="Red" Visible="false"> </asp:Label>
     <form id="PRG_FIN_ACCOUNTS_CHART" runat="server">
-<div  class="newpage">
-    <table>
+<div  class="newpage" style="padding-left: 100px !important;">
+    <table style="margin-left: 1px">
     <tr>
     <td>
         <asp:Literal runat="server" Visible="false" ID="litMsgs"></asp:Literal>
@@ -29,7 +49,7 @@
     </td></tr>
     </table>
 
-     <div class="grid">
+     <div class="grid" style="width:900px !important; margin-left:0px !important;">
             <div class="rounded">
                 <div class="top-outer"><div class="top-inner"><div class="top">
                     <h2>Accounts Chart Codes</h2>
@@ -39,41 +59,40 @@
                 	
 
                 <table class="tbl_menu_new">
-			        <tr><td colspan="4" class="myMenu_Title" align="center"><asp:Label ID="lblDesc1" runat="server" Text="Accounts Chart Setup"> </asp:Label> </td><td></td><td></td><td></td></tr>
-			        <tr><td>Company Code</td>
-			                <td><asp:Dropdownlist ID="cmbCoyCode" runat="server" Width="150px">
+			        <tr><td colspan="4" class="myMenu_Title" align="center"><asp:Label ID="lblDesc1" runat="server" Text="Accounts Chart Setup"> </asp:Label> </td></tr>
+			        <tr><td class="style2">Company Code</td>
+			                <td class="style1"><asp:Dropdownlist ID="cmbCoyCode" runat="server" Width="150px">
         				    </asp:Dropdownlist></td>
 
-					    <td>Entry Date</td>
+					    <td class="style5">Entry Date</td>
 					
-			            <td><asp:TextBox ID="txtEntryDate" runat="server" Width="150px" Enabled="False"></asp:TextBox> </td>
-				        <td></td>
+			            <td class="style4"><asp:TextBox ID="txtEntryDate" runat="server" Width="150px" Enabled="False"></asp:TextBox> </td>
                     </tr>
 				    <tr>
-					    <td>Main Code</td>
-					    <td><asp:TextBox ID="txtMainCode" runat="server" Width="270px" MaxLength=15 ></asp:TextBox></td>
-					    <td>Main Description</td>
-					    <td><asp:TextBox ID="txtMainDesc" runat="server" Width="270px" MaxLength=150></asp:TextBox></td>
+					    <td class="style2">Main Code</td>
+					    <td class="style1"><asp:TextBox ID="txtMainCode" runat="server" Width="270px" MaxLength=15 ></asp:TextBox></td>
+					    <td class="style5">Main Description</td>
+					    <td class="style4"><asp:TextBox ID="txtMainDesc" runat="server" Width="270px" MaxLength=150></asp:TextBox></td>
 
 				    </tr>
     				
 				    <tr>
-					    <td>Sub Code</td>
-					    <td><asp:TextBox ID="txtSubCode" runat="server" Width="270px" MaxLength=10 Text="0"></asp:TextBox></td>
-					    <td>Sub Description</td>
-					    <td><asp:TextBox ID="txtSubDesc" runat="server" Width="270px" MaxLength=150></asp:TextBox></td>
+					    <td class="style2">Sub Code</td>
+					    <td class="style1"><asp:TextBox ID="txtSubCode" runat="server" Width="270px" MaxLength=10 Text="0"></asp:TextBox></td>
+					    <td class="style5">Sub Description</td>
+					    <td class="style4"><asp:TextBox ID="txtSubDesc" runat="server" Width="270px" MaxLength=150></asp:TextBox></td>
 
 				    </tr>
 
 				    <tr>
-					    <td><asp:Label ID="lblLevel" runat="server" Text="Level"> </asp:Label></td>
-			                <td><asp:Dropdownlist ID="cmbLevel" runat="server" Width="150px">
+					    <td class="style2"><asp:Label ID="lblLevel" runat="server" Text="Level"> </asp:Label></td>
+			                <td class="style1"><asp:Dropdownlist ID="cmbLevel" runat="server" Width="150px">
         				    <asp:ListItem Value="M" Text="Main Account" Selected="True"> </asp:ListItem>
         				    <asp:ListItem Value="S" Text="Sub Account"> </asp:ListItem>
         				    </asp:Dropdownlist></td>
-					    <td><asp:Label ID="lblLedgerType" runat="server" Text="Ledger Type" > </asp:Label>
+					    <td class="style5"><asp:Label ID="lblLedgerType" runat="server" Text="Ledger Type" > </asp:Label>
 					    <asp:Label ID="lblGroup" runat="server" Text="Group" Visible=false> </asp:Label></td>
-			                <td><asp:Dropdownlist ID="cmbGroup" runat="server" Width="150px" Visible=false>
+			                <td class="style4"><asp:Dropdownlist ID="cmbGroup" runat="server" Width="150px" Visible=false>
         				    </asp:Dropdownlist>
         				    <asp:DropDownList ID="cmbLedgerTyp" runat="server" Width="150px">  
                                     <asp:ListItem Value="O">Select</asp:ListItem>
@@ -99,15 +118,15 @@
         				    </td>
 				    </tr>
 				    <tr>
-					    <td></td>
-					    <td>
+					    <td class="style2"></td>
+					    <td class="style1">
 					    </td>
-					    <td></td>
-					    <td></td>
+					    <td class="style5"></td>
+					    <td class="style4"></td>
 				    </tr>
 				<tr>
-					<td></td><td></td><td></td>
-					<td>
+					<td class="style2"></td><td class="style1"></td><td class="style5"></td>
+					<td class="style4">
                         <asp:Button ID="butSave" runat="server" Text="Save" onclick="butSave_Click" />
                         <asp:Button ID="butDelete" runat="server" Text="Delete" style="height: 26px"/>
                         <asp:Button ID="ButNewRec" runat="server" Text="New Rec" />
