@@ -57,6 +57,7 @@
     <asp:ListItem Value="All">All</asp:ListItem>
     <asp:ListItem Value="TDate">Trans Date</asp:ListItem>
     <asp:ListItem Value="Code">Policy No</asp:ListItem>
+        <asp:ListItem Value="Receipt">Receipt No</asp:ListItem>
         <asp:ListItem Value="PayerName">Payer Name</asp:ListItem>
     </asp:DropDownList>
     </td><td><asp:TextBox ID="txtSearch" runat="server" Width="128px"></asp:TextBox><span id="dtChoose">                        
@@ -76,14 +77,14 @@
               <PagerSettings Mode="NumericFirstLast" PageButtonCount="7" FirstPageText="«" LastPageText="»" />      
             <Columns>
             
-              <asp:HyperLinkField DataTextField="rtId" DataNavigateUrlFields="rtId,CompanyCode,BatchNo,SerialNo"
+            <%--  <asp:HyperLinkField DataTextField="rtId" DataNavigateUrlFields="rtId,CompanyCode,BatchNo,SerialNo"
          DataNavigateUrlFormatString="~/PRG_FIN_RECPT_ISSUE.aspx?idd={0},{1},{2},{3}" HeaderText="Id"  
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
          
 <HeaderStyle CssClass="first"></HeaderStyle>
 
 <ItemStyle CssClass="first"></ItemStyle>
-                </asp:HyperLinkField>
+                </asp:HyperLinkField>--%>
          
               <asp:HyperLinkField DataTextField="BatchNo" DataNavigateUrlFields="rtId,CompanyCode,BatchNo,SerialNo"
          DataNavigateUrlFormatString="~/PRG_FIN_RECPT_ISSUE.aspx?idd={0},{1},{2},{3}" HeaderText="Bat. #"  
@@ -94,21 +95,30 @@
 <ItemStyle CssClass="first"></ItemStyle>
                 </asp:HyperLinkField>
          
-              <asp:HyperLinkField DataTextField="SerialNo" DataNavigateUrlFields="rtId,CompanyCode,BatchNo,SerialNo"
+           <%--   <asp:HyperLinkField DataTextField="SerialNo" DataNavigateUrlFields="rtId,CompanyCode,BatchNo,SerialNo"
          DataNavigateUrlFormatString="~/PRG_FIN_RECPT_ISSUE.aspx?idd={0},{1},{2},{3}" HeaderText="SN"  
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
 
-<%--<HeaderStyle CssClass="first"></HeaderStyle>--%>
+<HeaderStyle CssClass="first"></HeaderStyle>
 
-<%--<ItemStyle CssClass="first"></ItemStyle>--%>
-                </asp:HyperLinkField>
+<ItemStyle CssClass="first"></ItemStyle>
+                </asp:HyperLinkField>--%>
+                <asp:BoundField DataField="DocNo" HeaderText="Recpt No">
+                <ItemStyle Width="60px" />
+                </asp:BoundField>
                 <asp:BoundField DataField="ReferenceNo" HeaderText="Policy No"/>
                 <asp:BoundField DataField="PayeeName" HeaderText="Payee Name"/>
                 <asp:BoundField DataField="TransDate" HeaderText="Eff. Date" DataFormatString="{0:dd/MM/yy}"/>
                 <asp:BoundField DataField="TranDescription1" HeaderText="Description"/>
                 <asp:BoundField DataField="TranDescription2" HeaderText="Tenure"/>
-                <asp:BoundField DataField="AmountLC" HeaderText="Amount" DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" ItemStyle-CssClass="NumberAlign"/>
+                <asp:BoundField DataField="AmountLC" HeaderText="Amount" 
+                    DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" 
+                    ItemStyle-CssClass="NumberAlign">
+<HeaderStyle CssClass="NumberAlign"></HeaderStyle>
+
+<ItemStyle CssClass="NumberAlign"></ItemStyle>
+                </asp:BoundField>
             </Columns>
         <HeaderStyle HorizontalAlign="Justify" VerticalAlign="Top" />
                 <AlternatingRowStyle BackColor="#CDE4F1" />

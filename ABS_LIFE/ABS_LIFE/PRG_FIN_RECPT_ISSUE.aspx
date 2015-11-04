@@ -241,6 +241,19 @@
             $("#txtReceiptRefNo").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtReceiptRefNo").val() != "" && ($("#lblRefNo").text() == "Proposal No" || $("#lblRefNo").text() == "Policy No")) {
+                    document.getElementById('txtInsuredCode').value = "";
+                    document.getElementById('txtAgentCode').value = ""; ;
+                    document.getElementById('txtAssuredName').value = ""; ;
+                    document.getElementById('txtAssuredAddress').value = ""; ;
+                    document.getElementById('txtPayeeName').value = "";
+                    document.getElementById('txtPolRegularContrib').value = "0.00" ;
+                    document.getElementById('txtAgentName').value = "";
+                    document.getElementById('txtMOP').value = "";
+                    document.getElementById('txtMOPDesc').value = "";
+                    document.getElementById('txtPolicyEffDate').value = "";
+                    document.getElementById('txtFileNo').value = "";
+                    document.getElementById('txtProductCode').value = "";
+
                     LoadPolicyInfoObject();
                 }
                 return false;
@@ -776,11 +789,10 @@
                 document.getElementById('txtFileNo').value = $(this).find("File_No").text();
                 document.getElementById('txtProductCode').value = $(this).find("Product_Code").text();
 
-                if ($(this).find("TBIL_POLY_ASSRD_CD").text() == "" || $(this).find("TBIL_POLY_AGCY_CODE").text() == "" || $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text() == "0.00" || $(this).find("Payment_Mode").text() == "")
+                if ($(this).find("TBIL_POLY_ASSRD_CD").text() == "" || $(this).find("TBIL_POLY_AGCY_CODE").text() == "" || $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text() == "0.00" || $(this).find("Payment_Mode").text() == "") {
                     alert("Please contact technical department, record not completed for policy no " + document.getElementById('txtReceiptRefNo').value);
-                $("#txtReceiptRefNo").focus();
-
-
+                    $("#txtReceiptRefNo").focus();
+                }
             });
 
         }
@@ -848,7 +860,7 @@
             //var errorText = response.responseText;
             //alert('Error!!!' + '\n\n' + errorText);
             alert('Error!: Policy Infomation Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
-            $('#cmbMode').focus();
+            $('#txtReceiptRefNo').focus();
         }
         function OnError_LoadPeriodsCover(response) {
             //debugger;
