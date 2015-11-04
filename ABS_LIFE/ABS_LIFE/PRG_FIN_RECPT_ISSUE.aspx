@@ -143,11 +143,15 @@
                     if (effDateLen == 8 && $.isNumeric(effDate)) {
                         $("#txtEffectiveDate").val(FormatDateAuto(effDate))
                     }
+                    else if (effDateLen != 8 && $.isNumeric(effDate)) {
+                        alert("Auto date format allows only 8 digit numbers (ddmmyyyy)");
+                        $("#txtEffectiveDate").focus();
+                    }
                 }
                 //return false;
             });
 
-//Format Cheque date Automatically
+            //Format Cheque date Automatically
             $("#txtChequeDate").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtChequeDate").val() != "") {
@@ -191,7 +195,9 @@
 
             //retrieve data on focus loss
             $("#txtMainAcctDebit").on('focusout', function(e) {
-                e.preventDefault();
+            e.preventDefault();
+            $("#txtMainAcctDebitDesc").val('')
+            $("#txtSubAcctDebitDesc").val('')
                 if ($("#txtMainAcctDebit").val() != "" && $("#txtSubAcctDebit").val() != "")
                     LoadChartInfo("txtSubAcctDebit", "txtMainAcctDebit", "Main", "DR");
                 $("#txtSubAcctDebit").focus();
@@ -201,7 +207,8 @@
             //retrieve data on focus loss
             $("#txtSubAcctDebit").on('focusout', function(e) {
                 e.preventDefault();
-
+                $("#txtMainAcctDebitDesc").val('')
+                $("#txtSubAcctDebitDesc").val('')
                 if ($("#txtSubAcctDebit").val() != "" && $("#txtMainAcctDebit").val() != "")
                     LoadChartInfo("txtSubAcctDebit", "txtMainAcctDebit", "Sub", "DR");
                 //return false;
@@ -210,6 +217,8 @@
 
             //retrieve data on focus loss
             $("#txtMainAcctCredit").on('focusout', function(e) {
+            $("#txtMainAcctCreditDesc").val('')
+            $("#txtSubAcctCreditDesc").val('')
                 e.preventDefault();
                 if ($("#txtMainAcctCredit").val() != "" && $("#txtSubAcctCredit").val() != "")
                 //LoadChartInfo("txtSubAcctDebit", "txtMainAcctCredit", "Main", "CR");
@@ -625,6 +634,10 @@
                     var xml = $(xmlDoc);
                     var accountcharts = xml.find("Table");
                     retrieve_AccountChartInfoValues(accountcharts, ctype, drcr)
+                    if (ctype == "Sub" && drcr == "DR") {
+                        $("#txtMainAcctCredit").focus();
+                        $("#txtSubAcctDebit").val("000000");
+                    }
                     //retrieve_AccountChartInfoValues(accountcharts, drcr)
                 },
                 failure: OnFailure,
@@ -1190,7 +1203,8 @@
                                             Receipt Amount (FC)
                                         </td>
                                         <td class="style17">
-                                            <asp:TextBox ID="txtReceiptAmtFC" runat="server" Width="150px" Text="0.00"></asp:TextBox><%--<asp:RegularExpressionValidator
+                                            <asp:TextBox ID="txtReceiptAmtFC" runat="server" Width="150px" Text="0.00" 
+                                                Enabled="False"></asp:TextBox><%--<asp:RegularExpressionValidator
                                                 ID="RegularExpressionValidator1" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtFC">*</asp:RegularExpressionValidator>--%>
                                         </td>

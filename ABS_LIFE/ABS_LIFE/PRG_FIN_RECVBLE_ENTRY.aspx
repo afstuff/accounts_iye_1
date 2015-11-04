@@ -188,7 +188,9 @@
             //retrieve data on focus loss
             $("#txtMainAcct").on('focusout', function(e) {
                 e.preventDefault();
-                if ($("#txtMainAcct").val() != "")
+                $("#txtMainAcctDesc").val('');
+                $("#txtSubAcctDesc").val('');
+                if ($("#txtMainAcct").val() != "" && $("#txtSubAcct").val() != "")
                     LoadChartInfo("txtSubAcct", "txtMainAcct", "DR", "Main");
 
                 //return false;
@@ -196,7 +198,9 @@
             //retrieve data on focus loss
             $("#txtSubAcct").on('focusout', function(e) {
                 e.preventDefault();
-                if ($("#txtSubAcct").val() != "")
+                $("#txtMainAcctDesc").val('');
+                $("#txtSubAcctDesc").val('');
+                if ($("#txtSubAcct").val() != "" && $("#txtMainAcct").val() != "")
                     LoadChartInfo("txtSubAcct", "txtMainAcct", "DR", "Sub");
             });
 
@@ -271,6 +275,10 @@
                     if (effDateLen == 8 && $.isNumeric(effDate)) {
                         $("#txtEffectiveDate").val(FormatDateAuto(effDate))
                     }
+                    else if (effDateLen != 8 && $.isNumeric(effDate)) {
+                        alert("Auto date format allows only 8 digit numbers (ddmmyyyy)");
+                        $("#txtEffectiveDate").focus();
+                    }
                 }
                 //return false;
             });
@@ -284,6 +292,10 @@
                     effDateLen = effDate.length
                     if (effDateLen == 8 && $.isNumeric(effDate)) {
                         $("#txtTellerDate").val(FormatDateAuto(effDate))
+                    }
+                    else if (effDateLen != 8 && $.isNumeric(effDate)) {
+                        alert("Auto date format allows only 8 digit numbers (ddmmyyyy)");
+                        $("#txtTellerDate").focus();
                     }
                 }
                 //return false;
@@ -299,20 +311,24 @@
                     if (effDateLen == 8 && $.isNumeric(effDate)) {
                         $("#txtChequeDate").val(FormatDateAuto(effDate))
                     }
+                    else if (effDateLen != 8 && $.isNumeric(effDate)) {
+                        alert("Auto date format allows only 8 digit numbers (ddmmyyyy)");
+                        $("#txtChequeDate").focus();
+                    }
                 }
                 //return false;
             });
 
-//Batch Date Validation
-            $("#txtBatchNo").on('focusout', function(e) {
+            //Batch Date Validation
+            $("#txtBatchDate").on('focusout', function(e) {
                 e.preventDefault();
-                if ($("#txtBatchNo").val() != "") {
-                    var BatchNo = $("#txtBatchNo").val();
+                if ($("#txtBatchDate").val() != "") {
+                    var BatchNo = $("#txtBatchDate").val();
                     BatchNoLen = BatchNo.length
                     if ($.isNumeric(BatchNo)) {
                         if (BatchNoLen != 6) {
                             alert("Invalid batch date");
-                            $("#txtBatchNo").focus();
+                            $("#txtBatchDate").focus();
                         }
                         else {
                             var lastTwoDigit = BatchNo.substring(4);
@@ -320,19 +336,19 @@
                             }
                             else {
                                 alert("Batch date month part is invalid")
-                                $("#txtBatchNo").focus();
+                                $("#txtBatchDate").focus();
                             }
                         }
                     }
                     else {
                         alert("Batch date contains non numeric character")
-                        $("#txtBatchNo").focus();
+                        $("#txtBatchDate").focus();
                     }
                 }
                 //return false;
             });
 
-            
+
             // ajax call to load policy information
             function LoadBranchInfoObject() {
                 $.ajax({
@@ -381,7 +397,7 @@
                         retrieve_AccountChartInfoValues(accountcharts, drcr)
                     },
                     failure: OnFailure_LoadChartInfo,
-                   // error: OnError_LoadChartInfo
+                    // error: OnError_LoadChartInfo
                     error: function() {
                         alert('Error!: Account Chart could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
                         if (ctype == "Sub") {
@@ -827,9 +843,9 @@
         function OnError_LoadChartInfo(response) {
             //debugger;
             var errorText = response.responseText;
-           // alert('Error!!!' + '\n\n' + errorText);
+            // alert('Error!!!' + '\n\n' + errorText);
             alert('Error!: Account Chart Details could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
-           // $('#txtMainAcct').focus()
+            // $('#txtMainAcct').focus()
         }
 
         function OnError_LoadInvoiceInfo(response) {
@@ -1061,7 +1077,6 @@
             height: 24px;
         }
     </style>
-
 </head>
 <body onload="<%=publicMsgs%>" onclick="return cancelEvent('onbeforeunload')">
     <form id="PRG_FIN_RECVBLE_ENTRY" runat="server" submitdisabledcontrols="true">
@@ -1157,11 +1172,9 @@
                                     <td>
                                         Department
                                     </td>
-                                    <td> 
-                                    <asp:TextBox ID="txtDeptCode" runat="server" Width="30px"></asp:TextBox>
-                                    
-                                        <asp:DropDownList ID="cmbDept" runat="server" Width="265px" TabIndex="5" 
-                                            AutoPostBack="True">
+                                    <td>
+                                        <asp:TextBox ID="txtDeptCode" runat="server" Width="30px"></asp:TextBox>
+                                        <asp:DropDownList ID="cmbDept" runat="server" Width="265px" TabIndex="5" AutoPostBack="True">
                                         </asp:DropDownList>
                                     </td>
                                 </tr>
@@ -1169,8 +1182,8 @@
                                     <td class="style2">
                                         <asp:Label ID="lblMode" runat="server" Text="Receipt Mode"> </asp:Label>
                                     </td>
-                                    <td class="style2"><asp:TextBox ID="txtMode" runat="server" Width="85px"></asp:TextBox>
-                                    
+                                    <td class="style2">
+                                        <asp:TextBox ID="txtMode" runat="server" Width="85px"></asp:TextBox>
                                         <asp:DropDownList ID="cmbMode" runat="server" Width="180px" TabIndex="6" AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Mode"></asp:ListItem>
                                             <asp:ListItem Value="C" Text="C-Cash"></asp:ListItem>
@@ -1233,8 +1246,7 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="txtCurrencyCode" runat="server" Width="64px" TabIndex="9"></asp:TextBox>&nbsp;<asp:DropDownList
-                                            ID="cmbCurrencyType" runat="server" Width="201px" TabIndex="12" 
-                                            AutoPostBack="True">
+                                            ID="cmbCurrencyType" runat="server" Width="201px" TabIndex="12" AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Currency Type"></asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:CustomValidator ID="csValidateCurrencyType" runat="server" ErrorMessage="Please Select the Currency Type">*</asp:CustomValidator>
@@ -1266,8 +1278,7 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="txtBranchCode" runat="server" Width="57px" TabIndex="11"></asp:TextBox>
-                                        <asp:DropDownList ID="cmbBranchCode" runat="server" Width="238px" TabIndex="13" 
-                                            AutoPostBack="True">
+                                        <asp:DropDownList ID="cmbBranchCode" runat="server" Width="238px" TabIndex="13" AutoPostBack="True">
                                             <asp:ListItem Value="0" Text="Branch Code"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
@@ -1351,13 +1362,12 @@
                                         </td>
                                         <td style="white-space: nowrap">
                                             <asp:TextBox ID="txtTransTypeCode" runat="server" Width="30"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbTransDetailType" runat="server" Width="150px" 
-                                                AutoPostBack="True">
+                                            <asp:DropDownList ID="cmbTransDetailType" runat="server" Width="150px" AutoPostBack="True">
                                             </asp:DropDownList>
                                             <img src="img/plusimage.png" id="TranTypeAdd" alt="add record" class="searchImage" />
                                         </td>
                                         <td>
-                                       <asp:TextBox ID="txtDRCR" runat="server" Width="18px" TabIndex="17"></asp:TextBox>
+                                            <asp:TextBox ID="txtDRCR" runat="server" Width="18px" TabIndex="17"></asp:TextBox>
                                             <asp:DropDownList ID="cmbDRCR" runat="server" Width="59px" AutoPostBack="True">
                                                 <asp:ListItem Value="0" Text="DR/CR"></asp:ListItem>
                                                 <asp:ListItem Value="D" Text="D-Debit" Selected="True"></asp:ListItem>
@@ -1379,7 +1389,8 @@
                                             <asp:TextBox ID="txtTransAmt" runat="server" Width="100px" AutoPostBack="True">0.00</asp:TextBox>
                                             <%--<asp:RegularExpressionValidator ID="vdamt" runat="server" ErrorMessage="Please Enter a Valid Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtTransAmt">*</asp:RegularExpressionValidator>
-                                       --%> </td>
+                                       --%>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>

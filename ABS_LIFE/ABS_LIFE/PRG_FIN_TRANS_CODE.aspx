@@ -13,7 +13,7 @@
     
     
 </head>
-<body>
+<body onload="<%= publicMsgs %>">
     <div class="">
  <asp:Label runat="server" ID="lblError" Font-Bold="true" ForeColor="Red" Visible="false"> </asp:Label>
     <form id="PRG_FIN_TRANS_CODE" runat="server">
@@ -40,6 +40,10 @@
 				<tr>
 					<td>Trans Code Description</td>
 					<td><asp:TextBox ID="txtTransCodeDesc" runat="server" Width="270px"></asp:TextBox></td>
+				</tr>
+				<tr>
+					<td>Trans Code Short Desc</td>
+                    <td><asp:TextBox ID="txtTransCodeShortDesc" runat="server" Width="270px"></asp:TextBox></td>
 				</tr>
 				<tr>
 					<td>Branch</td>

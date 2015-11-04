@@ -16,6 +16,7 @@ Partial Public Class PRG_FIN_TRANS_CODE
     Dim strKey As String
     Dim transTyp As CustodianLife.Model.TransactionTypes
     Dim coyCdEnq As New CompanyCodesRepository()
+    Protected publicMsgs As String = String.Empty
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not Page.IsPostBack Then
@@ -72,6 +73,10 @@ Partial Public Class PRG_FIN_TRANS_CODE
 
             transTyp.Description = txtTransCodeDesc.Text
             transTyp.TransactionCode = txtTransCode.Text
+            transTyp.ShortDescription = txtTransCodeShortDesc.Text
+            transTyp.Flag = "A"
+            transTyp.OperatorId = "ADM"
+            transTyp.EntryDate = Now
             ttRepo.Save(transTyp)
             Session("transTyp") = transTyp
         Else
@@ -81,11 +86,16 @@ Partial Public Class PRG_FIN_TRANS_CODE
 
             transTyp.Description = txtTransCodeDesc.Text
             transTyp.TransactionCode = txtTransCode.Text
+            transTyp.ShortDescription = txtTransCodeShortDesc.Text
+            transTyp.Flag = "C"
+            transTyp.OperatorId = "ADM"
+            transTyp.EntryDate = Now
 
             ttRepo.Save(transTyp)
 
         End If
-
+        Dim msg = "Save Operation Successful"
+        publicMsgs = "javascript:alert('" + msg + "')"
         initializeFields()
 
 
@@ -111,6 +121,7 @@ Partial Public Class PRG_FIN_TRANS_CODE
 
             txtTransCodeDesc.Text = transTyp.Description
             txtTransCode.Text = transTyp.TransactionCode
+            txtTransCodeShortDesc.Text = transTyp.ShortDescription
 
             updateFlag = True
             Session("updateFlag") = updateFlag
@@ -118,13 +129,13 @@ Partial Public Class PRG_FIN_TRANS_CODE
 
     End Sub
     Protected Sub initializeFields()
-        cmbBranch.SelectedIndex = 0
+        ' cmbBranch.SelectedIndex = 0
         cmbCoyCode.SelectedIndex = 0
         cmbDepts.SelectedIndex = 0
-
+        cmbBranch.Text = "1501"
         txtTransCodeDesc.Text = String.Empty
         txtTransCode.Text = String.Empty
-
+        txtTransCodeShortDesc.Text = String.Empty
         updateFlag = False
         Session("updateFlag") = updateFlag 'ready for a new record
 

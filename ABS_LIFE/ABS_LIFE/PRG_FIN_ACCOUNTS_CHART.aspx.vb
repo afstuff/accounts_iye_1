@@ -72,6 +72,7 @@ Partial Public Class PRG_FIN_ACCOUNTS_CHART
 
             lblError.Visible = False
             With accChart
+                .caId = Nothing
                 .AccountLedgerType = cmbLedgerTyp.SelectedValue
                 .AccountLevel = cmbLevel.SelectedValue
                 .AccountMainGroup = cmbGroup.SelectedValue
