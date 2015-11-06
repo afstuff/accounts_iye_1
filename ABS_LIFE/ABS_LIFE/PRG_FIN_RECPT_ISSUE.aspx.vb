@@ -88,6 +88,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
     Protected Sub butSave_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butSave.Click, butSaveN.Click
         Dim msg As String = String.Empty
+        lblError.Text = ""
         Dim Err = ""
         ValidateFields(Err)
         If Err = "Y" Then
@@ -662,6 +663,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected Sub txtReceiptNo_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtReceiptNo.TextChanged
         If txtReceiptNo.Text <> "" Then
             initializeFields()
+            lblError.Text = ""
             rcRepo = CType(Session("rcRepo"), ReceiptsRepository)
             Rceipt = rcRepo.GetByReceiptNo(Trim(txtReceiptNo.Text))
 
@@ -816,18 +818,197 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
     Private Sub ValidateFields(ByRef ErrorInd)
         Dim msg
+        If txtReceiptNo.Text = "" Then
+            msg = "Receipt number must not be empty"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtReceiptNo.Focus()
+            Exit Sub
+        End If
+        If txtBatchNo.Text = "" Then
+            msg = "Batch date must not be empty"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtBatchNo.Focus()
+            Exit Sub
+        End If
+        If txtEffectiveDate.Text = "" Then
+            msg = "Effective date must not be empty"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtEffectiveDate.Focus()
+            Exit Sub
+        End If
+
+        Dim str() As String
+        str = DoDate_Process(txtEffectiveDate.Text, txtEffectiveDate)
+        If (str(2) = Nothing) Then
+            Dim errMsg = str(0).Insert(18, " Effective date, ")
+            msg = errMsg.Replace("Javascript:alert('", "").Replace("');", "")
+            lblError.Text = msg
+            publicMsgs = "javascript:alert('" + msg + "')"
+            lblError.Visible = True
+            txtEffectiveDate.Focus()
+            ErrorInd = "Y"
+            Exit Sub
+        Else
+            txtEffectiveDate.Text = str(2).ToString()
+        End If
+        If cmbMode.SelectedIndex = 0 Then
+            msg = "Please select receipt mode"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            cmbMode.Focus()
+            Exit Sub
+        End If
+        If cmbReceiptType.SelectedIndex = 0 Then
+            msg = "Please select receipt type"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            cmbReceiptType.Focus()
+            Exit Sub
+        End If
+        If txtReceiptRefNo.Text = "" Then
+            msg = lblRefNo.Text & " must not be empty"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtReceiptRefNo.Focus()
+            Exit Sub
+        End If
+        If txtInsuredCode.Text = "" Then
+            msg = "Insured code must not be empty, Please contact technical dept to update record"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtInsuredCode.Focus()
+            Exit Sub
+        End If
+        If cmbMode.SelectedValue = "T" Then
+            If txtTellerNo.Text = "" Then
+                msg = "Teller no must not be empty"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtTellerNo.Focus()
+                Exit Sub
+            End If
+        End If
+        'If cmbCurrencyType.SelectedIndex = 0 Then
+        '    msg = "Please select currency type"
+        '    ErrorInd = "Y"
+        '    publicMsgs = "javascript:alert('" + msg + "')"
+        '    cmbCurrencyType.Focus()
+        '    Exit Sub
+        'End If
+        If txtAgentCode.Text = "" Then
+            msg = "Agent Code must not be empty, Please contact technical dept to update record"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtAgentCode.Focus()
+            Exit Sub
+        End If
+
+        If cmbMode.SelectedValue = "Q" Then
+            If txtChequeNo.Text = "" Then
+                msg = "Cheque no must not be empty"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtChequeNo.Focus()
+                Exit Sub
+            End If
+            If txtChequeDate.Text = "" Then
+                msg = "Cheque date must not be empty"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtChequeDate.Focus()
+                Exit Sub
+            End If
+        End If
+        If txtPayeeName.Text = "" Then
+            msg = "Payee name must not be empty"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtPayeeName.Focus()
+            Exit Sub
+        End If
+
+        If txtTransDesc1.Text = "" Then
+            msg = "Payee name must not be empty"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtTransDesc1.Focus()
+            Exit Sub
+        End If
+        If txtPolRegularContrib.Text = "0.00" Then
+            msg = "Policy Regular Contrib must not be equal to 0.00, Please contact technical dept to update record"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtPolRegularContrib.Focus()
+            Exit Sub
+        End If
+        If cmbCommissions.SelectedIndex = 0 Then
+            msg = "Please select commission applicable"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            cmbCommissions.Focus()
+            Exit Sub
+        End If
+        If txtMOP.Text = "" Then
+            msg = "Mode of payment must not be empty, Please contact technical dept to update record"
+            ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
+            publicMsgs = "javascript:alert('" + msg + "')"
+            txtMOP.Focus()
+            Exit Sub
+        End If
         If Not IsNumeric(txtReceiptAmtLC.Text) Then
             msg = "Receipt Amount LC must be numeric"
             ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
             publicMsgs = "javascript:alert('" + msg + "')"
+            txtReceiptAmtLC.Focus()
             Exit Sub
         End If
         If Not IsNumeric(txtReceiptAmtFC.Text) Then
             msg = "Receipt Amount FC must be numeric"
             ErrorInd = "Y"
+            lblError.Text = msg
+            lblError.Visible = True
             publicMsgs = "javascript:alert('" + msg + "')"
+            txtReceiptAmtFC.Focus()
             Exit Sub
         End If
+
     End Sub
 
     Private Sub GetPolicyInfos(ByRef ErrorInd)
@@ -848,7 +1029,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtProductCode.Text = dt.Tables(0).Rows(0).Item("Product_Code")
 
             If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
-                Dim message = "Please contact technical department, record not completed for policy no " & txtReceiptRefNo.Text
+                Dim message = "Please contact technical department, record not completed for " & lblRefNo.Text & "no " & txtReceiptRefNo.Text
                 ErrorInd = "Y"
                 publicMsgs = "javascript:alert('" + message + "')"
                 txtReceiptRefNo.Focus()
@@ -878,4 +1059,277 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtSubAcctCreditDesc.Text = dt.Tables(0).Rows(0).Item("sSubDesc")
         End If
     End Sub
+
+    Function DoDate_Process(ByVal dateValue As String, ByVal ctrlId As Control) As String()
+        Dim rtnMsg(3) As String
+        Dim rtnMsg_ As String = Nothing
+
+        'Checking fields for empty values
+        If dateValue = "" Then
+            rtnMsg_ = " Field is required!"
+            rtnMsg(0) = rtnMsg_
+            rtnMsg(1) = ctrlId.ID
+            Return rtnMsg
+        Else
+            'Validate date
+            Dim myarrData = Split(dateValue, "/")
+            'If myarrData.Count <> 3 Then
+            If myarrData.Length <> 3 Then
+                rtnMsg_ = " Expecting full date in ddmmyyyy format ..."
+                rtnMsg_ = "Javascript:alert('" & rtnMsg_ & "')"
+                rtnMsg(0) = rtnMsg_
+                rtnMsg(1) = ctrlId.ID
+                Return rtnMsg
+                'Exit Function
+            End If
+            Dim strMyDay = myarrData(0)
+            Dim strMyMth = myarrData(1)
+            Dim strMyYear = myarrData(2)
+
+            strMyDay = CType(Format(Val(strMyDay), "00"), String)
+            strMyMth = CType(Format(Val(strMyMth), "00"), String)
+            strMyYear = CType(Format(Val(strMyYear), "0000"), String)
+
+            Dim strMyDte = Trim(strMyDay) & "/" & Trim(strMyMth) & "/" & Trim(strMyYear)
+            'dateValue = Trim(strMyDte)
+
+
+            Dim blnStatusX = gnTest_TransDate(strMyDte)
+            If blnStatusX = False Then
+                rtnMsg_ = " is not a valid date..."
+                rtnMsg_ = "Javascript:alert('" & rtnMsg_ & "');"
+                rtnMsg(0) = rtnMsg_
+                rtnMsg(1) = ctrlId.ID
+                Return rtnMsg
+                'Exit Function
+            Else
+                rtnMsg(2) = CType(strMyDte, String)
+                Return rtnMsg
+            End If
+            dateValue = RTrim(strMyDte)
+            'Exit Sub
+        End If
+
+
+
+        Return rtnMsg
+    End Function
+    Public Function gnTest_TransDate(ByVal MyFunc_Date As String) As Boolean
+
+        On Error GoTo MyTestDate_Err1
+
+        Dim pvbln As Boolean
+
+        gnTest_TransDate = False
+        pvbln = False
+
+        'If Len(MyFunc_Date) = 10 And Mid(MyFunc_Date, 3, 1) = "/" And Mid(MyFunc_Date, 6, 1) = "/" Then
+        'Else
+        '    Return pvbln
+        '    Exit Function
+        'End If
+
+        If (Len(MyFunc_Date) = 10) And _
+           (Mid(MyFunc_Date, 3, 1) = "-" Or Mid(MyFunc_Date, 3, 1) = "/") And _
+           (Mid(MyFunc_Date, 6, 1) = "-" Or Mid(MyFunc_Date, 6, 1) = "/") Then
+        Else
+            Return pvbln
+            Exit Function
+        End If
+
+        Dim strDteMsg As String = "Invalid Date"
+        Dim strDteErr As String = "0"
+        Dim DteTst As Date
+
+        Dim strDte_Start As String
+        Dim strDte_End As String
+
+        Dim strDteYY As String
+        Dim strDteMM As String
+        Dim strDteDD As String
+
+        strDteMsg = ""
+        strDteErr = "0"
+
+        strDteMsg = ""
+        strDteErr = "0"
+
+        'MsgBox _
+        ' "Left Xter. :" & Left(MyFunc_Date, 2) & vbCrLf & _
+        ' "Mid Xter. :" & Mid(MyFunc_Date, 4, 2) & vbCrLf & _
+        ' "Right Xter. :" & Right(MyFunc_Date, 4)
+
+        'If MyFunc_Date = "__/__/____" Or _
+        '   MyFunc_Date = "" Then
+        '    MyTestDate_Trans = True
+        '    Exit Function
+        'End If
+
+        strDteDD = Left(MyFunc_Date, 2)
+        strDteMM = Mid(MyFunc_Date, 4, 2)
+        strDteYY = Right(MyFunc_Date, 4)
+
+        strDteDD = Trim(strDteDD)
+        strDteMM = Trim(strDteMM)
+        strDteYY = Trim(strDteYY)
+
+        'If strDteDD = "" And _
+        '   strDteMM = "" And _
+        '   strDteYY = "" Then
+        '    MyTestDate_Trans = True
+        '    Exit Function
+        'End If
+
+        'If Val(Left(MyFunc_Date, 2)) = 0 And _
+        '   Val(Mid(MyFunc_Date, 4, 2)) = 0 And _
+        '   Val(Right(MyFunc_Date, 4)) = 0 Then
+        '   MyTestDate_Trans = True
+        '   Exit Function
+        'End If
+
+        If Trim(strDteDD) < "01" Or _
+           Trim(strDteDD) > "31" Then
+            strDteMsg = _
+              "  -> Day < 01 or Day > 31 ..." & vbCrLf
+            strDteErr = "1"
+            'MsgBox "Day date error..."
+        End If
+        If Trim(strDteMM) < "01" Or _
+           Trim(strDteMM) > "12" Then
+            strDteMsg = strDteMsg & _
+              "  -> Month < 01 or Month > 12 ..." & vbCrLf
+            strDteErr = "1"
+            'MsgBox "Month date error..."
+        End If
+
+
+        'If strDteYY < "1990" Then
+        '   strDteMsg = strDteMsg & _
+        '     "  -> Year < 1990..." & vbCrLf
+        '   strDteErr = "1"
+        '   'MsgBox "Year date error..." & Year(Now)
+        'End If
+        If Len(Trim(strDteYY)) < 4 Then
+            strDteMsg = strDteMsg & _
+              "  -> Year = 0 digit or Year < 4 digits..." & vbCrLf
+            strDteErr = "1"
+            'MsgBox "Year date error..." & Year(Now)
+        End If
+
+
+        strDte_Start = ""
+        strDte_End = ""
+        strDte_Start = MyFunc_Date
+        strDte_End = MyFunc_Date
+
+
+        'Get the first day of a month
+        '----------------------------
+        'strDte_Start = DateSerial( _
+        '  Format(Val(strDteYY), "0000"), _
+        '  Format(Val(strDteMM), "00"), _
+        '  Format(Val(1), "00"))
+
+        'Get the end day of a month
+        '--------------------------
+        'strDte_End = DateSerial( _
+        '  Format(Val(strDteYY), "0000"), _
+        '  Format(Val(strDteMM) + 1, "00"), _
+        '  Format(Val(0), "00"))
+
+
+        'If Val(strDteDD) > Val(Mid(strDte_End, 4, 2)) Then
+        '   strDteMsg = strDteMsg & _
+        '     "  -> Invalid day in month. Month <" & strDteMM & ">" & _
+        '     " ends in <" & Mid(strDte_End, 4, 2) & ">" & _
+        '     ". Full Date: " & strDte_End & vbCrLf
+        '   strDteErr = "1"
+        '   'MsgBox "Day date error..."
+        'End If
+
+
+        Select Case Trim(strDteMM)
+            Case "01", "03", "05", "07", "08", "10", "12"
+                If Val(strDteDD) > 31 Then
+                    strDteMsg = strDteMsg & _
+                    "  -> Invalid day in month. Month <" & strDteMM & ">" & _
+                    " ends in <" & " 31 " & ">" & _
+                    ". Full Date: " & strDte_End & vbCrLf
+                    strDteErr = "1"
+                End If
+
+            Case "02"
+                If (Val(strDteYY) \ 4) = 0 Then
+                    If Val(strDteDD) > 29 Then
+                        strDteMsg = strDteMsg & _
+                            "  -> Invalid day in month. Month <" & strDteMM & ">" & _
+                            " ends in <" & " 29 " & ">" & _
+                            ". Full Date: " & strDte_End & vbCrLf
+                        strDteErr = "1"
+                    End If
+                Else
+                    If Val(strDteDD) > 28 Then
+                        strDteMsg = strDteMsg & _
+                            "  -> Invalid day in month. Month <" & strDteMM & ">" & _
+                            " ends in <" & " 28 " & ">" & _
+                            ". Full Date: " & strDte_End & vbCrLf
+                        strDteErr = "1"
+                    End If
+
+                End If
+
+            Case "04", "06", "09", "11"
+                If Val(strDteDD) > 30 Then
+                    strDteMsg = strDteMsg & _
+                    "  -> Invalid day in month. Month <" & strDteMM & ">" & _
+                    " ends in <" & " 30 " & ">" & _
+                    ". Full Date: " & strDte_End & vbCrLf
+                    strDteErr = "1"
+                End If
+        End Select
+
+
+MyTestDate_01:
+        If strDteErr <> "0" Then
+            GoTo MyTestDate_Msg
+        End If
+
+        gnTest_TransDate = True
+        pvbln = True
+
+        Return pvbln
+        Exit Function
+
+MyTestDate_Msg:
+
+        'Call gnASPNET_MsgBox(strDteMsg)
+        'Call gnASPNET_MsgBox("Invalid date...")
+        'Call gnASPNET_MsgBox_VB(strDteMsg)
+
+        gnTest_TransDate = False
+        pvbln = False
+
+        'MsgBox( _
+        '  "Error: Incorrect or Incomplete date... " & vbCrLf & vbCrLf & _
+        '  "Check the following:" & vbCrLf & vbCrLf & _
+        '  strDteMsg & vbCrLf & vbCrLf & _
+        '  "Please enter correct date or pick from <DatePicker>.", , "Date" & " - " & MyFunc_Date)
+
+        Return pvbln
+        Exit Function
+
+MyTestDate_Err1:
+        gnTest_TransDate = False
+        pvbln = False
+
+        'If Err.Number = 13 Then
+        '    MsgBox("Error: Invalid date...", , "Incorrect date")
+        'Else
+        '    MsgBox("Error: " & Err.Description & _
+        '      "(" & Err.Number & ")", vbCritical, "Error " & " - " & MyFunc_Date)
+        'End If
+
+        Return pvbln
+
+    End Function
 End Class
