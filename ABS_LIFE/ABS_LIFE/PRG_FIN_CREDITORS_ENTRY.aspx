@@ -413,13 +413,13 @@
                         var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
                         $('#txtMainAcct').attr('value', resultValueDR); // Main account code
                         $('#txtMainAcctDesc').attr('value', resultDescDR); // Main account description
-//                        var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
-//                        var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
-//                        resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
+                        var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
+                        var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
+                        resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
 
-//                        $('#txtSubAcct').attr('value', resultValSubDR);
-//                        $('#txtSubAcctDesc').attr('value', resultDescSubDR);
-//                        $('#txtLedgerType').attr('value', resultLedgType);
+                        $('#txtSubAcct').attr('value', resultValSubDR); // Sub account code
+                        $('#txtSubAcctDesc').attr('value', resultDescSubDR); //Sub account description
+                      //  $('#txtLedgerType').attr('value', resultLedgType);
 //                    
                         dialog.data.fadeOut('200', function() {
                             dialog.container.slideUp('200', function() {
@@ -435,7 +435,8 @@
 
             $('#SubAccountSearch').click(function(e) {
                 e.preventDefault();
-            var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcct').val();
+            //var src = "\AccountChartBrowse.aspx?MainAcct=" + $('#txtMainAcct').val();
+              var src = "\AccountChartBrowse.aspx";
                 $.modal('<iframe id="simplemodal-container" src="' + src + '" height="500" width="830" style="border:0">', {
                     closeHTML: "<a  class='modalCloseImg' href='#'></a>",
                     containerCss: {
@@ -451,7 +452,11 @@
                     opacity: 30,
                     overlayCss: { backgroundColor: "black" },
                     onClose: function(dialog) {
-
+                    
+                             var resultValueDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue").val();
+                        var resultDescDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc").val();
+                        $('#txtMainAcct').attr('value', resultValueDR); // Main account code
+                        $('#txtMainAcctDesc').attr('value', resultDescDR); // Main account description
                         var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
                         var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
                         resultLedgType = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc2").val();
@@ -564,8 +569,12 @@
                     	
 			    <table class="tbl_menu_new">
 			        <tr><td colspan="4" class="myMenu_Title" align="center"><asp:Label ID="lblDesc1" runat="server" Text="Invoice Entry"> </asp:Label> </td><td></td><td></td><td></td></tr>
-			        <tr><td><asp:Label ID="lblRcptNum" runat="server" Text="Receipt Number"> </asp:Label></td><td ><asp:TextBox ID="txtReceiptNo" runat="server" 
-                            Width="150px" Enabled="False"></asp:TextBox> </td>					
+			        <tr><td>
+                                            <asp:CheckBox ID="chkInvoiceNo" runat="server" 
+                            AutoPostBack="True" Text="Invoice Number" />
+                                            </td><td >
+                            <asp:TextBox ID="txtReceiptNo" runat="server" 
+                            Width="150px" Enabled="False" AutoPostBack="True"></asp:TextBox> </td>					
 			            <td>Entry Date</td>
 				        <td><asp:TextBox ID="txtEntryDate" runat="server" Width="150px" Enabled="False"></asp:TextBox> </td>
                     </tr>
@@ -648,27 +657,28 @@
                        
         			    <td style="white-space:nowrap">
                             <asp:TextBox ID="txtItem" runat="server" Width="80px"></asp:TextBox>
-                            <asp:RegularExpressionValidator ID="vdItem" runat="server"
+                          <%--  <asp:RegularExpressionValidator ID="vdItem" runat="server"
                             ErrorMessage="Please Enter a Valid Item value" 
-                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtItem">*</asp:RegularExpressionValidator>
+                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtItem">*</asp:RegularExpressionValidator>--%>
                         </td>
                         <td style="white-space:nowrap">
-                            <asp:TextBox ID="txtPrice" runat="server" Width="80px"></asp:TextBox>
-					    <asp:RegularExpressionValidator ID="vdPrice" runat="server"
+                            <asp:TextBox ID="txtPrice" runat="server" Width="80px" AutoPostBack="True"></asp:TextBox>
+					    <%--<asp:RegularExpressionValidator ID="vdPrice" runat="server"
                             ErrorMessage="Please Enter a Valid Price" 
-                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtPrice">*</asp:RegularExpressionValidator> 
+                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtPrice">*</asp:RegularExpressionValidator> --%>
                          </td>
-                        <td style="white-space:nowrap"><asp:TextBox ID="txtQty" runat="server" Width="96px"></asp:TextBox>
-					    <asp:RegularExpressionValidator ID="vdQty" runat="server"
+                        <td style="white-space:nowrap"><asp:TextBox ID="txtQty" runat="server" Width="96px" 
+                                AutoPostBack="True"></asp:TextBox>
+					   <%-- <asp:RegularExpressionValidator ID="vdQty" runat="server"
                             ErrorMessage="Please Enter a Valid Quantity" 
-                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtQty">*</asp:RegularExpressionValidator> 
+                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtQty">*</asp:RegularExpressionValidator> --%>
                          </td>
                          
                         <td style="white-space:nowrap">
                            <asp:TextBox ID="txtTransAmt" runat="server" Width="100px">0.00</asp:TextBox>
-					    <asp:RegularExpressionValidator ID="vdamt" runat="server"
+					    <%--<asp:RegularExpressionValidator ID="vdamt" runat="server"
                             ErrorMessage="Please Enter a Valid Amount" 
-                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtTransAmt">*</asp:RegularExpressionValidator> 
+                                ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtTransAmt">*</asp:RegularExpressionValidator>--%> 
                          </td>
 				    </tr>				
     	
@@ -688,6 +698,17 @@
                             </td>
                             <td style="white-space:nowrap">
                             <asp:Button ID="butClose" runat="server" Text="Close" Visible="True" /></td>
+                            
+				    </tr>
+    	
+    				
+                        <tr><td colspan="8">
+					    <asp:TextBox ID="txtMainAcctDesc" runat="server" Width="200px" Enabled="false"></asp:TextBox>
+					    <asp:TextBox ID="txtSubAcctDesc" runat="server" Width="170px" Enabled="false"></asp:TextBox>
+					    <asp:TextBox ID="txtRefDesc1" runat="server"  Enabled="false" Width="170px"></asp:TextBox>
+					    <asp:TextBox ID="txtRefDesc2" runat="server" Width="170px" Enabled="false"></asp:TextBox>
+					    <asp:TextBox ID="txtRefDesc3" runat="server" Width="170px" Enabled="false"></asp:TextBox>
+					        </td>
                             
 				    </tr>
 			    </table>
@@ -716,8 +737,8 @@
                <RowStyle CssClass="row" />
                   <PagerSettings Mode="NumericFirstLast" PageButtonCount="7" FirstPageText="«" LastPageText="»" />      
                 <Columns>
-                  <asp:HyperLinkField DataTextField="glId" DataNavigateUrlFields="glId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo"
-             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5}" HeaderText="Id" Visible="false"  
+                  <asp:HyperLinkField DataTextField="InId" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
+             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Id" Visible="false"  
              HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
              
     <HeaderStyle CssClass="first"></HeaderStyle>
@@ -725,8 +746,8 @@
     <ItemStyle CssClass="first"></ItemStyle>
                     </asp:HyperLinkField>
 
-                  <asp:HyperLinkField DataTextField="CompanyCode" DataNavigateUrlFields="glId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo"
-             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5}" HeaderText="Coy"  Visible="false" 
+                  <asp:HyperLinkField DataTextField="CompanyCode" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
+             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Coy"  Visible="false" 
              HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
              
     <HeaderStyle CssClass="first"></HeaderStyle>
@@ -734,8 +755,8 @@
     <ItemStyle CssClass="first"></ItemStyle>
                     </asp:HyperLinkField>
                      
-                  <asp:HyperLinkField DataTextField="BatchNo" DataNavigateUrlFields="glId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo"
-             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5}" HeaderText="Bat.#"  
+                  <asp:HyperLinkField DataTextField="BatchNo" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
+             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Bat.#"  
              HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
              
     <HeaderStyle CssClass="first"></HeaderStyle>
@@ -743,8 +764,8 @@
     <ItemStyle CssClass="first"></ItemStyle>
                     </asp:HyperLinkField>
              
-                  <asp:HyperLinkField DataTextField="BatchDate" DataNavigateUrlFields="glId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo"
-             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5}" HeaderText="Proc Dt"  
+                  <asp:HyperLinkField DataTextField="BatchDate" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
+             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Proc Dt"  
              HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
 
@@ -753,8 +774,8 @@
     <ItemStyle CssClass="first"></ItemStyle>
                     </asp:HyperLinkField>
 
-                  <asp:HyperLinkField DataTextField="SerialNo" DataNavigateUrlFields="glId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo"
-             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5}" HeaderText="SN"  
+                  <asp:HyperLinkField DataTextField="SerialNo" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
+             DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="SN"  
              HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
     <HeaderStyle CssClass="first"></HeaderStyle>
@@ -762,32 +783,32 @@
     <ItemStyle CssClass="first"></ItemStyle>
                     </asp:HyperLinkField>
 
-                  <asp:HyperLinkField DataTextField="SubSerialNo" DataNavigateUrlFields="glId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo"
+                 <%-- <asp:HyperLinkField DataTextField="SubSerialNo" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo"
              DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5}" HeaderText="SSN"  
              HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
     <HeaderStyle CssClass="first"></HeaderStyle>
 
     <ItemStyle CssClass="first"></ItemStyle>
-                    </asp:HyperLinkField>
+                    </asp:HyperLinkField>--%>
 
-                    <asp:BoundField DataField="DocNo" HeaderText="Doc#"/>
+                   <%-- <asp:BoundField DataField="DocNo" HeaderText="Doc#"/>--%>
                     <asp:BoundField DataField="MainAccountDR" HeaderText="Main A/C"/>
                     <asp:BoundField DataField="SubAccountDR" HeaderText="Sub A/C"/>
-                    <asp:BoundField DataField="DRCR" HeaderText="DR/CR"/>
-                    <asp:BoundField DataField="TransId" HeaderText="Trans #" />
+                    <%--<asp:BoundField DataField="DRCR" HeaderText="DR/CR"/>--%>
+                   <%-- <asp:BoundField DataField="TransId" HeaderText="Trans #" />--%>
                     <asp:BoundField DataField="TransDate" HeaderText="Trans Dt" DataFormatString="{0:d}" />
-                    <asp:BoundField DataField="TransMode" HeaderText="Mode" />
-                    <asp:BoundField DataField="ChequeNo" HeaderText="Chq #" />
-                    <asp:BoundField DataField="ChequeDate" HeaderText="Chq Dt" DataFormatString="{0:d}"/>
+                   <%-- <asp:BoundField DataField="TransMode" HeaderText="Mode" />--%>
+                   <%-- <asp:BoundField DataField="ChequeNo" HeaderText="Chq #" />--%>
+                  <%--  <asp:BoundField DataField="ChequeDate" HeaderText="Chq Dt" DataFormatString="{0:d}"/>--%>
                     <asp:BoundField DataField="TransDescription" HeaderText="Trans. Desc" />
-                    <asp:BoundField DataField="RefNo1" HeaderText="Ref. 1" />
-                    <asp:BoundField DataField="RefNo2" HeaderText="Ref. 2" />
-                    <asp:BoundField DataField="RefNo3" HeaderText="Ref. 3" />
-                    <asp:BoundField DataField="RefAmount" DataFormatString="{0:N2}" HeaderText="Ref. Amt" />                
-                    <asp:TemplateField  HeaderText="Trans. Amt">
+                   <%-- <asp:BoundField DataField="RefNo1" HeaderText="Ref. 1" />--%>
+                   <%-- <asp:BoundField DataField="RefNo2" HeaderText="Ref. 2" />--%>
+                  <%--  <asp:BoundField DataField="RefNo3" HeaderText="Ref. 3" />--%>
+                   <%--<asp:BoundField DataField="RefAmount" DataFormatString="{0:N2}" HeaderText="Ref. Amt" />    --%>     
+                    <asp:TemplateField  HeaderText="Item Amt">
                       <ItemTemplate>
-                       <asp:Label ID="lblTransAmt" runat="server" DataFormatString="{0:N2}" Text='<%#Eval("GLAmountLC") %>' />
+                       <asp:Label ID="lblTransAmt" runat="server" DataFormatString="{0:N2}" Text='<%#Eval("TransAmt") %>' />
                       </ItemTemplate>
 
                       <FooterTemplate>
@@ -799,7 +820,7 @@
                       </asp:TemplateField>                
                                     
                 </Columns>
-                
+                                
             <HeaderStyle HorizontalAlign="Justify" VerticalAlign="Top" />
                     <AlternatingRowStyle BackColor="#CDE4F1" />
             </asp:GridView>
@@ -809,13 +830,16 @@
             </div>      
         </div>
              <asp:ObjectDataSource ID="ods1" runat="server" SelectMethod="GetById" 
-               TypeName="CustodianLife.Data.GLTransRepository" 
+               TypeName="CustodianLife.Data.InvoiceRepository" 
                         OldValuesParameterFormatString="original_{0}">
                  <SelectParameters>
-                     <asp:Parameter DefaultValue="BatchNo" Name="_key" Type="String" />
+                     <%--<asp:Parameter DefaultValue="BatchNo" Name="_key" Type="String" />
                      <asp:ControlParameter ControlID="txtBatchNo" DefaultValue="" Name="_value" 
                          PropertyName="Text" Type="String" />
-                     <asp:ControlParameter ControlID="txtProgType" DefaultValue="" Name="_prg" 
+                    <asp:ControlParameter ControlID="txtProgType" DefaultValue="" Name="_prg" 
+                         PropertyName="Text" Type="String" />--%>
+                         <asp:Parameter DefaultValue="Code" Name="_key" Type="String" />
+                     <asp:ControlParameter ControlID="txtReceiptNo" DefaultValue="Z" Name="_value" 
                          PropertyName="Text" Type="String" />
                  </SelectParameters>
         </asp:ObjectDataSource>  
@@ -831,12 +855,7 @@
            <tr>
 					    <td></td>
 					    <td>
-					    <asp:TextBox ID="txtMainAcctDesc" runat="server" Width="200px" Enabled="false"></asp:TextBox>
-					    <asp:TextBox ID="txtSubAcctDesc" runat="server" Width="170px" Enabled="false"></asp:TextBox>
-					    <asp:TextBox ID="txtRefDesc1" runat="server"  Enabled="false" Width="170px"></asp:TextBox>
-					    <asp:TextBox ID="txtRefDesc2" runat="server" Width="170px" Enabled="false"></asp:TextBox>
-					    <asp:TextBox ID="txtRefDesc3" runat="server" Width="170px" Enabled="false"></asp:TextBox>
-					    </td>
+					        &nbsp;</td>
 					    <td> </td>
 					    <td>
                         </td>
