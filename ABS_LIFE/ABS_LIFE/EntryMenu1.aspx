@@ -292,7 +292,8 @@ ddaccordion.init({
                             <li><a href="Receiptotherslist.aspx?prgKey=receipt" target="">Accounts Receivable</a></li>
                             <li><a href="Receiptotherslist.aspx?prgKey=payment" target=""> Accounts Payable</a></li>
                             <li><a href="Receiptotherslist.aspx?prgKey=journal" target="">Journal</a></li>
-                            <li><a href="PRG_FIN_CREDITORS_ENTRY.aspx" target="">Creditors Invoice</a></li>
+                            <%--<li><a href="PRG_FIN_CREDITORS_ENTRY.aspx" target="">Creditors Invoice</a></li>--%>
+                             <li><a href="InvoiceList.aspx" target="">Creditors Invoice</a></li>
                             <li>Trans Report</li>
                             <li><a href="Receiptslist.aspx" target="">Individual Life Receipts</a></li>
                             <li><a href="Receiptotherslist.aspx" target="frame_a">Accounts Receivable</a></li>
