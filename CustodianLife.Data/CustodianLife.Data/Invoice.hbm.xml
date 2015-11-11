@@ -9,12 +9,14 @@
     <property name="BranchCode" column="TBFN_CRD_BRANCH_NO" length="10" />
     <property name="BatchNo" column="TBFN_CRD_BATCH_NO" length="10" />
     <property name="SerialNo" column="TBFN_CRD_SER_NO" type="integer" />
+    <property name="SubSerialNo" column="TBFN_CRD_SUB_SER_NO" type="integer" />
+    <property name="TransId" column="TBFN_CRD_TRANS_ID" length="3" />
     <property name="RecordType" column="TBFN_CRD_REC_TYP" length="5" />
     <property name="DeptCode" column="TBFN_CRD_DEPT" length="5"/>
     <property name="InvoiceNo" column="TBFN_CRD_TRANS_NO" length="15" />
     <property name="TransDate" column="TBFN_CRD_TRANS_DATE" type="datetime"  />
     <property name="TransType" column="TBFN_CRD_TRANS_TYPE" length="5" />
-    <property name="ItemSize" column="TBFN_CRD_ITEM_SIZE" length="15" />
+    <property name="ItemSize" column="TBFN_CRD_ITEM_SIZE" length="50" />
     <property name="Quantity" column="TBFN_CRD_ITEM_QTY" type="integer" />
     <property name="Price" column="TBFN_CRD_ITEM_PRICE" type="decimal"/>
     <property name="TransAmt" column="TBFN_CRD_TRANS_AMT" type="decimal"/>

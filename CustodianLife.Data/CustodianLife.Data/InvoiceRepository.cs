@@ -61,7 +61,7 @@ namespace CustodianLife.Data
             Char[] seperator = new char[] { ',' };
             string[] keys = _key.Split(seperator, StringSplitOptions.RemoveEmptyEntries);
 
-            string hqlOptions = "from Invoice i where i.IvId = " + keys[0]
+            string hqlOptions = "from Invoice i where i.InId = " + keys[0]
                               + " and i.CompanyCode = '" + keys[1] + "'"
                               + " and i.BatchNo = " + keys[2]
                               + " and i.BatchDate = " + keys[3]
@@ -344,6 +344,15 @@ namespace CustodianLife.Data
         }
 
 
+        public IList<Invoice> GetByInvoiceNo(String _invoiceno)
+        {
+            string hqlOptions = "from Invoice i where i.InvoiceNo = '" + _invoiceno + "'";
+            using (var session = GetSession())
+            {
 
+               // return (Invoice)session.CreateQuery(hqlOptions).UniqueResult();
+                return session.CreateQuery(hqlOptions).List<Invoice>();
+            }
+        }
     }
 }

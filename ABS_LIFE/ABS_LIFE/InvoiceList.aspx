@@ -81,7 +81,7 @@
             <Columns>
             
               <asp:HyperLinkField DataTextField="InId" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
-         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Id" Visible="false"  
+         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY1.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Id" Visible="false"  
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
          
 <HeaderStyle CssClass="first"></HeaderStyle>
@@ -90,7 +90,7 @@
                 </asp:HyperLinkField>
 
              <%-- <asp:HyperLinkField DataTextField="CompanyCode" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo,TransType"
-         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5}&prgKey={6}" HeaderText="Coy"  
+         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY1.aspx?idd={0},{1},{2},{3},{4},{5}&prgKey={6}" HeaderText="Coy"  
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
          
 <HeaderStyle CssClass="first"></HeaderStyle>
@@ -100,7 +100,7 @@
          
          
               <asp:HyperLinkField DataTextField="BatchNo" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
-         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Bat. #"  
+         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY1.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Bat. #"  
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
          
 <HeaderStyle CssClass="first"></HeaderStyle>
@@ -109,7 +109,7 @@
                 </asp:HyperLinkField>
          
               <asp:HyperLinkField DataTextField="BatchDate" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
-         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Bat. Dt"  
+         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY1.aspx?idd={0},{1},{2},{3},{4}" HeaderText="Bat. Dt"  
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
 
@@ -119,7 +119,7 @@
                 </asp:HyperLinkField>
 
               <asp:HyperLinkField DataTextField="SerialNo" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo"
-         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4}" HeaderText="SN"  
+         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY1.aspx?idd={0},{1},{2},{3},{4}" HeaderText="SN"  
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
 <HeaderStyle CssClass="first"></HeaderStyle>
@@ -128,7 +128,7 @@
                 </asp:HyperLinkField>
 
    <%--<asp:HyperLinkField DataTextField="SubSerialNo" DataNavigateUrlFields="InId,CompanyCode,BatchNo,BatchDate,SerialNo,SubSerialNo,TransType"
-         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY.aspx?idd={0},{1},{2},{3},{4},{5} &prgKey={6}" HeaderText="SSN"  Visible="false" 
+         DataNavigateUrlFormatString="~/PRG_FIN_CREDITORS_ENTRY1.aspx?idd={0},{1},{2},{3},{4},{5} &prgKey={6}" HeaderText="SSN"  Visible="false" 
          HeaderStyle-CssClass="first" ItemStyle-CssClass="first"  >
 
 <HeaderStyle CssClass="first"></HeaderStyle>

@@ -9,16 +9,16 @@ Partial Public Class InvoiceList
         If Not Page.IsPostBack Then
             inRepo = New InvoiceRepository
 
-            Session("chRepo") = inRepo
+            Session("invRepo") = inRepo
 
         Else 'post back
-            inRepo = CType(Session("chRepo"), InvoiceRepository)
+            inRepo = CType(Session("invRepo"), InvoiceRepository)
 
         End If
     End Sub
 
     Private Sub butNew_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles butNew.Click
-        Response.Redirect("PRG_FIN_CREDITORS_ENTRY.aspx")
+        Response.Redirect("PRG_FIN_CREDITORS_ENTRY1.aspx")
     End Sub
 
     Private Sub butClose_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles butClose.Click
