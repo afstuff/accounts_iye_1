@@ -1113,6 +1113,11 @@
         {
             height: 24px;
         }
+        
+    .NumberAlign
+    {
+    	text-align:right!important;
+    }
     </style>
 </head>
 <body onload="<%=publicMsgs%>" onclick="return cancelEvent('onbeforeunload')">
@@ -1211,7 +1216,7 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="txtDeptCode" runat="server" Width="30px"></asp:TextBox>
-                            <asp:Dropdownlist ID="cmbDept" runat="server" Width="270px">
+                            <asp:Dropdownlist ID="cmbDept" runat="server" Width="270px" AutoPostBack="True">
         				    </asp:Dropdownlist>
                                     </td>
                                 </tr>
@@ -1221,7 +1226,8 @@
                                     </td>
                                     <td class="style2">
                                         <asp:TextBox ID="txtBranchCode" runat="server" Width="57px" TabIndex="11"></asp:TextBox>
-                                        <asp:Dropdownlist ID="cmbBranchCode" runat="server" Width="150px">
+                                        <asp:Dropdownlist ID="cmbBranchCode" runat="server" Width="150px" 
+                                            AutoPostBack="True">
         				    <asp:ListItem Value="0" Text="Branch Code"></asp:ListItem>
         				    </asp:Dropdownlist>
                                     </td>
@@ -1343,7 +1349,7 @@
                                 AutoPostBack="True"></asp:TextBox>
                                         </td>
                                         <td>
-                           <asp:TextBox ID="txtTransAmt" runat="server" Width="100px">0.00</asp:TextBox>
+                           <asp:TextBox ID="txtTransAmt" runat="server" Width="100px" Enabled="False">0.00</asp:TextBox>
                                             <%--<asp:RegularExpressionValidator ID="vdamt" runat="server" ErrorMessage="Please Enter a Valid Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtTransAmt">*</asp:RegularExpressionValidator>
                                        --%>
@@ -1473,10 +1479,10 @@
                     <asp:BoundField DataField="TransDate" HeaderText="Trans Dt" DataFormatString="{0:d}" />
                  <asp:BoundField DataField="ItemSize" HeaderText="Item Desc"/>
                 <asp:BoundField DataField="Quantity" HeaderText="Quantity"/>
-                <asp:BoundField DataField="Price" HeaderText="Price"/>    
+                <asp:BoundField DataField="Price" HeaderText="Price" DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" ItemStyle-CssClass="NumberAlign"/>    
                     <asp:TemplateField  HeaderText="Item Amt">
                       <ItemTemplate>
-                       <asp:Label ID="lblTransAmt" runat="server" DataFormatString="{0:N2}" Text='<%#Eval("TransAmt") %>' />
+                       <asp:Label ID="lblTransAmt" runat="server" DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" ItemStyle-CssClass="NumberAlign" Text='<%#Eval("TransAmt") %>' />
                       </ItemTemplate>
 
                       <FooterTemplate>

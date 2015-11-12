@@ -154,16 +154,22 @@ Partial Public Class PRG_FIN_CREDITORS_ENTRY1
                 txtTransDesc.Text = .TransDescription
                 txtSerialNo.Text = .SerialNo
                 cmbTransType.SelectedValue = .TransType
-
+                cmbTransDetailType.SelectedValue = .DetailTransType
                 txtTransAmt.Text = Format(.TransAmt, "Standard")
                 'txtLedgerType.Text = .LedgerTypeCode
                 txtProgType.Text = CType(Session("prgKey"), String)
 
                 txtSubSerialNo.Text = .SubSerialNo
                 cmbTransType.SelectedValue = .TransType
+                txtItem.Text = .ItemSize
+                txtPrice.Text = .Price
+                txtQty.Text = .Quantity
                 Session("InvTrans") = InvTrans
             End With
 
+            If txtMainAcct.Text <> "" Then
+                GetAcctDescription()
+            End If
             updateFlag = True
             Session("updateFlag") = updateFlag
             detailEdit = "Y"
@@ -343,15 +349,15 @@ Partial Public Class PRG_FIN_CREDITORS_ENTRY1
 
     Private Sub ValidateFields(ByRef ErrorInd)
         Dim msg
-        If txtReceiptNo.Text = "" Then
-            msg = "Receipt number must not be empty"
-            ErrorInd = "Y"
-            lblError.Text = msg
-            lblError.Visible = True
-            publicMsgs = "javascript:alert('" + msg + "')"
-            txtReceiptNo.Focus()
-            Exit Sub
-        End If
+        'If txtReceiptNo.Text = "" Then
+        '    msg = "Receipt number must not be empty"
+        '    ErrorInd = "Y"
+        '    lblError.Text = msg
+        '    lblError.Visible = True
+        '    publicMsgs = "javascript:alert('" + msg + "')"
+        '    txtReceiptNo.Focus()
+        '    Exit Sub
+        'End If
         If txtBatchNo.Text = "" Then
             msg = "Batch number must not be empty"
             ErrorInd = "Y"
@@ -719,10 +725,13 @@ MyTestDate_Err1:
     End Sub
 
     Private Sub txtPrice_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtPrice.TextChanged
-        If chkInvoiceNo.Checked Then
-            txtReceiptNo.Enabled = True
-        Else
-            txtReceiptNo.Enabled = False
+        If txtPrice.Text <> "" Then
+            txtPrice.Text = Format(txtPrice.Text, "Standard")
+            If (txtPrice.Text <> "" And txtQty.Text <> "") Then
+                If IsNumeric(txtPrice.Text And txtQty.Text) Then
+                    txtTransAmt.Text = Format(txtPrice.Text * txtQty.Text, "Standard")
+                End If
+            End If
         End If
     End Sub
 
@@ -821,6 +830,7 @@ MyTestDate_Err1:
                         End If
                         .DRCR = String.Empty 'D
                         .TransAmt = txtTransAmt.Text
+                        .DetailTransType = String.Empty 'D
                         If Trim(txtRefDate.Text).Length() > 0 Then
                             .RefDate = CType(txtRefDate.Text, Date)
                         Else
@@ -874,6 +884,7 @@ MyTestDate_Err1:
                         .TransAmt = txtTransAmt.Text
                         .MainAccountDR = txtMainAcct.Text
                         .SubAccountDR = txtSubAcct.Text
+                        .DetailTransType = cmbTransDetailType.SelectedValue.ToString 'D
 
                         .TransDate = CType(txtEffectiveDate.Text, Date)
                         .TransDescription = txtTransDesc.Text
@@ -917,11 +928,11 @@ MyTestDate_Err1:
                         ' If .PostStatus = "U" And .ApprovalStatus = "N" Then  'Unposted and Not Approved -- change is possible
 
                         invRepo.Save(InvTrans)
-                        msg = "Save Operation Successful"
+                        'msg = "Save Operation Successful"
 
-                        lblError.Text = msg
-                        lblError.Visible = True
-                        publicMsgs = "javascript:alert('" + msg + "')"
+                        'lblError.Text = msg
+                        'lblError.Visible = True
+                        'publicMsgs = "javascript:alert('" + msg + "')"
 
                         'End If
                         grdData.DataBind()
@@ -931,6 +942,10 @@ MyTestDate_Err1:
                     End With
                 End If
                 ' initializeFields()
+                msg = "Save Operation Successful"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
             End If
         Catch ex As Exception
             msg = ex.Message
@@ -1018,6 +1033,22 @@ MyTestDate_Err1:
 
         If cmbDept.SelectedIndex <> 0 Then
             txtDeptCode.Text = cmbDept.SelectedValue
+        End If
+    End Sub
+
+    Protected Sub cmbTransDetailType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbTransDetailType.SelectedIndexChanged
+        lblError.Text = ""
+
+        If cmbTransDetailType.SelectedIndex <> 0 Then
+            txtTransTypeCode.Text = cmbTransDetailType.SelectedValue
+        End If
+    End Sub
+
+    Protected Sub cmbBranchCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbBranchCode.SelectedIndexChanged
+        lblError.Text = ""
+
+        If cmbBranchCode.SelectedIndex <> 0 Then
+            txtBranchCode.Text = cmbBranchCode.SelectedValue
         End If
     End Sub
 End Class

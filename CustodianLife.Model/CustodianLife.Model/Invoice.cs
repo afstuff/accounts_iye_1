@@ -13,6 +13,8 @@ namespace CustodianLife.Model
         public virtual string BranchCode { get; set; }
         public virtual string BatchNo { get; set; }
         public virtual Int32 SerialNo { get; set; }
+        public virtual string TransId { get; set; }
+        public virtual int SubSerialNo { get; set; }
         public virtual string RecordType { get; set; }
         public virtual string DeptCode { get; set; }
         public virtual string InvoiceNo { get; set; }
@@ -22,6 +24,7 @@ namespace CustodianLife.Model
         public virtual Int64 Quantity { get; set; }
         public virtual decimal Price { get; set; }
         public virtual decimal TransAmt { get; set; }
+        public virtual string DetailTransType { get; set; }
         public virtual string DRCR { get; set; }
         public virtual string CreditorCode { get; set; }
         public virtual string CreditorType { get; set; }
@@ -36,5 +39,6 @@ namespace CustodianLife.Model
         public virtual string Flag { get; set; }
         public virtual DateTime EntryDate { get; set; }
         public virtual string OperatorId { get; set; }
+              
     }
 }

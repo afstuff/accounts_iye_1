@@ -27,6 +27,7 @@
     <property name="SubAccountDR" column="TBFN_CRD_SUB_ACCT_NO_DR" length="20"/>
     <property name="LedgerTypeCode" column="TBFN_CRD_LEDG_TYPE_DR" length="3"/>
     <property name="TransDescription" column="TBFN_CRD_TRANS_DESC" length="100"/>
+    <property name="DetailTransType" column="TBFN_CRD_DETAIL_TYP" length="3" />
     <property name="RefNo" column="TBFN_CRD_TRANS_REF_NO" length="5"/>
     <property name="RefDate" column="TBFN_CRD_CHQ_REF_DATE" type="datetime"/>
     <property name="PostStatus" column="TBFN_CRD_POST_STATUS" length="1"/>

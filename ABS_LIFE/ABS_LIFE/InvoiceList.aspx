@@ -60,8 +60,7 @@
     <asp:ListItem Value="BatchNo">Batch No</asp:ListItem>
     <asp:ListItem Value="BatchDate">Batch Date</asp:ListItem>
     <asp:ListItem Value="TDate">Trans Date</asp:ListItem>
-    <asp:ListItem Value="RefNo">Ref No</asp:ListItem>
-        <asp:ListItem Value="PayerName">Payer Name</asp:ListItem>
+    <asp:ListItem Value="Code">Invoice No</asp:ListItem>
     </asp:DropDownList>
     </td><td><asp:TextBox ID="txtSearch" runat="server"> </asp:TextBox><span id="dtChoose">                        
     <script language="JavaScript" type="text/javascript">
@@ -141,9 +140,10 @@
                 <asp:BoundField DataField="TransDate" HeaderText="Trans Date" DataFormatString="{0:dd/MM/yy}"/>
                 <asp:BoundField DataField="TransDescription" HeaderText="Description"/>
                 <asp:BoundField DataField="TransType" HeaderText="Type"/>
-                <asp:BoundField DataField="ItemSize" HeaderText="Item Size"/>
+                <asp:BoundField DataField="ItemSize" HeaderText="Item Desc"/>
                 <asp:BoundField DataField="Quantity" HeaderText="Quantity"/>
-                <asp:BoundField DataField="Price" HeaderText="Price"/>
+                <asp:BoundField DataField="Price" HeaderText="Price" DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" 
+                    ItemStyle-CssClass="NumberAlign"/>
                 <asp:BoundField DataField="TransAmt" HeaderText="Amount" DataFormatString="{0:n}" HeaderStyle-CssClass="NumberAlign" ItemStyle-CssClass="NumberAlign"/>
             </Columns>
             

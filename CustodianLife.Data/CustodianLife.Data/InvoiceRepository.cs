@@ -110,11 +110,12 @@ namespace CustodianLife.Data
                     }
                 case "TDate":
 
-                    hqlOptions = "from Invoice r where r." + fCriteria + " = " + _value;
+                    hqlOptions = "from Invoice r where r." + fCriteria + " = '" + _value + "'";
                     using (var session = GetSession())
                     {
 
                         return session.CreateQuery(hqlOptions).List<Invoice>();
+
                     }
 
                 case "All":
