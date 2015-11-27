@@ -403,15 +403,6 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected WithEvents cmbCommissions As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''csValidateCommissions control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents csValidateCommissions As Global.System.Web.UI.WebControls.CustomValidator
-
-    '''<summary>
     '''txtPolRegularContrib control.
     '''</summary>
     '''<remarks>
@@ -491,6 +482,24 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtSubAcctCredit As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''txtPolRegularContribH control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtPolRegularContribH As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''txtMainAcctDebitDescH control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtMainAcctDebitDescH As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''butSave control.

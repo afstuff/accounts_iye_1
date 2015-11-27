@@ -246,7 +246,8 @@
                     document.getElementById('txtAssuredName').value = ""; ;
                     document.getElementById('txtAssuredAddress').value = ""; ;
                     document.getElementById('txtPayeeName').value = "";
-                    document.getElementById('txtPolRegularContrib').value = "0.00" ;
+                    document.getElementById('txtPolRegularContrib').value = "0.00";
+                    document.getElementById('txtPolRegularContribH').value = "0.00";
                     document.getElementById('txtAgentName').value = "";
                     document.getElementById('txtMOP').value = "";
                     document.getElementById('txtMOPDesc').value = "";
@@ -442,7 +443,7 @@
                             $('#txtMainAcctDebit').val(resultValueDR)
                         if (resultDescDR.length > 0)
                             $('#txtMainAcctDebitDesc').attr('value', resultDescDR); // Main account description
-
+                        $('#txtMainAcctDebitDescH').attr('value', resultDescDR); // Main account description hidden field
                         var resultValSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtValue1").val();
 
                         var resultDescSubDR = $("iframe[src='AccountChartBrowse.aspx']").contents().find("#txtDesc1").val();
@@ -605,7 +606,7 @@
             $("#txtTransDesc1").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtTransDesc1").val() != "")
-                    LoadPeriodsCover();
+                  //  LoadPeriodsCover();
                 return false;
             });
 
@@ -782,6 +783,11 @@
                 document.getElementById('txtAssuredAddress').value = $(this).find("Insured_Address").text();
                 document.getElementById('txtPayeeName').value = $(this).find("Insured_Name").text();
                 document.getElementById('txtPolRegularContrib').value = $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text();
+                document.getElementById('txtPolRegularContribH').value = $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text();
+
+                //$('#<%= txtPolRegularContrib.ClientID %>').val($(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text());
+
+
                 document.getElementById('txtAgentName').value = $(this).find("Agent_Name").text();
                 document.getElementById('txtMOP').value = $(this).find("Payment_Mode").text();
                 document.getElementById('txtMOPDesc').value = $(this).find("Payment_Mode_Desc").text();
@@ -790,7 +796,7 @@
                 document.getElementById('txtProductCode').value = $(this).find("Product_Code").text();
 
                 if ($(this).find("TBIL_POLY_ASSRD_CD").text() == "" || $(this).find("TBIL_POLY_AGCY_CODE").text() == "" || $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text() == "0.00" || $(this).find("Payment_Mode").text() == "") {
-                    alert("Please contact technical department, record not completed for policy no " + document.getElementById('txtReceiptRefNo').value);
+                    alert("Please contact technical department, record not completed for " + policy + " no " + document.getElementById('txtReceiptRefNo').value);
                     $("#txtReceiptRefNo").focus();
                 }
             });
@@ -979,6 +985,13 @@
         }
     </script>
 
+    <style type="text/css">
+        .style1
+        {
+            height: 29px;
+        }
+    </style>
+
 </head>
 <body onload="<%=publicMsgs%>" onclick="return cancelEvent('onbeforeunload')">
     <form id="PRG_FIN_RECPT_ISSUE" runat="server" submitdisabledcontrols="true">
@@ -1149,7 +1162,7 @@
                                             Assured Address
                                         </td>
                                         <td class="style17">
-                                            <asp:TextBox ID="txtAssuredAddress" runat="server" Width="290px" Enabled="false"
+                                            <asp:TextBox ID="txtAssuredAddress" runat="server" Width="290px"
                                                 BorderStyle="None"></asp:TextBox>
                                             <asp:TextBox ID="txtFileNo" runat="server" Width="150px" BorderStyle="None" CssClass="popupOffset"></asp:TextBox>
                                             <asp:TextBox ID="txtProductCode" runat="server" Width="150px" CssClass="popupOffset"
@@ -1157,10 +1170,10 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="style6">
+                                        <td class="style1">
                                             Currency Type
                                         </td>
-                                        <td>
+                                        <td class="style1">
                                             <asp:TextBox ID="txtCurrencyCode" runat="server" Width="36px"></asp:TextBox>
                                             <asp:DropDownList ID="cmbCurrencyType" runat="server" Width="110px" Height="21px"
                                                 AutoPostBack="True">
@@ -1168,10 +1181,10 @@
                                             </asp:DropDownList>
                                             <asp:CustomValidator ID="csValidateCurrencyType" runat="server" ErrorMessage="Please Select the Currency Type">*</asp:CustomValidator>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style1">
                                             Agent Code
                                         </td>
-                                        <td class="style17">
+                                        <td class="style1">
                                             <asp:TextBox ID="txtAgentCode" runat="server" Width="150px"></asp:TextBox>
                                         </td>
                                     </tr>
@@ -1268,8 +1281,8 @@
                                                 <asp:ListItem Value="Y" Text="YES" Selected="True"></asp:ListItem>
                                                 <asp:ListItem Value="N" Text="NO"></asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:CustomValidator ID="csValidateCommissions" runat="server" OnServerValidate="csValidateCommissions_ServerValidate"
-                                                ControlToValidate="cmbCommissions" ErrorMessage="Please Select Commission Applicable">*</asp:CustomValidator>
+                                          <%--  <asp:CustomValidator ID="csValidateCommissions" runat="server" OnServerValidate="csValidateCommissions_ServerValidate"
+                                                ControlToValidate="cmbCommissions" ErrorMessage="Please Select Commission Applicable">*</asp:CustomValidator>--%>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1325,8 +1338,10 @@
                                     </tr>
                                     <tr>
                                         <td class="style6">
+                                            <asp:HiddenField ID="txtPolRegularContribH" runat="server" />
                                         </td>
                                         <td>
+                                            <asp:HiddenField ID="txtMainAcctDebitDescH" runat="server" />
                                         </td>
                                         <td class="style16">
                                         </td>
@@ -1354,15 +1369,16 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txtMainAcctDebitDesc" runat="server" Width="300px" BorderStyle="None"
-                                                Enabled="false"> </asp:TextBox>
+                                            <asp:TextBox ID="txtMainAcctDebitDesc" runat="server" Width="300px" 
+                                               Enabled="true" BorderStyle="None"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtSubAcctDebitDesc" runat="server" Width="300px" BorderStyle="None"
-                                                Enabled="false"></asp:TextBox>
+                                            <asp:TextBox ID="txtSubAcctDebitDesc" runat="server" Width="300px" 
+                                                BorderStyle="None"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtAssuredName" runat="server" Width="270px" Enabled="false" BorderStyle="None"></asp:TextBox>
+                                            <asp:TextBox ID="txtAssuredName" runat="server" Width="270px" 
+                                                BorderStyle="None"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1378,12 +1394,12 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txtMainAcctCreditDesc" runat="server" Width="300px" BorderStyle="None"
-                                                Enabled="false"></asp:TextBox>
+                                            <asp:TextBox ID="txtMainAcctCreditDesc" runat="server" Width="300px" 
+                                                BorderStyle="None"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtSubAcctCreditDesc" runat="server" Width="300px" BorderStyle="None"
-                                                Enabled="false"> </asp:TextBox>
+                                            <asp:TextBox ID="txtSubAcctCreditDesc" runat="server" Width="300px" 
+                                                BorderStyle="None"></asp:TextBox>
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtAgentName" runat="server" Width="270px" Enabled="false" BorderStyle="None"></asp:TextBox>

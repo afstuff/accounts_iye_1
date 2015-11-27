@@ -26,18 +26,24 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Dim Err As String
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        txtAssuredAddress.Attributes.Add("disabled", "disabled")
         txtMOP.Attributes.Add("disabled", "disabled")
         txtMOPDesc.Attributes.Add("disabled", "disabled")
         txtTransDesc2.Attributes.Add("disabled", "disabled")
         txtAgentCode.Attributes.Add("disabled", "disabled")
         txtPolRegularContrib.Attributes.Add("disabled", "disabled")
         txtInsuredCode.Attributes.Add("disabled", "disabled")
-
+        txtAgentName.Attributes.Add("disabled", "disabled")
+        txtMainAcctDebitDesc.Attributes.Add("disabled", "disabled")
+        txtMainAcctCreditDesc.Attributes.Add("disabled", "disabled")
+        txtSubAcctDebitDesc.Attributes.Add("disabled", "disabled")
+        txtSubAcctCreditDesc.Attributes.Add("disabled", "disabled")
+        txtAssuredName.Attributes.Add("disabled", "disabled")
+        txtAgentName.Attributes.Add("disabled", "disabled")
         If Not Page.IsPostBack Then
             rcRepo = New ReceiptsRepository
             indLifeEnq = New IndLifeCodesRepository
             prodEnq = New ProductDetailsRepository
-
             Session("rcRepo") = rcRepo
             updateFlag = False
             Session("updateFlag") = updateFlag
@@ -57,7 +63,9 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeItem_CodeLongDesc", "CodeItem")
             txtSubAcctDebit.Text = "000000"
             txtSubAcctCredit.Text = "000000"
-
+            cmbBranchCode.SelectedValue = "1501"
+            txtBranchCode.Text = cmbBranchCode.SelectedValue
+            txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
             If strKey IsNot Nothing Then
                 fillValues()
             Else
@@ -65,7 +73,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             End If
 
         Else 'post back
-
+            txtPolRegularContrib.Text = txtPolRegularContribH.Value
+            txtMainAcctDebitDesc.Text = txtMainAcctDebitDescH.Value
             Me.Validate()
             If (Not Me.IsValid) Then
                 Dim msg As String
@@ -415,6 +424,10 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             cmbTransType.SelectedValue = Rceipt.TransType
             cmbCurrencyType.SelectedValue = Rceipt.CurrencyType
 
+            txtBranchCode.Text = cmbBranchCode.SelectedValue
+            txtCurrencyCode.Text = cmbCurrencyType.Text
+            txtReceiptCode.Text = cmbReceiptType.SelectedValue
+
             txtFileNo.Text = Rceipt.FileNo
             txtProductCode.Text = Rceipt.ProductCode
             updateFlag = True
@@ -430,7 +443,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     End Sub
     Protected Sub initializeFields()
         'txtReceiptNo.Enabled = False
-
+        txtPolRegularContribH.Value = "0.00"
+        txtMainAcctDebitDescH.Value = ""
         txtAgentCode.Text = String.Empty
         txtReceiptAmtFC.Text = String.Empty
         txtReceiptAmtLC.Text = String.Empty
@@ -478,14 +492,17 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtSubAcctCreditDesc.Text = String.Empty
 
         txtMode.Text = String.Empty
-        txtBranchCode.Text = String.Empty
+        'txtBranchCode.Text = String.Empty
         txtReceiptCode.Text = String.Empty
-        txtCurrencyCode.Text = String.Empty
+        'txtCurrencyCode.Text = String.Empty
         txtMainAcctDebitDesc.Text = String.Empty
         txtAssuredName.Text = String.Empty
         txtAgentName.Text = String.Empty
         txtAssuredAddress.Text = String.Empty
         txtMOPDesc.Text = String.Empty
+        cmbBranchCode.SelectedValue = "1501"
+        txtBranchCode.Text = cmbBranchCode.SelectedValue
+        txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
         updateFlag = False
         Session("updateFlag") = updateFlag 'ready for a new record
 
@@ -613,15 +630,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     End Function
 
 
-    Protected Sub csValidateCommissions_ServerValidate(ByVal source As Object, _
-                                                       ByVal args As System.Web.UI.WebControls.ServerValidateEventArgs) _
-                                                       Handles csValidateCommissions.ServerValidate
-        If (cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D") Then
-            If cmbCommissions.SelectedValue = "0" Then
-                args.IsValid = False
-            End If
-        End If
-    End Sub
+    'Protected Sub csValidateCommissions_ServerValidate(ByVal source As Object, _
+    '                                                   ByVal args As System.Web.UI.WebControls.ServerValidateEventArgs) _
+    '                                                   Handles csValidateCommissions.ServerValidate
+    '    If (cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D") Then
+    '        If cmbCommissions.SelectedValue = "0" Then
+    '            args.IsValid = False
+    '        End If
+    '    End If
+    'End Sub
 
     Protected Sub txtPolRegularContrib_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtPolRegularContrib.TextChanged
 
@@ -731,6 +748,10 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 cmbTransType.SelectedValue = Rceipt.TransType
                 cmbCurrencyType.SelectedValue = Rceipt.CurrencyType
 
+                txtBranchCode.Text = cmbBranchCode.SelectedValue
+                txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
+                txtReceiptCode.Text = cmbReceiptType.SelectedValue
+
                 txtFileNo.Text = Rceipt.FileNo
                 txtProductCode.Text = Rceipt.ProductCode
                 updateFlag = True
@@ -750,10 +771,6 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                         Exit Sub
                     End If
                 End If
-
-
-
-
             End If
         End If
     End Sub
@@ -818,15 +835,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
     Private Sub ValidateFields(ByRef ErrorInd)
         Dim msg
-        If txtReceiptNo.Text = "" Then
-            msg = "Receipt number must not be empty"
-            ErrorInd = "Y"
-            lblError.Text = msg
-            lblError.Visible = True
-            publicMsgs = "javascript:alert('" + msg + "')"
-            txtReceiptNo.Focus()
-            Exit Sub
-        End If
+        'If txtReceiptNo.Text = "" Then
+        '    msg = "Receipt number must not be empty"
+        '    ErrorInd = "Y"
+        '    lblError.Text = msg
+        '    lblError.Visible = True
+        '    publicMsgs = "javascript:alert('" + msg + "')"
+        '    txtReceiptNo.Focus()
+        '    Exit Sub
+        'End If
         If txtBatchNo.Text = "" Then
             msg = "Batch date must not be empty"
             ErrorInd = "Y"
@@ -955,7 +972,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         End If
 
         If txtTransDesc1.Text = "" Then
-            msg = "Payee name must not be empty"
+            msg = "Trans desc 1 must not be empty"
             ErrorInd = "Y"
             lblError.Text = msg
             lblError.Visible = True
