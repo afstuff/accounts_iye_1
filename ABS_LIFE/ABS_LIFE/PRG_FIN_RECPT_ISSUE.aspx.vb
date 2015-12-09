@@ -427,6 +427,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtBranchCode.Text = cmbBranchCode.SelectedValue
             txtCurrencyCode.Text = cmbCurrencyType.Text
             txtReceiptCode.Text = cmbReceiptType.SelectedValue
+            txtMode.Text = cmbMode.SelectedValue
 
             txtFileNo.Text = Rceipt.FileNo
             txtProductCode.Text = Rceipt.ProductCode
@@ -751,6 +752,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 txtBranchCode.Text = cmbBranchCode.SelectedValue
                 txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
                 txtReceiptCode.Text = cmbReceiptType.SelectedValue
+                txtMode.Text = cmbMode.SelectedValue
 
                 txtFileNo.Text = Rceipt.FileNo
                 txtProductCode.Text = Rceipt.ProductCode
@@ -830,6 +832,21 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         If ((txtReceiptAmtLC.Text <> "") And IsNumeric(txtReceiptAmtLC.Text)) Then
             txtReceiptAmtLC.Text = Format(txtReceiptAmtLC.Text, "Standard")
             txtReceiptAmtFC.Text = txtReceiptAmtLC.Text
+
+            If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+                Dim dt As DataSet = New DataSet()
+                Dim recRep1 As New ReceiptsRepository()
+                dt = recRep1.GetPaymentCoverDataSet(txtReceiptRefNo.Text, txtMOP.Text, txtPolicyEffDate.Text, CDbl(txtPolRegularContrib.Text), CDbl(txtReceiptAmtLC.Text))
+                If dt.Tables(0).Rows().Count <> 0 Then
+                    txtTransDesc2.Text = dt.Tables(0).Rows(0).Item("sPeriodsCoverRange")
+                Else
+                    lblError.Text = "Load Periods Cover Not Found. Parameters Empty or Invalid. Please Re-Confirm"
+                    lblError.Visible = True
+                    publicMsgs = "javascript:alert('" + lblError.Text + "')"
+                    Exit Sub
+                End If
+            End If
+
         End If
     End Sub
 
@@ -904,14 +921,16 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtReceiptRefNo.Focus()
             Exit Sub
         End If
-        If txtInsuredCode.Text = "" Then
-            msg = "Insured code must not be empty, Please contact technical dept to update record"
-            ErrorInd = "Y"
-            lblError.Text = msg
-            lblError.Visible = True
-            publicMsgs = "javascript:alert('" + msg + "')"
-            txtInsuredCode.Focus()
-            Exit Sub
+        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+            If txtInsuredCode.Text = "" Then
+                msg = "Insured code must not be empty, Please contact technical dept to update record"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtInsuredCode.Focus()
+                Exit Sub
+            End If
         End If
         If cmbMode.SelectedValue = "T" Then
             If txtTellerNo.Text = "" Then
@@ -931,14 +950,16 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         '    cmbCurrencyType.Focus()
         '    Exit Sub
         'End If
-        If txtAgentCode.Text = "" Then
-            msg = "Agent Code must not be empty, Please contact technical dept to update record"
-            ErrorInd = "Y"
-            lblError.Text = msg
-            lblError.Visible = True
-            publicMsgs = "javascript:alert('" + msg + "')"
-            txtAgentCode.Focus()
-            Exit Sub
+        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+            If txtAgentCode.Text = "" Then
+                msg = "Agent Code must not be empty, Please contact technical dept to update record"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtAgentCode.Focus()
+                Exit Sub
+            End If
         End If
 
         If cmbMode.SelectedValue = "Q" Then
@@ -970,24 +991,27 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtPayeeName.Focus()
             Exit Sub
         End If
-
-        If txtTransDesc1.Text = "" Then
-            msg = "Trans desc 1 must not be empty"
-            ErrorInd = "Y"
-            lblError.Text = msg
-            lblError.Visible = True
-            publicMsgs = "javascript:alert('" + msg + "')"
-            txtTransDesc1.Focus()
-            Exit Sub
+        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+            If txtTransDesc1.Text = "" Then
+                msg = "Trans desc 1 must not be empty"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtTransDesc1.Focus()
+                Exit Sub
+            End If
         End If
-        If txtPolRegularContrib.Text = "0.00" Then
-            msg = "Policy Regular Contrib must not be equal to 0.00, Please contact technical dept to update record"
-            ErrorInd = "Y"
-            lblError.Text = msg
-            lblError.Visible = True
-            publicMsgs = "javascript:alert('" + msg + "')"
-            txtPolRegularContrib.Focus()
-            Exit Sub
+        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+            If txtPolRegularContrib.Text = "0.00" Then
+                msg = "Policy Regular Contrib must not be equal to 0.00, Please contact technical dept to update record"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtPolRegularContrib.Focus()
+                Exit Sub
+            End If
         End If
         If cmbCommissions.SelectedIndex = 0 Then
             msg = "Please select commission applicable"
@@ -998,14 +1022,16 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             cmbCommissions.Focus()
             Exit Sub
         End If
-        If txtMOP.Text = "" Then
-            msg = "Mode of payment must not be empty, Please contact technical dept to update record"
-            ErrorInd = "Y"
-            lblError.Text = msg
-            lblError.Visible = True
-            publicMsgs = "javascript:alert('" + msg + "')"
-            txtMOP.Focus()
-            Exit Sub
+        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+            If txtMOP.Text = "" Then
+                msg = "Mode of payment must not be empty, Please contact technical dept to update record"
+                ErrorInd = "Y"
+                lblError.Text = msg
+                lblError.Visible = True
+                publicMsgs = "javascript:alert('" + msg + "')"
+                txtMOP.Focus()
+                Exit Sub
+            End If
         End If
         If Not IsNumeric(txtReceiptAmtLC.Text) Then
             msg = "Receipt Amount LC must be numeric"
@@ -1039,20 +1065,22 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtAssuredAddress.Text = dt.Tables(0).Rows(0).Item("Insured_Address")
             txtPayeeName.Text = dt.Tables(0).Rows(0).Item("Insured_Name")
             txtPolRegularContrib.Text = Format(dt.Tables(0).Rows(0).Item("TBIL_POL_PRM_DTL_MOP_PRM_LC"), "Standard")
+            txtPolRegularContribH.Value = txtPolRegularContrib.Text
             txtAgentName.Text = dt.Tables(0).Rows(0).Item("Agent_Name")
             txtMOP.Text = dt.Tables(0).Rows(0).Item("Payment_Mode")
             txtMOPDesc.Text = dt.Tables(0).Rows(0).Item("Payment_Mode_Desc")
             txtFileNo.Text = dt.Tables(0).Rows(0).Item("File_No")
             txtProductCode.Text = dt.Tables(0).Rows(0).Item("Product_Code")
-
-            If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
-                Dim message = "Please contact technical department, record not completed for " & lblRefNo.Text & "no " & txtReceiptRefNo.Text
-                ErrorInd = "Y"
-                publicMsgs = "javascript:alert('" + message + "')"
-                txtReceiptRefNo.Focus()
-                Exit Sub
+            txtPolicyEffDate.Text = dt.Tables(0).Rows(0).Item("TBIL_POLICY_EFF_DT")
+            If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+                If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
+                    Dim message = "Please contact technical department, record not completed for " & lblRefNo.Text & "no " & txtReceiptRefNo.Text
+                    ErrorInd = "Y"
+                    publicMsgs = "javascript:alert('" + message + "')"
+                    txtReceiptRefNo.Focus()
+                    Exit Sub
+                End If
             End If
-
         End If
 
     End Sub

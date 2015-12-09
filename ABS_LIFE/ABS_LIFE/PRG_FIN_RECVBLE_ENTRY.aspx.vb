@@ -32,9 +32,6 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
     Dim newDocRefNo As String
     Protected publicMsgs As String = String.Empty
     Protected ci As CultureInfo
-
-
-
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         txtSubSerialNo.Attributes.Add("disabled", "disabled")
         txtRefAmt.Attributes.Add("disabled", "disabled")
@@ -423,16 +420,21 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
                 txtBatchDate.Text = .BatchDate
                 txtBatchNo.Text = .BatchNo
                 cmbBranchCode.SelectedValue = .BranchCode
+                txtBranchCode.Text = cmbBranchCode.SelectedValue
                 txtChequeDate.Text = ValidDateFromDB(.ChequeDate)
                 txtChequeNo.Text = .ChequeNo
                 txtPayeeName.Text = .ClientName
                 txtCompanyCode.Text = .CompanyCode
                 cmbCurrencyType.SelectedValue = .CurrencyType
+                txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
                 cmbDept.SelectedValue = .DeptCode
+                txtDeptCode.Text = cmbDept.SelectedValue
                 txtReceiptNo.Text = .DocNo
                 txtEntryDate.Text = .EntryDate
                 cmbTransDetailType.SelectedValue = .DetailTransType
+                txtTransTypeCode.Text = cmbTransDetailType.SelectedValue
                 cmbDRCR.SelectedValue = .DRCR
+                txtDRCR.Text = cmbDRCR.SelectedValue
                 'txtTotalAmt.Text = Math.Round(.TotalAmt, 2)
                 ' txtRefAmt.Text = Math.Round(.RefAmount, 2)
                 txtRefAmt.Text = Format(.RefAmount, "Standard")
@@ -469,6 +471,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
                 txtTransAmt.Text = Format(.GLAmountLC, "Standard")
 
                 cmbMode.SelectedValue = .TransMode
+                txtMode.Text = cmbMode.SelectedValue
                 txtLedgerType.Text = .LedgerTypeCode
                 txtProgType.Text = CType(Session("prgKey"), String)
 
@@ -517,7 +520,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
         cmbDRCR.SelectedIndex = 1
         'txtRefAmt.Text = String.Empty
         txtRefDate.Text = String.Empty
-        txtReceiptRefNo1.Text = String.Empty
+        'txtReceiptRefNo1.Text = String.Empty
         txtReceiptRefNo2.Text = String.Empty
         txtReceiptRefNo3.Text = String.Empty
         txtRefAmt.Text = 0.0
@@ -549,7 +552,7 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
         cmbDRCR.SelectedIndex = 1
         txtRefAmt.Text = String.Empty
         txtRefDate.Text = String.Empty
-        txtReceiptRefNo1.Text = String.Empty
+        'txtReceiptRefNo1.Text = String.Empty
         txtReceiptRefNo2.Text = String.Empty
         txtReceiptRefNo3.Text = String.Empty
         txtRefAmt.Text = 0.0
@@ -851,14 +854,14 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
 
     Private Sub ValidateFields(ByRef ErrorInd)
         'Dim lblError.Text
-        If txtReceiptNo.Text = "" Then
-            lblError.Text = "Receipt number must not be empty"
-            ErrorInd = "Y"
-            publicMsgs = "javascript:alert('" + lblError.Text + "')"
-            txtReceiptNo.Focus()
-            lblError.Visible = True
-            Exit Sub
-        End If
+        'If txtReceiptNo.Text = "" Then
+        '    lblError.Text = "Receipt number must not be empty"
+        '    ErrorInd = "Y"
+        '    publicMsgs = "javascript:alert('" + lblError.Text + "')"
+        '    txtReceiptNo.Focus()
+        '    lblError.Visible = True
+        '    Exit Sub
+        'End If
         If txtBatchNo.Text = "" Then
             lblError.Text = "Batch number must not be empty"
             ErrorInd = "Y"
@@ -1000,22 +1003,22 @@ Partial Public Class PRG_FIN_RECVBLE_ENTRY
             lblError.Visible = True
             Exit Sub
         End If
-        If txtPayeeName.Text = "" Then
-            lblError.Text = "Payee name must not be empty"
-            ErrorInd = "Y"
-            publicMsgs = "javascript:alert('" + lblError.Text + "')"
-            txtPayeeName.Focus()
-            lblError.Visible = True
-            Exit Sub
-        End If
-        If cmbBranchCode.SelectedIndex = 0 Then
-            lblError.Text = "Please select a branch"
-            ErrorInd = "Y"
-            publicMsgs = "javascript:alert('" + lblError.Text + "')"
-            cmbBranchCode.Focus()
-            lblError.Visible = True
-            Exit Sub
-        End If
+        'If txtPayeeName.Text = "" Then
+        '    lblError.Text = "Payee name must not be empty"
+        '    ErrorInd = "Y"
+        '    publicMsgs = "javascript:alert('" + lblError.Text + "')"
+        '    txtPayeeName.Focus()
+        '    lblError.Visible = True
+        '    Exit Sub
+        'End If
+        'If cmbBranchCode.SelectedIndex = 0 Then
+        '    lblError.Text = "Please select a branch"
+        '    ErrorInd = "Y"
+        '    publicMsgs = "javascript:alert('" + lblError.Text + "')"
+        '    cmbBranchCode.Focus()
+        '    lblError.Visible = True
+        '    Exit Sub
+        'End If
         If txtTransDesc.Text = "" Then
             lblError.Text = "Transaction description must not be empty"
             ErrorInd = "Y"

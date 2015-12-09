@@ -614,6 +614,26 @@ namespace CustodianLife.Data
             return GetDataSet(query).GetXml();
         }
 
+
+        public DataSet GetPaymentCoverDataSet(string _polnum
+                                        , String _mop
+                                        , String _effdate
+                                        , String _contrib
+                                       , String _amtpaid)
+        {
+
+
+            string query = "SELECT * "
+                          + "FROM CiFn_ReceiptCoverPeriods('"
+                          + _polnum + "','"
+                          + _mop + "', '"
+                          + _effdate + "', "
+                          + _contrib + ","
+                          + _amtpaid + ",NULL,NULL,NULL)";
+
+            return GetDataSet(query);
+        }
+
         public String GetAccountChartDetails(string _accountsubcode
                                          , String _accountmaincode)
         {

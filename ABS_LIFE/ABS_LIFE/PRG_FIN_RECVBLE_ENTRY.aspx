@@ -1000,8 +1000,8 @@
             else if (receiptmode == "T") {
                 $("#cmbMode").val('T');
             }
-            else if (receiptmode == "C") {
-                $("#cmbMode").val('C');
+            else if (receiptmode == "F") {
+                $("#cmbMode").val('F');
             }
             else {
                 alert("Receipt mode not found");
@@ -1190,6 +1190,7 @@
                                             <asp:ListItem Value="Q" Text="Q-Cheque"></asp:ListItem>
                                             <asp:ListItem Value="D" Text="D-Direct Payment To Bank"></asp:ListItem>
                                             <asp:ListItem Value="T" Text="T-Teller"></asp:ListItem>
+                                            <asp:ListItem Value="F">F-Transfer</asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
                                     <td class="style2">

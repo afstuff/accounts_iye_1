@@ -603,12 +603,12 @@
             });
 
             //retrieve data on focus loss
-            $("#txtTransDesc1").on('focusout', function(e) {
+          /* $("#txtTransDesc1").on('focusout', function(e) {
                 e.preventDefault();
                 if ($("#txtTransDesc1").val() != "")
-                  //  LoadPeriodsCover();
+                  LoadPeriodsCover();
                 return false;
-            });
+            });*/
 
             //retrieve data on focus
             // $("#txtTransDesc1").on('focusout', function(e) {
