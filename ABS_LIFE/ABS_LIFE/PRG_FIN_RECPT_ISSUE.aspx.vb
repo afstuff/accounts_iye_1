@@ -836,14 +836,22 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
                 Dim dt As DataSet = New DataSet()
                 Dim recRep1 As New ReceiptsRepository()
-                dt = recRep1.GetPaymentCoverDataSet(txtReceiptRefNo.Text, txtMOP.Text, txtPolicyEffDate.Text, CDbl(txtPolRegularContrib.Text), CDbl(txtReceiptAmtLC.Text))
-                If dt.Tables(0).Rows().Count <> 0 Then
-                    txtTransDesc2.Text = dt.Tables(0).Rows(0).Item("sPeriodsCoverRange")
-                Else
-                    lblError.Text = "Load Periods Cover Not Found. Parameters Empty or Invalid. Please Re-Confirm"
+                If txtPolRegularContrib.Text = "" Or txtPolRegularContrib.Text = "0.00" Then
+                    lblError.Text = "Regular Contrib cannot be 0 or empty, contact technical dept"
                     lblError.Visible = True
                     publicMsgs = "javascript:alert('" + lblError.Text + "')"
                     Exit Sub
+                Else
+                    dt = recRep1.GetPaymentCoverDataSet(txtReceiptRefNo.Text, txtMOP.Text, txtPolicyEffDate.Text, CDbl(txtPolRegularContrib.Text), CDbl(txtReceiptAmtLC.Text))
+                    If dt.Tables(0).Rows().Count <> 0 Then
+                        If Not IsDBNull(dt.Tables(0).Rows(0).Item("sPeriodsCoverRange")) Then _
+                                                        txtTransDesc2.Text = dt.Tables(0).Rows(0).Item("sPeriodsCoverRange")
+                    Else
+                        lblError.Text = "Load Periods Cover Not Found. Parameters Empty or Invalid. Please Re-Confirm"
+                        lblError.Visible = True
+                        publicMsgs = "javascript:alert('" + lblError.Text + "')"
+                        Exit Sub
+                    End If
                 End If
             End If
 

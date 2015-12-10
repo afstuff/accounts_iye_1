@@ -328,18 +328,20 @@
 
                         var resultPolicy = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue").val();
                         var resultProposal = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue1").val();
-                        //                       alert(resultPolicy + "--" + resultProposal);
-
+                                  //   alert(resultPolicy + "--" + resultProposal);
+                       
                         switch ($('#cmbReceiptType').val()) {
                             case "D":
                                 if (resultProposal.length > 0)
-                                    $('#txtReceiptRefNo').attr('value', resultProposal); // proposal code
+                                   // $('#txtReceiptRefNo').attr('value', resultProposal); // proposal code
+                               document.getElementById('txtReceiptRefNo').value = resultProposal;
 
                                 break;
                             case "P":
 
                                 if (resultPolicy.length > 0)
-                                    $('#txtReceiptRefNo').attr('value', resultPolicy); // policy code
+                                    //$('#txtReceiptRefNo').attr('value', resultPolicy); // policy code
+                                document.getElementById('txtReceiptRefNo').value = resultPolicy;
                                 break;
                             default:
                                 //$('#lblRefNo').text('Ref No');
