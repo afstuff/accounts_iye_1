@@ -45,7 +45,10 @@ namespace CustodianLife.Model
         public virtual String OperId { get; set; }
         public virtual String FileNo { get; set; }
         public virtual String ProcDate { get; set; }
-
+        public virtual String TempPolicyNo { get; set; }
+        public virtual String TempInsuredName { get; set; }
+        public virtual String TempProdCode { get; set; }
+        public virtual String TempProdCat { get; set; }
 
     }
 }
