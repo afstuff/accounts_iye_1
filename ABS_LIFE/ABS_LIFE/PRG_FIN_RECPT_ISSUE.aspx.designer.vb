@@ -61,6 +61,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''ScriptManager1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ScriptManager1 As Global.System.Web.UI.ScriptManager
+
+    '''<summary>
     '''chkReceiptNo control.
     '''</summary>
     '''<remarks>
@@ -275,6 +284,87 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtAgentCode As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''notFound control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents notFound As Global.System.Web.UI.HtmlControls.HtmlTableRow
+
+    '''<summary>
+    '''txtTempInsName control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtTempInsName As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''notFound1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents notFound1 As Global.System.Web.UI.HtmlControls.HtmlTableRow
+
+    '''<summary>
+    '''lblProductClass control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblProductClass As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''txtProductClass control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtProductClass As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''cboProductClass control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboProductClass As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''lblProduct_Num control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblProduct_Num As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''txtProduct control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtProduct As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''cboProduct control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboProduct As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
     '''txtChequeNo control.
@@ -493,6 +583,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Protected WithEvents txtPolRegularContribH As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''HidShowHide control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents HidShowHide As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''txtMainAcctDebitDescH control.
     '''</summary>
     '''<remarks>
@@ -500,6 +599,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtMainAcctDebitDescH As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''txtTempPolNo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtTempPolNo As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''butSave control.

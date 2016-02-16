@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="PRG_FIN_RECPT_ISSUE.aspx.vb"
-    Inherits="ABS_LIFE.PRG_FIN_RECPT_ISSUE" %>
+    Inherits="ABS_LIFE.PRG_FIN_RECPT_ISSUE" EnableEventValidation="false" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -42,7 +42,6 @@
 
         // calling jquery functions once document is ready
         $(document).ready(function() {
-
             var resultValueDR;
             var resultValueCR;
             var resultValue;
@@ -59,6 +58,22 @@
                 }
 
             }
+
+
+            //Refresh screen with post back values
+            function HideShow() {
+                switch ($('#HidShowHide').val()) {
+                    case "hide":
+                        $('#notFound').hide();
+                        $('#notFound1').hide();
+                        break;
+                    default:
+                        $('#notFound').show();
+                        $('#notFound1').show();
+                }
+
+            }
+
             function GetReceiptType() {
 
                 $("#cmbReceiptType").val($("#txtReceiptCode").val());
@@ -111,6 +126,7 @@
 
             checkMode();
             CheckReceiptType();
+            HideShow();
 
             $('#txtReceiptAmtLC').on('focusout', function(e) {
                 e.preventDefault();
@@ -122,15 +138,35 @@
 
             $('#cmbMode').on('focusout', function(e) {
                 e.preventDefault();
+                $('#txtMode').val($('#cmbMode').val());
                 checkMode();
 
                 //return false;
             });
 
+            $('#cmbCurrencyType').on('focusout', function(e) {
+                e.preventDefault();
+                $('#txtCurrencyCode').val($('#cmbCurrencyType').val());
+            });
+
+
+            $('#cmbBranchCode').on('focusout', function(e) {
+                e.preventDefault();
+                $('#txtBranchCode').val($('#cmbBranchCode').val());
+            });
 
             $('#cmbReceiptType, #cmbCommissions').on('focusout', function(e) {
                 e.preventDefault();
                 CheckReceiptType();
+            });
+
+
+            $('#cboProductClass').on('focusout', function(e) {
+                e.preventDefault();
+                if ($('#cboProductClass').val() != "0") {
+                    $('#txtProductClass').val($('#cboProductClass').val());
+                    GetProductClass();
+                }
             });
 
             //FORMAT EFFECTIVE DATE AUTOMATICALLY. Make the slashes jump into place
@@ -195,9 +231,9 @@
 
             //retrieve data on focus loss
             $("#txtMainAcctDebit").on('focusout', function(e) {
-            e.preventDefault();
-            $("#txtMainAcctDebitDesc").val('')
-            $("#txtSubAcctDebitDesc").val('')
+                e.preventDefault();
+                $("#txtMainAcctDebitDesc").val('')
+                $("#txtSubAcctDebitDesc").val('')
                 if ($("#txtMainAcctDebit").val() != "" && $("#txtSubAcctDebit").val() != "")
                     LoadChartInfo("txtSubAcctDebit", "txtMainAcctDebit", "Main", "DR");
                 $("#txtSubAcctDebit").focus();
@@ -217,8 +253,8 @@
 
             //retrieve data on focus loss
             $("#txtMainAcctCredit").on('focusout', function(e) {
-            $("#txtMainAcctCreditDesc").val('')
-            $("#txtSubAcctCreditDesc").val('')
+                $("#txtMainAcctCreditDesc").val('')
+                $("#txtSubAcctCreditDesc").val('')
                 e.preventDefault();
                 if ($("#txtMainAcctCredit").val() != "" && $("#txtSubAcctCredit").val() != "")
                 //LoadChartInfo("txtSubAcctDebit", "txtMainAcctCredit", "Main", "CR");
@@ -254,10 +290,13 @@
                     document.getElementById('txtPolicyEffDate').value = "";
                     document.getElementById('txtFileNo').value = "";
                     document.getElementById('txtProductCode').value = "";
+                    document.getElementById('txtTempPolNo').value = $("#txtReceiptRefNo").val()
 
                     LoadPolicyInfoObject();
+
                 }
                 return false;
+
             });
 
             //retrieve data on focus loss branches
@@ -296,14 +335,39 @@
                 //return false;
             });
 
-            $("#cmbReceiptType").on('focusout', function(e) {
-                e.preventDefault();
-                if ($("#cmbReceiptCode").val() != "")
-                    $('#txtReceiptCode').val($("#cmbReceiptCode").val())
+            //            $("#cmbReceiptType").on('focusout', function(e) {
+            //                e.preventDefault();
+            //                if ($("#cmbReceiptType").val() != "")
+            //                    $('#txtReceiptCode').val($("#cmbReceiptType").val())
 
+            //                //return false;
+            //            });
+
+            $("#txtProductClass").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtProductClass").val() != "") {
+                    GetProductClass();
+                }
                 //return false;
             });
 
+            //            $('#cboProduct').change(function(e) {
+            //                e.preventDefault();
+            //                $('#txtProduct').val($('#cboProduct').val());
+            //            });
+
+            $('#cboProduct').on('focusout', function(e) {
+                e.preventDefault();
+                $('#txtProduct').val($('#cboProduct').val());
+            });
+
+            $("#txtProduct").on('focusout', function(e) {
+                e.preventDefault();
+                if ($("#txtProduct").val() != "") {
+                    GetProduct();
+                }
+                //return false;
+            });
 
 
             //call popup to browse the Policies
@@ -328,20 +392,20 @@
 
                         var resultPolicy = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue").val();
                         var resultProposal = $("iframe[src='PolicyBrowse.aspx']").contents().find("#txtValue1").val();
-                                  //   alert(resultPolicy + "--" + resultProposal);
-                       
+                        //   alert(resultPolicy + "--" + resultProposal);
+
                         switch ($('#cmbReceiptType').val()) {
                             case "D":
                                 if (resultProposal.length > 0)
-                                   // $('#txtReceiptRefNo').attr('value', resultProposal); // proposal code
-                               document.getElementById('txtReceiptRefNo').value = resultProposal;
+                                // $('#txtReceiptRefNo').attr('value', resultProposal); // proposal code
+                                    document.getElementById('txtReceiptRefNo').value = resultProposal;
 
                                 break;
                             case "P":
 
                                 if (resultPolicy.length > 0)
-                                    //$('#txtReceiptRefNo').attr('value', resultPolicy); // policy code
-                                document.getElementById('txtReceiptRefNo').value = resultPolicy;
+                                //$('#txtReceiptRefNo').attr('value', resultPolicy); // policy code
+                                    document.getElementById('txtReceiptRefNo').value = resultPolicy;
                                 break;
                             default:
                                 //$('#lblRefNo').text('Ref No');
@@ -383,7 +447,7 @@
                     overlayCss: { backgroundColor: "black" }
 
                 }
-              );
+                      );
             });
             //call popup to add to the main account
             $('#MainAcctDebitAdd, #SubAcctDebitAdd,#MainAcctCreditAdd,#SubAcctCreditAdd').click(function(e) {
@@ -605,11 +669,11 @@
             });
 
             //retrieve data on focus loss
-          /* $("#txtTransDesc1").on('focusout', function(e) {
-                e.preventDefault();
-                if ($("#txtTransDesc1").val() != "")
-                  LoadPeriodsCover();
-                return false;
+            /* $("#txtTransDesc1").on('focusout', function(e) {
+            e.preventDefault();
+            if ($("#txtTransDesc1").val() != "")
+            LoadPeriodsCover();
+            return false;
             });*/
 
             //retrieve data on focus
@@ -632,359 +696,418 @@
             $("#divTable").ajaxStop(OnAjaxStop);
             $("#divTable").ajaxComplete(OnAjaxComplete);
             //loading screen functionality - this part is additional - end
-        });
 
-        // ajax call to load account chart information
-        function LoadChartInfo(subaccountcode, mainaccountcode, ctype, drcr) {
-            console.log(document.getElementById(subaccountcode).value)
-            console.log(document.getElementById(mainaccountcode).value)
-            $.ajax({
-                type: "POST",
-                url: "PRG_FIN_RECPT_ISSUE.aspx/GetAccountChartDetails",
-                //                data: JSON.stringify({ _accountcode: document.getElementById(accountcode).value, _type: ctype }),
-                data: JSON.stringify({ _accountsubcode: document.getElementById(subaccountcode).value, _accountmaincode: document.getElementById(mainaccountcode).value }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function(data) {
-                    var xmlDoc = $.parseXML(data.d);
-                    var xml = $(xmlDoc);
-                    var accountcharts = xml.find("Table");
-                    retrieve_AccountChartInfoValues(accountcharts, ctype, drcr)
-                    if (ctype == "Sub" && drcr == "DR") {
-                        $("#txtMainAcctCredit").focus();
-                        $("#txtSubAcctDebit").val("000000");
+
+
+            // ajax call to load account chart information
+            function LoadChartInfo(subaccountcode, mainaccountcode, ctype, drcr) {
+                console.log(document.getElementById(subaccountcode).value)
+                console.log(document.getElementById(mainaccountcode).value)
+                $.ajax({
+                    type: "POST",
+                    url: "PRG_FIN_RECPT_ISSUE.aspx/GetAccountChartDetails",
+                    //                data: JSON.stringify({ _accountcode: document.getElementById(accountcode).value, _type: ctype }),
+                    data: JSON.stringify({ _accountsubcode: document.getElementById(subaccountcode).value, _accountmaincode: document.getElementById(mainaccountcode).value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        var xmlDoc = $.parseXML(data.d);
+                        var xml = $(xmlDoc);
+                        var accountcharts = xml.find("Table");
+                        retrieve_AccountChartInfoValues(accountcharts, ctype, drcr)
+                        if (ctype == "Sub" && drcr == "DR") {
+                            $("#txtMainAcctCredit").focus();
+                            $("#txtSubAcctDebit").val("000000");
+                        }
+                        //retrieve_AccountChartInfoValues(accountcharts, drcr)
+                    },
+                    failure: OnFailure,
+                    //error: OnError_LoadChartInfo(ctype, drcr)
+                    error: function() {
+                        alert('Error!: Account Chart could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
+                        if (ctype == "Sub" && drcr == "DR") {
+                            $("#txtMainAcctDebit").focus();
+                            $("#txtSubAcctDebit").val("000000");
+                        }
+                        else if (ctype == "Sub" && drcr == "CR") {
+                            $("#txtMainAcctCredit").focus();
+                            $("#txtSubAcctCredit").val("000000");
+                        }
                     }
-                    //retrieve_AccountChartInfoValues(accountcharts, drcr)
-                },
-                failure: OnFailure,
-                //error: OnError_LoadChartInfo(ctype, drcr)
-                error: function() {
-                    alert('Error!: Account Chart could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
-                    if (ctype == "Sub" && drcr == "DR") {
-                        $("#txtMainAcctDebit").focus();
-                        $("#txtSubAcctDebit").val("000000");
+                });
+                // this avoids page refresh on button click
+                return false;
+            }
+            // retrieve the values and
+            function retrieve_AccountChartInfoValues(accountcharts, ctype, drcr) {
+                //debugger;
+                $.each(accountcharts, function() {
+                    var accountchart = $(this);
+
+                    if (ctype == "Main" && drcr == "DR") {
+
+                        document.getElementById('txtMainAcctDebitDesc').value = $(this).find("sMainDesc").text()
+                        document.getElementById('txtMainAcctDebitDescH').value = $(this).find("sMainDesc").text()
+                        // document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
+                        // document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
+                        document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
+                        document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
+                    }
+                    else if (ctype == "Main" && drcr == "CR") {
+                        document.getElementById('txtMainAcctCreditDesc').value = $(this).find("sMainDesc").text()
+                        //  document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
+                        //  document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
+
+                        document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
+                        document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
+                    }
+                    else if (ctype == "Sub" && drcr == "DR") {
+
+                        document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
+                        document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
+                        document.getElementById('txtMainAcctDebit').value = $(this).find("sMainCode").text()
+                        document.getElementById('txtMainAcctDebitDesc').value = $(this).find("sMainDesc").text()
+                        document.getElementById('txtMainAcctDebitDescH').value = $(this).find("sMainDesc").text()
+
                     }
                     else if (ctype == "Sub" && drcr == "CR") {
-                        $("#txtMainAcctCredit").focus();
-                        $("#txtSubAcctCredit").val("000000");
+                        document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
+                        document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
+                        document.getElementById('txtMainAcctCredit').value = $(this).find("sMainCode").text()
+                        document.getElementById('txtMainAcctCreditDesc').value = $(this).find("sMainDesc").text()
                     }
-                }
-            });
-            // this avoids page refresh on button click
-            return false;
-        }
-        // retrieve the values and
-        function retrieve_AccountChartInfoValues(accountcharts, ctype, drcr) {
-            //debugger;
-            $.each(accountcharts, function() {
-                var accountchart = $(this);
 
-                if (ctype == "Main" && drcr == "DR") {
-
-                    document.getElementById('txtMainAcctDebitDesc').value = $(this).find("sMainDesc").text()
-                    // document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
-                    // document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
-                    document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
-                    document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
-                }
-                else if (ctype == "Main" && drcr == "CR") {
-                    document.getElementById('txtMainAcctCreditDesc').value = $(this).find("sMainDesc").text()
-                    //  document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
-                    //  document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
-
-                    document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
-                    document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
-                }
-                else if (ctype == "Sub" && drcr == "DR") {
-
-                    document.getElementById('txtSubAcctDebit').value = $(this).find("sSubCode").text()
-                    document.getElementById('txtSubAcctDebitDesc').value = $(this).find("sSubDesc").text()
-                    document.getElementById('txtMainAcctDebit').value = $(this).find("sMainCode").text()
-                    document.getElementById('txtMainAcctDebitDesc').value = $(this).find("sMainDesc").text()
-
-                }
-                else if (ctype == "Sub" && drcr == "CR") {
-                    document.getElementById('txtSubAcctCredit').value = $(this).find("sSubCode").text()
-                    document.getElementById('txtSubAcctCreditDesc').value = $(this).find("sSubDesc").text()
-                    document.getElementById('txtMainAcctCredit').value = $(this).find("sMainCode").text()
-                    document.getElementById('txtMainAcctCreditDesc').value = $(this).find("sMainDesc").text()
-                }
-
-            });
-        }
-
-
-        // ajax call to load policy information
-        function LoadBranchInfoObject() {
-            $.ajax({
-                type: "POST",
-                url: "PRG_FIN_RECPT_ISSUE.aspx/GetBranchInformation",
-                data: JSON.stringify({ _branchcode: document.getElementById('txtBranchCode').value }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccess_LoadBranchInfoObject,
-                failure: OnFailure,
-                error: OnError_LoadBranchInfoObject
-            });
-            // this avoids page refresh on button click
-            return false;
-        }
-        function OnSuccess_LoadBranchInfoObject(response) {
-            //debugger;
-
-            var xmlDoc = $.parseXML(response.d);
-            var xml = $(xmlDoc);
-            var branches = xml.find("Table");
-            retrieve_BranchInfoValues(branches);
-
-        }
-        // retrieve the values for branch
-        function retrieve_BranchInfoValues(branches) {
-            //debugger;
-            $.each(branches, function() {
-                var branch = $(this);
-                $("#cmbBranchCode").val($(this).find("sCode").text())
-            });
-        }
-
-
-        // ajax call to load policy information
-        function LoadPolicyInfoObject() {
-            $.ajax({
-                type: "POST",
-                url: "PRG_FIN_RECPT_ISSUE.aspx/GetPolicyInformation",
-                data: JSON.stringify({ _polnum: document.getElementById('txtReceiptRefNo').value, _type: document.getElementById('cmbReceiptType').value }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccess_LoadPolicyInfoObject,
-                failure: OnFailure,
-                error: OnError_LoadPolicyInfoObject
-            });
-            // this avoids page refresh on button click
-
-            return false;
-        }
-        // on sucess get the xml
-        function OnSuccess_LoadPolicyInfoObject(response) {
-            //debugger;
-
-            var xmlDoc = $.parseXML(response.d);
-            var xml = $(xmlDoc);
-            var policyholders = xml.find("Table");
-            retrieve_PolicyInfoValues(policyholders);
-
-        }
-        // retrieve the values and
-        function retrieve_PolicyInfoValues(policyholders) {
-            //debugger;
-            $.each(policyholders, function() {
-                var policyholder = $(this);
-                document.getElementById('txtInsuredCode').value = $(this).find("TBIL_POLY_ASSRD_CD").text();
-                document.getElementById('txtAgentCode').value = $(this).find("TBIL_POLY_AGCY_CODE").text();
-                document.getElementById('txtAssuredName').value = $(this).find("Insured_Name").text();
-                document.getElementById('txtAssuredAddress').value = $(this).find("Insured_Address").text();
-                document.getElementById('txtPayeeName').value = $(this).find("Insured_Name").text();
-                document.getElementById('txtPolRegularContrib').value = $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text();
-                document.getElementById('txtPolRegularContribH').value = $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text();
-
-                //$('#<%= txtPolRegularContrib.ClientID %>').val($(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text());
-
-
-                document.getElementById('txtAgentName').value = $(this).find("Agent_Name").text();
-                document.getElementById('txtMOP').value = $(this).find("Payment_Mode").text();
-                document.getElementById('txtMOPDesc').value = $(this).find("Payment_Mode_Desc").text();
-                document.getElementById('txtPolicyEffDate').value = $(this).find("TBIL_POLICY_EFF_DT").text();
-                document.getElementById('txtFileNo').value = $(this).find("File_No").text();
-                document.getElementById('txtProductCode').value = $(this).find("Product_Code").text();
-
-                if ($(this).find("TBIL_POLY_ASSRD_CD").text() == "" || $(this).find("TBIL_POLY_AGCY_CODE").text() == "" || $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text() == "0.00" || $(this).find("Payment_Mode").text() == "") {
-                    alert("Please contact technical department, record not completed for " + policy + " no " + document.getElementById('txtReceiptRefNo').value);
-                    $("#txtReceiptRefNo").focus();
-                }
-            });
-
-        }
-
-        // ajax call to load receipts cover details
-        function LoadPeriodsCover() {
-            $.ajax({
-                type: "POST",
-                url: "PRG_FIN_RECPT_ISSUE.aspx/PaymentsPeriodCover",
-                data: JSON.stringify({ _polnum: document.getElementById('txtReceiptRefNo').value,
-                    _mop: document.getElementById('txtMOP').value,
-                    _effdate: document.getElementById('txtPolicyEffDate').value,
-                    _contrib: document.getElementById('txtPolRegularContrib').value,
-                    _amtpaid: document.getElementById('txtReceiptAmtLC').value
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccess_LoadPeriodsCover,
-                failure: OnFailure_LoadPeriodsCover,
-                error: OnError_LoadPeriodsCover
-            });
-            // this avoids page refresh on button click
-            return false;
-        }
-        // on sucess get the xml
-        function OnSuccess_LoadPeriodsCover(response) {
-            //debugger;
-            var xmlDoc = $.parseXML(response.d);
-            var xml = $(xmlDoc);
-            var coverdets = xml.find("Table");
-            retrieve_LoadPeriodsCover(coverdets)
-
-        }
-        // retrieve the values and
-        function retrieve_LoadPeriodsCover(coverdets) {
-            //debugger;
-            $.each(coverdets, function() {
-                var coverdet = $(this);
-
-                document.getElementById('txtTransDesc2').value = $(this).find("sPeriodsCoverRange").text()
-            });
-        }
-        function OnFailure_LoadPeriodsCover(response) {
-            //debugger;
-            //alert('Failure!!!' + '<br/>' + response.reponseText);
-            alert('Failure!: Periods Covered Failed. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
-        }
-
-        // function OnError_LoadChartInfo(response) {
-        function OnError_LoadChartInfo(ctype, drcr) {
-            //debugger;
-            //var errorText = response.responseText;
-            //alert('Error!!!' + '\n\n' + errorText);
-            alert('Error!: Account Chart could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
-        }
-        function OnError_LoadBranchInfoObject(response) {
-            //debugger;
-            //var errorText = response.responseText;
-            //alert('Error!!!' + '\n\n' + errorText);
-            alert('Error!: Branch Infomation Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
-            $('#txtBranchCode').focus();
-        }
-        function OnError_LoadPolicyInfoObject(response) {
-            //debugger;
-            //var errorText = response.responseText;
-            //alert('Error!!!' + '\n\n' + errorText);
-            alert('Error!: Policy Infomation Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
-            $('#txtReceiptRefNo').focus();
-        }
-        function OnError_LoadPeriodsCover(response) {
-            //debugger;
-            //var errorText = response.responseText;
-            //alert('Error!!!' + '\n\n' + errorText);
-            alert('Error!: Load Periods Cover Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
-        }
-        function OnError_LoadCurrencyObject(response) {
-            //debugger;
-            //var errorText = response.responseText;
-            //alert('Error!!!' + '\n\n' + errorText);
-            alert('Error!: Currency Code Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
-            $('#txtCurrencyCode').focus();
-        }
-
-
-        // loading screen functionality functions - this part is additional - start
-        function OnAjaxStart() {
-            //debugger;
-            //alert('Starting...');
-            $("#divLoading").css("display", "block");
-        }
-        function OnFailure(response) {
-            //debugger;
-            alert('Failure!!!' + '<br/>' + response.reponseText);
-        }
-        function OnError(response) {
-            //debugger;
-            var errorText = response.responseText;
-            alert('Error!!!' + '\n\n' + errorText);
-        }
-        function OnAjaxError() {
-            //debugger;
-            alert('Error!: Invalid Ajax Call');
-        }
-        function OnAjaxSuccess() {
-            //debugger;
-            //alert('Sucess!!!');
-            $("#divLoading").css("display", "none");
-        }
-        function OnAjaxStop() {
-            //debugger;
-            //alert('Stop!!!');
-            $("#divLoading").css("display", "none");
-        }
-        function OnAjaxComplete() {
-            //debugger;
-            //alert('Completed!!!');
-            $("#divLoading").css("display", "none");
-        }
-        // loading screen functionality functions - this part is additional - end
-
-
-        // ajax call to load currency type
-        function LoadCurrencyObject() {
-            $.ajax({
-                type: "POST",
-                url: "PRG_FIN_RECPT_ISSUE.aspx/GetCurrencyInformation",
-                data: JSON.stringify({ _currencycode: document.getElementById('txtCurrencyCode').value }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccess_LoadCurrencyObject,
-                failure: OnFailure,
-                error: OnError_LoadCurrencyObject
-            });
-            // this avoids page refresh on button click
-            return false;
-        }
-        function OnSuccess_LoadCurrencyObject(response) {
-            //debugger;
-
-            var xmlDoc = $.parseXML(response.d);
-            var xml = $(xmlDoc);
-            var currencies = xml.find("Table");
-            retrieve_LoadCurrencyObject(currencies);
-
-        }
-        // retrieve the values for currency
-        function retrieve_LoadCurrencyObject(currencies) {
-            //debugger;
-            $.each(currencies, function() {
-                var currency = $(this);
-                $("#cmbCurrencyType").val($(this).find("TBIL_COD_ITEM").text())
-            });
-        }
-
-
-        function GetReceiptMode() {
-            receiptmode = $('#txtMode').val()
-            if (receiptmode == "C") {
-                $("#cmbMode").val('C');
+                });
             }
-            else if (receiptmode == "Q") {
-                $("#cmbMode").val('Q');
-            }
-            else if (receiptmode == "D") {
-                $("#cmbMode").val('D');
-            }
-            else if (receiptmode == "T") {
-                $("#cmbMode").val('T');
-            }
-            else if (receiptmode == "C") {
-                $("#cmbMode").val('C');
-            }
-            else {
-                alert("Receipt mode not found");
-                $("#cmbMode").val(0);
-            }
-        }
 
-        function FormatDateAuto(effDate) {
-              var effDateDay = effDate.substring(0, 2);
-              var effDateMonth = effDate.substring(2, 4);
-              var effDateYear = effDate.substring(4);
-              return effDateDay + "/" + effDateMonth + "/" + effDateYear;    
-        }
+
+            // ajax call to load policy information
+            function LoadBranchInfoObject() {
+                $.ajax({
+                    type: "POST",
+                    url: "PRG_FIN_RECPT_ISSUE.aspx/GetBranchInformation",
+                    data: JSON.stringify({ _branchcode: document.getElementById('txtBranchCode').value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccess_LoadBranchInfoObject,
+                    failure: OnFailure,
+                    error: OnError_LoadBranchInfoObject
+                });
+                // this avoids page refresh on button click
+                return false;
+            }
+            function OnSuccess_LoadBranchInfoObject(response) {
+                //debugger;
+
+                var xmlDoc = $.parseXML(response.d);
+                var xml = $(xmlDoc);
+                var branches = xml.find("Table");
+                retrieve_BranchInfoValues(branches);
+
+            }
+            // retrieve the values for branch
+            function retrieve_BranchInfoValues(branches) {
+                //debugger;
+                $.each(branches, function() {
+                    var branch = $(this);
+                    $("#cmbBranchCode").val($(this).find("sCode").text())
+                });
+            }
+
+
+            // ajax call to load policy information
+            function LoadPolicyInfoObject() {
+                $.ajax({
+                    type: "POST",
+                    url: "PRG_FIN_RECPT_ISSUE.aspx/GetPolicyInformation",
+                    data: JSON.stringify({ _polnum: document.getElementById('txtReceiptRefNo').value, _type: document.getElementById('cmbReceiptType').value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccess_LoadPolicyInfoObject,
+                    failure: OnFailure,
+                    error: OnError_LoadPolicyInfoObject
+                });
+                // this avoids page refresh on button click
+
+                return false;
+            }
+            // on sucess get the xml
+            function OnSuccess_LoadPolicyInfoObject(response) {
+                //debugger;
+                $('#HidShowHide').val("hide");
+                HideShow()
+                var xmlDoc = $.parseXML(response.d);
+                var xml = $(xmlDoc);
+                var policyholders = xml.find("Table");
+                retrieve_PolicyInfoValues(policyholders);
+
+            }
+            // retrieve the values and
+            function retrieve_PolicyInfoValues(policyholders) {
+                //debugger;
+                $.each(policyholders, function() {
+                    var policyholder = $(this);
+                    document.getElementById('txtInsuredCode').value = $(this).find("TBIL_POLY_ASSRD_CD").text();
+                    document.getElementById('txtAgentCode').value = $(this).find("TBIL_POLY_AGCY_CODE").text();
+                    document.getElementById('txtAssuredName').value = $(this).find("Insured_Name").text();
+                    document.getElementById('txtAssuredAddress').value = $(this).find("Insured_Address").text();
+                    document.getElementById('txtPayeeName').value = $(this).find("Insured_Name").text();
+                    document.getElementById('txtPolRegularContrib').value = $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text();
+                    document.getElementById('txtPolRegularContribH').value = $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text();
+
+
+                    document.getElementById('txtAgentName').value = $(this).find("Agent_Name").text();
+                    document.getElementById('txtMOP').value = $(this).find("Payment_Mode").text();
+                    document.getElementById('txtMOPDesc').value = $(this).find("Payment_Mode_Desc").text();
+                    document.getElementById('txtPolicyEffDate').value = $(this).find("TBIL_POLICY_EFF_DT").text();
+                    document.getElementById('txtFileNo').value = $(this).find("File_No").text();
+                    document.getElementById('txtProductCode').value = $(this).find("Product_Code").text();
+
+                    //                if ($(this).find("TBIL_POLY_ASSRD_CD").text() == "" || $(this).find("TBIL_POLY_AGCY_CODE").text() == "" || $(this).find("TBIL_POL_PRM_DTL_MOP_PRM_LC").text() == "0.00" || $(this).find("Payment_Mode").text() == "") {
+                    //                    alert("Please contact technical department, record not completed for " + policy + " no " + document.getElementById('txtReceiptRefNo').value);
+                    //                    $("#txtReceiptRefNo").focus();
+                    //                }
+
+                });
+
+            }
+
+            // ajax call to load receipts cover details
+            function LoadPeriodsCover() {
+                $.ajax({
+                    type: "POST",
+                    url: "PRG_FIN_RECPT_ISSUE.aspx/PaymentsPeriodCover",
+                    data: JSON.stringify({ _polnum: document.getElementById('txtReceiptRefNo').value,
+                        _mop: document.getElementById('txtMOP').value,
+                        _effdate: document.getElementById('txtPolicyEffDate').value,
+                        _contrib: document.getElementById('txtPolRegularContrib').value,
+                        _amtpaid: document.getElementById('txtReceiptAmtLC').value
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccess_LoadPeriodsCover,
+                    failure: OnFailure_LoadPeriodsCover,
+                    error: OnError_LoadPeriodsCover
+                });
+                // this avoids page refresh on button click
+                return false;
+            }
+            // on sucess get the xml
+            function OnSuccess_LoadPeriodsCover(response) {
+                //debugger;
+                var xmlDoc = $.parseXML(response.d);
+                var xml = $(xmlDoc);
+                var coverdets = xml.find("Table");
+                retrieve_LoadPeriodsCover(coverdets)
+
+            }
+            // retrieve the values and
+            function retrieve_LoadPeriodsCover(coverdets) {
+                //debugger;
+                $.each(coverdets, function() {
+                    var coverdet = $(this);
+
+                    document.getElementById('txtTransDesc2').value = $(this).find("sPeriodsCoverRange").text()
+                });
+            }
+            function OnFailure_LoadPeriodsCover(response) {
+                //debugger;
+                //alert('Failure!!!' + '<br/>' + response.reponseText);
+                alert('Failure!: Periods Covered Failed. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
+            }
+
+            // function OnError_LoadChartInfo(response) {
+            function OnError_LoadChartInfo(ctype, drcr) {
+                //debugger;
+                //var errorText = response.responseText;
+                //alert('Error!!!' + '\n\n' + errorText);
+                alert('Error!: Account Chart could not be Retrieved. Parameters sent is empty or invalid. Please Re-Confirm' + '<br/>');
+            }
+            function OnError_LoadBranchInfoObject(response) {
+                //debugger;
+                //var errorText = response.responseText;
+                //alert('Error!!!' + '\n\n' + errorText);
+                alert('Error!: Branch Infomation Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
+                $('#txtBranchCode').focus();
+            }
+            function OnError_LoadPolicyInfoObject(response) {
+                $('#HidShowHide').val("show");
+                HideShow();
+            }
+            function OnError_LoadPeriodsCover(response) {
+                //debugger;
+                //var errorText = response.responseText;
+                //alert('Error!!!' + '\n\n' + errorText);
+                alert('Error!: Load Periods Cover Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
+            }
+            function OnError_LoadCurrencyObject(response) {
+                //debugger;
+                //var errorText = response.responseText;
+                //alert('Error!!!' + '\n\n' + errorText);
+                alert('Error!: Currency Code Not Found. Parameters Empty or Invalid. Please Re-Confirm' + '<br/>');
+                $('#txtCurrencyCode').focus();
+            }
+
+
+            // loading screen functionality functions - this part is additional - start
+            function OnAjaxStart() {
+                //debugger;
+                //alert('Starting...');
+                $("#divLoading").css("display", "block");
+            }
+            function OnFailure(response) {
+                //debugger;
+                alert('Failure!!!' + '<br/>' + response.reponseText);
+            }
+            function OnError(response) {
+                //debugger;
+                var errorText = response.responseText;
+                alert('Error!!!' + '\n\n' + errorText);
+            }
+            function OnAjaxError() {
+                //debugger;
+                alert('Error!: Invalid Ajax Call');
+            }
+            function OnAjaxSuccess() {
+                //debugger;
+                //alert('Sucess!!!');
+                $("#divLoading").css("display", "none");
+            }
+            function OnAjaxStop() {
+                //debugger;
+                //alert('Stop!!!');
+                $("#divLoading").css("display", "none");
+            }
+            function OnAjaxComplete() {
+                //debugger;
+                //alert('Completed!!!');
+                $("#divLoading").css("display", "none");
+            }
+            // loading screen functionality functions - this part is additional - end
+
+
+            // ajax call to load currency type
+            function LoadCurrencyObject() {
+                $.ajax({
+                    type: "POST",
+                    url: "PRG_FIN_RECPT_ISSUE.aspx/GetCurrencyInformation",
+                    data: JSON.stringify({ _currencycode: document.getElementById('txtCurrencyCode').value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccess_LoadCurrencyObject,
+                    failure: OnFailure,
+                    error: OnError_LoadCurrencyObject
+                });
+                // this avoids page refresh on button click
+                return false;
+            }
+            function OnSuccess_LoadCurrencyObject(response) {
+                //debugger;
+
+                var xmlDoc = $.parseXML(response.d);
+                var xml = $(xmlDoc);
+                var currencies = xml.find("Table");
+                retrieve_LoadCurrencyObject(currencies);
+
+            }
+            // retrieve the values for currency
+            function retrieve_LoadCurrencyObject(currencies) {
+                //debugger;
+                $.each(currencies, function() {
+                    var currency = $(this);
+                    $("#cmbCurrencyType").val($(this).find("TBIL_COD_ITEM").text())
+                });
+            }
+
+
+            function GetReceiptMode() {
+                receiptmode = $('#txtMode').val()
+                if (receiptmode == "C") {
+                    $("#cmbMode").val('C');
+                }
+                else if (receiptmode == "Q") {
+                    $("#cmbMode").val('Q');
+                }
+                else if (receiptmode == "D") {
+                    $("#cmbMode").val('D');
+                }
+                else if (receiptmode == "T") {
+                    $("#cmbMode").val('T');
+                }
+                else if (receiptmode == "C") {
+                    $("#cmbMode").val('C');
+                }
+                else {
+                    alert("Receipt mode not found");
+                    $("#cmbMode").val(0);
+                }
+            }
+
+            function GetProductClass() {
+                productclass = $('#txtProductClass').val();
+                $('#txtProduct').val("");
+                $("#cboProductClass").val(productclass);
+                $.ajax({
+                    type: "POST",
+                    url: "PRG_FIN_RECPT_ISSUE.aspx/GetProductByCatCodeClient",
+                    data: JSON.stringify({ _catCode: document.getElementById('txtProductClass').value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccess_GetProductByCatCodeClient,
+                    failure: OnFailure,
+                    error: OnError_GetProductByCatCodeClient
+                });
+                // this avoids page refresh on button click
+                return false;
+            }
+
+            // on sucess get the xml
+            function OnSuccess_GetProductByCatCodeClient(response) {
+                //debugger;
+                var xmlDoc = $.parseXML(response.d);
+                var xml = $(xmlDoc);
+                var productdets = xml.find("Table");
+                retrieve_ProductDetails(productdets);
+
+            }
+            // retrieve the values and
+            function retrieve_ProductDetails(productdets) {
+                //debugger;
+
+                $('#cboProduct').empty();
+                $('#cboProduct')
+            .append('<option value="0">' + "Select" + '</option>')
+                $.each(productdets, function() {
+                    var productdet = $(this);
+                    //document.getElementById("drpWaiverCodes").value = $(this).find("TBIL_COV_CD").text();
+                    $('#cboProduct')
+            .append('<option value=' + $(this).find("TBIL_PRDCT_DTL_CODE").text() + '>' +
+              $(this).find("TBIL_PRDCT_DTL_CODE").text() + '-' + $(this).find("TBIL_PRDCT_DTL_DESC").text() + '</option>')
+                });
+
+
+            }
+            function OnError_GetProductByCatCodeClient(response) {
+                alert('Error!: Product Category not found. Please re-try' + '<br/>');
+                $('#txtProductClass').focus();
+                $('#cboProductClass').val(0)
+            }
+
+
+            function GetProduct() {
+                product = $('#txtProduct').val()
+                $("#cboProduct").val(product);
+
+            }
+            function FormatDateAuto(effDate) {
+                var effDateDay = effDate.substring(0, 2);
+                var effDateMonth = effDate.substring(2, 4);
+                var effDateYear = effDate.substring(4);
+                return effDateDay + "/" + effDateMonth + "/" + effDateYear;
+            }
+        });         //Document ready ends here
+
+       
     </script>
 
     <style type="text/css">
@@ -993,7 +1116,6 @@
             height: 29px;
         }
     </style>
-
 </head>
 <body onload="<%=publicMsgs%>" onclick="return cancelEvent('onbeforeunload')">
     <form id="PRG_FIN_RECPT_ISSUE" runat="server" submitdisabledcontrols="true">
@@ -1006,6 +1128,8 @@
                         <asp:Label runat="server" ID="Status" Font-Bold="true" ForeColor="Red" Visible="true"
                             Text="Status:"> </asp:Label>
                         <asp:Label runat="server" ID="lblError" Font-Bold="true" ForeColor="Red" Visible="false"> </asp:Label>
+                        <asp:ScriptManager ID="ScriptManager1" runat="server">
+                        </asp:ScriptManager>
                     </td>
                 </tr>
             </table>
@@ -1024,7 +1148,7 @@
                             <div class="mid">
                                 <table class="tbl_menu_new">
                                     <tr>
-                                        <td colspan="4" class="myMenu_Title" align="center">
+                                        <td colspan="6" class="myMenu_Title" align="center">
                                             Individual Premium Reciepts Entry
                                         </td>
                                         <td class="style5">
@@ -1042,10 +1166,10 @@
                                         <td>
                                             <asp:TextBox ID="txtReceiptNo" runat="server" Width="150px" Enabled="False" AutoPostBack="True"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Entry Date
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtEntryDate" runat="server" Width="150px" Enabled="false"></asp:TextBox>
                                         </td>
                                     </tr>
@@ -1056,10 +1180,10 @@
                                         <td>
                                             <asp:TextBox ID="txtCompanyCode" runat="server" Width="150px" Enabled="False"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Serial Number
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtSerialNo" runat="server" Width="150px" Enabled="false"></asp:TextBox>
                                         </td>
                                     </tr>
@@ -1068,12 +1192,12 @@
                                             Batch Date
                                         </td>
                                         <td class="style3">
-                                            <asp:TextBox ID="txtBatchNo" runat="server" Width="150px">0</asp:TextBox>(yyyymm)
+                                            <asp:TextBox ID="txtBatchNo" runat="server" Width="150px"></asp:TextBox>(yyyymm)
                                         </td>
-                                        <td class="style10">
+                                        <td class="style10" colspan="2">
                                             Transaction Type
                                         </td>
-                                        <td class="style11">
+                                        <td class="style11" colspan="2">
                                             <asp:DropDownList ID="cmbTransType" runat="server" Width="150px">
                                                 <asp:ListItem Value="R" Text="Receipt" Selected="True"></asp:ListItem>
                                             </asp:DropDownList>
@@ -1086,10 +1210,10 @@
                                         <td class="style12">
                                             <asp:TextBox ID="txtTempReceiptNo" runat="server" Width="150px"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Effective Date
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtEffectiveDate" runat="server" Width="150px"></asp:TextBox>
 
                                             <script language="JavaScript" type="text/javascript">
@@ -1104,7 +1228,7 @@
                                         </td>
                                         <td class="style4">
                                             <asp:TextBox ID="txtMode" runat="server" Width="26px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbMode" runat="server" Width="120px" AutoPostBack="True">
+                                            <asp:DropDownList ID="cmbMode" runat="server" Width="120px">
                                                 <asp:ListItem Value="0" Text="Receipt Mode"></asp:ListItem>
                                                 <asp:ListItem Value="C" Text="C-Cash"></asp:ListItem>
                                                 <asp:ListItem Value="Q" Text="Q-Cheque"></asp:ListItem>
@@ -1112,13 +1236,12 @@
                                                 <asp:ListItem Value="T" Text="T-Teller"></asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
-                                        <td class="style14">
+                                        <td class="style14" colspan="2">
                                             Receipt Type
                                         </td>
-                                        <td class="style15">
+                                        <td class="style15" colspan="2">
                                             <asp:TextBox ID="txtReceiptCode" runat="server" Width="18px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbReceiptType" runat="server" Width="126px" OnSelectedIndexChanged="cmbReceiptType_SelectedIndexChanged"
-                                                AutoPostBack="True">
+                                            <asp:DropDownList ID="cmbReceiptType" runat="server" Width="126px" OnSelectedIndexChanged="cmbReceiptType_SelectedIndexChanged">
                                                 <asp:ListItem Value="0" Text="Receipt Type"></asp:ListItem>
                                                 <asp:ListItem Value="D" Text="D-Premium Deposit"></asp:ListItem>
                                                 <asp:ListItem Value="P" Text="P-Regular Premium"></asp:ListItem>
@@ -1146,10 +1269,10 @@
                                             <asp:TextBox ID="txtReceiptRefNo" runat="server" Width="250px"></asp:TextBox><img
                                                 src="img/glass1.png" id="imgReceiptRefNo" alt="search" class="searchImage" />
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Insured Code
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtInsuredCode" runat="server" Width="150px"></asp:TextBox>
                                         </td>
                                     </tr>
@@ -1160,12 +1283,11 @@
                                         <td>
                                             <asp:TextBox ID="txtTellerNo" runat="server" Width="150px"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Assured Address
                                         </td>
-                                        <td class="style17">
-                                            <asp:TextBox ID="txtAssuredAddress" runat="server" Width="290px"
-                                                BorderStyle="None"></asp:TextBox>
+                                        <td class="style17" colspan="2">
+                                            <asp:TextBox ID="txtAssuredAddress" runat="server" Width="290px" BorderStyle="None"></asp:TextBox>
                                             <asp:TextBox ID="txtFileNo" runat="server" Width="150px" BorderStyle="None" CssClass="popupOffset"></asp:TextBox>
                                             <asp:TextBox ID="txtProductCode" runat="server" Width="150px" CssClass="popupOffset"
                                                 BorderStyle="None"></asp:TextBox>
@@ -1177,17 +1299,67 @@
                                         </td>
                                         <td class="style1">
                                             <asp:TextBox ID="txtCurrencyCode" runat="server" Width="36px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbCurrencyType" runat="server" Width="110px" Height="21px"
-                                                AutoPostBack="True">
+                                            <asp:DropDownList ID="cmbCurrencyType" runat="server" Width="110px" Height="21px">
                                                 <asp:ListItem Value="0" Text="Currency Type"></asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:CustomValidator ID="csValidateCurrencyType" runat="server" ErrorMessage="Please Select the Currency Type">*</asp:CustomValidator>
                                         </td>
-                                        <td class="style1">
+                                        <td class="style1" colspan="2">
                                             Agent Code
                                         </td>
-                                        <td class="style1">
+                                        <td class="style1" colspan="2">
                                             <asp:TextBox ID="txtAgentCode" runat="server" Width="150px"></asp:TextBox>
+                                        </td>
+                                    </tr>
+                                    <tr id="notFound" runat="server">
+                                        <td class="style6">
+                                            Insured Name
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="txtTempInsName" runat="server" Width="270px"></asp:TextBox>
+                                        </td>
+                                        <td class="style16">
+                                            &nbsp;
+                                        </td>
+                                        <td class="style16">
+                                            &nbsp;
+                                        </td>
+                                        <td class="style17">
+                                            &nbsp;
+                                        </td>
+                                        <td class="style17">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr id="notFound1" runat="server">
+                                        <td class="style6">
+                                            <asp:Label ID="lblProductClass" runat="server" Text="Product Category:"></asp:Label>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="txtProductClass" runat="server" Width="36px"></asp:TextBox>
+                                            <asp:DropDownList ID="cboProductClass" runat="server" CssClass="selProduct" AppendDataBoundItems="True"
+                                                Width="150px">
+                                                <asp:ListItem Value="0">Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </td>
+                                        <td class="style16" colspan="2">
+                                            <asp:Label ID="lblProduct_Num" runat="server" Text="Product Code:"></asp:Label>
+                                        </td>
+                                        <td class="style17" colspan="2">
+                                            <%--  <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                                <ContentTemplate>--%>
+                                            <asp:TextBox ID="txtProduct" runat="server" Width="36px"></asp:TextBox>
+                                            <asp:DropDownList ID="cboProduct" runat="server" CssClass="selProduct" AppendDataBoundItems="True"
+                                                Width="150px">
+                                                <asp:ListItem Value="0">Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <%--      <select size="0" id="cboProduct" runat="server">
+                                                    </select>--%>
+                                            <%--     </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:AsyncPostBackTrigger ControlID="txtProductClass" />
+                                                </Triggers>
+                                            </asp:UpdatePanel>--%>
                                         </td>
                                     </tr>
                                     <tr id="ChequeRow">
@@ -1197,10 +1369,10 @@
                                         <td>
                                             <asp:TextBox ID="txtChequeNo" runat="server" Width="150px"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Cheque Date
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtChequeDate" runat="server" Width="150px"></asp:TextBox>
 
                                             <script language="JavaScript" type="text/javascript">
@@ -1226,12 +1398,11 @@
                                                 ID="rvDecimal" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtLC">*</asp:RegularExpressionValidator>--%>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Receipt Amount (FC)
                                         </td>
-                                        <td class="style17">
-                                            <asp:TextBox ID="txtReceiptAmtFC" runat="server" Width="150px" Text="0.00" 
-                                                Enabled="False"></asp:TextBox><%--<asp:RegularExpressionValidator
+                                        <td class="style17" colspan="2">
+                                            <asp:TextBox ID="txtReceiptAmtFC" runat="server" Width="150px" Text="0.00" Enabled="False"></asp:TextBox><%--<asp:RegularExpressionValidator
                                                 ID="RegularExpressionValidator1" runat="server" ErrorMessage="Please Enter a Valid Receipt Amount"
                                                 ValidationExpression="^(-)?\d+(\.\d\d)?$" ControlToValidate="txtReceiptAmtFC">*</asp:RegularExpressionValidator>--%>
                                         </td>
@@ -1243,12 +1414,12 @@
                                         <td>
                                             <asp:TextBox ID="txtPayeeName" runat="server" Width="270px"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Branch
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtBranchCode" runat="server" Width="40px"></asp:TextBox>
-                                            <asp:DropDownList ID="cmbBranchCode" runat="server" Width="150px" AutoPostBack="True">
+                                            <asp:DropDownList ID="cmbBranchCode" runat="server" Width="150px">
                                                 <asp:ListItem Value="0" Text="Branch Code"></asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
@@ -1260,10 +1431,10 @@
                                         <td>
                                             <asp:TextBox ID="txtTransDesc1" runat="server" Width="270px"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             <asp:Label ID="lblBankGLCode" runat="server" Text="Bank GL Code" CssClass="popupOffset"> </asp:Label>
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtBankGLCode" runat="server" Width="270px" CssClass="popupOffset"></asp:TextBox>
                                         </td>
                                     </tr>
@@ -1274,16 +1445,16 @@
                                         <td>
                                             <asp:TextBox ID="txtTransDesc2" runat="server" Width="270px"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Comm. Applicable?
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:DropDownList ID="cmbCommissions" runat="server" Width="100px">
                                                 <asp:ListItem Value="0" Text="Commissions Applicable?"></asp:ListItem>
                                                 <asp:ListItem Value="Y" Text="YES" Selected="True"></asp:ListItem>
                                                 <asp:ListItem Value="N" Text="NO"></asp:ListItem>
                                             </asp:DropDownList>
-                                          <%--  <asp:CustomValidator ID="csValidateCommissions" runat="server" OnServerValidate="csValidateCommissions_ServerValidate"
+                                            <%--  <asp:CustomValidator ID="csValidateCommissions" runat="server" OnServerValidate="csValidateCommissions_ServerValidate"
                                                 ControlToValidate="cmbCommissions" ErrorMessage="Please Select Commission Applicable">*</asp:CustomValidator>--%>
                                         </td>
                                     </tr>
@@ -1294,10 +1465,10 @@
                                         <td>
                                             <asp:TextBox ID="txtPolRegularContrib" runat="server" Width="150px" Text="0.00"></asp:TextBox>
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             Mode of Payment
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtMOP" runat="server" Width="20px"> </asp:TextBox><asp:TextBox
                                                 ID="txtMOPDesc" runat="server" Width="250px" BorderStyle="None"></asp:TextBox>
                                         </td>
@@ -1311,10 +1482,10 @@
                                             <img src="img/glass1.png" id="MainAccountDebitSearch" alt="search" class="searchImage" /><img
                                                 src="img/plusimage.png" id="MainAcctDebitAdd" alt="add record" class="searchImage" />
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             <asp:Label ID="lblMainAcctCR" runat="server" Text="Main A/C (Credit)"></asp:Label>
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtMainAcctCredit" runat="server" Width="150px"></asp:TextBox><img
                                                 src="img/glass1.png" id="MainAccountCreditSearch" alt="search" class="searchImage" /><img
                                                     src="img/plusimage.png" id="MainAcctCreditAdd" alt="add record" class="searchImage" />
@@ -1329,10 +1500,10 @@
                                             <img src="img/glass1.png" id="SubAccountDebitSearch" alt="search" class="searchImage" /><img
                                                 src="img/plusimage.png" id="SubAcctDebitAdd" alt="add record" class="searchImage" />
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
                                             <asp:Label ID="lblSubAcctCR" runat="server" Text="Sub A/C (Credit)"></asp:Label>
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:TextBox ID="txtSubAcctCredit" runat="server" Width="150px"></asp:TextBox><img
                                                 src="img/glass1.png" id="SubAccountCreditSearch" alt="search" class="searchImage" /><img
                                                     src="img/plusimage.png" id="SubAcctCreditAdd" alt="add record" class="searchImage" />
@@ -1341,13 +1512,15 @@
                                     <tr>
                                         <td class="style6">
                                             <asp:HiddenField ID="txtPolRegularContribH" runat="server" />
+                                            <asp:HiddenField ID="HidShowHide" runat="server" />
                                         </td>
                                         <td>
                                             <asp:HiddenField ID="txtMainAcctDebitDescH" runat="server" />
                                         </td>
-                                        <td class="style16">
+                                        <td class="style16" colspan="2">
+                                            <asp:TextBox ID="txtTempPolNo" runat="server" Width="131px" Style="display: none;"></asp:TextBox>
                                         </td>
-                                        <td class="style17">
+                                        <td class="style17" colspan="2">
                                             <asp:Button ID="butSave" runat="server" Text="Save" OnClick="butSave_Click" Visible="false" />
                                             <asp:Button ID="butSaveN" runat="server" Text="Save" OnClientClick="JavaSave_Rtn()" />
                                             <asp:Button ID="butDelete" runat="server" Text="Delete" />
@@ -1371,16 +1544,14 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txtMainAcctDebitDesc" runat="server" Width="300px" 
-                                               Enabled="true" BorderStyle="None"></asp:TextBox>
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="txtSubAcctDebitDesc" runat="server" Width="300px" 
+                                            <asp:TextBox ID="txtMainAcctDebitDesc" runat="server" Width="300px" Enabled="true"
                                                 BorderStyle="None"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtAssuredName" runat="server" Width="270px" 
-                                                BorderStyle="None"></asp:TextBox>
+                                            <asp:TextBox ID="txtSubAcctDebitDesc" runat="server" Width="300px" BorderStyle="None"></asp:TextBox>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="txtAssuredName" runat="server" Width="270px" BorderStyle="None"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1396,15 +1567,23 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txtMainAcctCreditDesc" runat="server" Width="300px" 
-                                                BorderStyle="None"></asp:TextBox>
+                                            <asp:TextBox ID="txtMainAcctCreditDesc" runat="server" Width="300px" BorderStyle="None"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtSubAcctCreditDesc" runat="server" Width="300px" 
-                                                BorderStyle="None"></asp:TextBox>
+                                            <asp:TextBox ID="txtSubAcctCreditDesc" runat="server" Width="300px" BorderStyle="None"></asp:TextBox>
                                         </td>
                                         <td>
                                             <asp:TextBox ID="txtAgentName" runat="server" Width="270px" Enabled="false" BorderStyle="None"></asp:TextBox>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
                                         </td>
                                     </tr>
                                 </table>

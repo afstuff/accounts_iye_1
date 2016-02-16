@@ -24,6 +24,13 @@ namespace CustodianLife.Model
         public virtual decimal ProductInstallPay3 { get; set; }
         public virtual decimal ProductInstallPeriod3 { get; set; }
         //public virtual ProductCoverDetails ProductCoverDetail { get; set; }
+        public virtual string PrdtCode_Desc
+        {
+            get
+            {
+                return ProductCode + "-" + ProductDesc;
+            }
+        }
 
     }
 }

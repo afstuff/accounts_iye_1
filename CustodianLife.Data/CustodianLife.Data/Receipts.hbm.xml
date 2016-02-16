@@ -41,6 +41,12 @@
     <property name="OperId" column="TBFN_ACCT_OPERID" length="10" />
     <property name="FileNo" column="TBFN_ACCT_POLY_FILE_NO" length="40" />
     <property name="ProcDate" column="TBFN_ACCT_PROC_DATE" length="6" />
+    <property name="TempPolicyNo" column="TBFN_ACCT_TEMP_POLICY_NO" length="40" />
+    <property name="TempInsuredName" column="TBFN_ACCT_TEMP_INSURED_NAME" length="50" />
+    <property name="TempProdCode" column="TBFN_ACCT_TEMP_PRODUCT_CODE" length="15" />
+    <property name="TempProdCat" column="TBFN_ACCT_TEMP_PRODUCT_CAT" length="1" />
+
+
 
   </class>
 </hibernate-mapping>

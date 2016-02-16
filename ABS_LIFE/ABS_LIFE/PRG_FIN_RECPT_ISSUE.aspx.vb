@@ -15,6 +15,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Dim rcRepo As ReceiptsRepository
     Dim indLifeEnq As IndLifeCodesRepository
     Dim prodEnq As ProductDetailsRepository
+    Dim prodCatRepo As ProductCatRepository
     Dim polinfo As PolicyInfo
     Dim updateFlag As Boolean
     Dim strKey As String
@@ -24,6 +25,8 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
     Dim Rceipt As CustodianLife.Model.Receipts
     Protected publicMsgs As String = String.Empty
     Dim Err As String
+    Dim strTmp_Value As String = ""
+    Dim myarrData() As String
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         txtAssuredAddress.Attributes.Add("disabled", "disabled")
@@ -40,10 +43,12 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtSubAcctCreditDesc.Attributes.Add("disabled", "disabled")
         txtAssuredName.Attributes.Add("disabled", "disabled")
         txtAgentName.Attributes.Add("disabled", "disabled")
+
         If Not Page.IsPostBack Then
             rcRepo = New ReceiptsRepository
             indLifeEnq = New IndLifeCodesRepository
             prodEnq = New ProductDetailsRepository
+            prodCatRepo = New ProductCatRepository
             Session("rcRepo") = rcRepo
             updateFlag = False
             Session("updateFlag") = updateFlag
@@ -61,6 +66,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
             SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeItem_CodeLongDesc", "CodeItem")
             SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeItem_CodeLongDesc", "CodeItem")
+            SetComboBinding(cboProductClass, prodCatRepo.ProductCategories(), "PrdtCode_Desc", "ProductCatCode")
             txtSubAcctDebit.Text = "000000"
             txtSubAcctCredit.Text = "000000"
             cmbBranchCode.SelectedValue = "1501"
@@ -180,6 +186,10 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.Flag = "A"
                     Rceipt.OperId = "001"
                     Rceipt.ProcDate = txtBatchNo.Text.Trim
+                    Rceipt.TempPolicyNo = txtTempPolNo.Text.Trim()
+                    Rceipt.TempInsuredName = txtTempInsName.Text.Trim()
+                    Rceipt.TempProdCode = cboProduct.SelectedValue
+                    Rceipt.TempProdCat = cboProductClass.SelectedValue
 
                     'msg = "Values to be saved  agent code" _
                     '       & Rceipt.AgentCode _
@@ -285,6 +295,10 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     Rceipt.Flag = "A"
                     Rceipt.OperId = "001"
                     Rceipt.ProcDate = txtBatchNo.Text.Trim
+                    Rceipt.TempPolicyNo = txtTempPolNo.Text.Trim()
+                    Rceipt.TempInsuredName = txtTempInsName.Text.Trim()
+                    Rceipt.TempProdCode = cboProduct.SelectedValue
+                    Rceipt.TempProdCat = cboProductClass.SelectedValue
 
                     'msg = "Values to be saved  agent code" _
                     '                           & Rceipt.AgentCode _
@@ -331,7 +345,11 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     lblError.Visible = True
                     publicMsgs = "javascript:alert('" + msg + "')"
                 End If
-
+                If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+                    If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
+                        rcRepo.UpdateUnCompletedRec(txtReceiptRefNo.Text)
+                    End If
+                End If
                 initializeFields()
                 txtReceiptNo.Enabled = False
             End If
@@ -504,6 +522,14 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         cmbBranchCode.SelectedValue = "1501"
         txtBranchCode.Text = cmbBranchCode.SelectedValue
         txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
+
+        txtTempInsName.Text = String.Empty
+        txtTempPolNo.Text = String.Empty
+        cboProductClass.SelectedIndex = 0
+        cboProduct.SelectedIndex = 0
+        txtProductClass.Text = cboProductClass.SelectedValue
+        txtProduct.Text = cboProduct.SelectedValue
+        'notFound.Visible = True
         updateFlag = False
         Session("updateFlag") = updateFlag 'ready for a new record
 
@@ -630,6 +656,21 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
     End Function
 
+    <System.Web.Services.WebMethod()> _
+     Public Shared Function GetProductByCatCodeClient(ByVal _catCode As String) As String
+        Dim ProductDetails As String = String.Empty
+        Dim prodEnq As New ProductDetailsRepository()
+        'Dim crit As String = 
+
+        Try
+            ProductDetails = prodEnq.GetProductByCatCodeClient(_catCode)
+            Return ProductDetails
+        Finally
+            If ProductDetails = "<NewDataSet />" Then
+                Throw New Exception()
+            End If
+        End Try
+    End Function
 
     'Protected Sub csValidateCommissions_ServerValidate(ByVal source As Object, _
     '                                                   ByVal args As System.Web.UI.WebControls.ServerValidateEventArgs) _
@@ -653,13 +694,13 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         Response.Redirect("ReceiptsList.aspx")
     End Sub
 
-    Protected Sub csValidateCurrencyType_ServerValidate(ByVal source As Object, _
-                                                        ByVal args As System.Web.UI.WebControls.ServerValidateEventArgs) _
-                                                        Handles csValidateCurrencyType.ServerValidate
-        If (cmbCurrencyType.SelectedValue = "0") Then
-            args.IsValid = False
-        End If
-    End Sub
+    'Protected Sub csValidateCurrencyType_ServerValidate(ByVal source As Object, _
+    '                                                    ByVal args As System.Web.UI.WebControls.ServerValidateEventArgs) _
+    '                                                    Handles csValidateCurrencyType.ServerValidate
+    '    If (cmbCurrencyType.SelectedValue = "0") Then
+    '        args.IsValid = False
+    '    End If
+    'End Sub
 
     Protected Sub butPrintReceipt_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butPrintReceipt.Click
         If Len(Trim(txtRecptNo.Text)) = 0 Then
@@ -756,6 +797,18 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
                 txtFileNo.Text = Rceipt.FileNo
                 txtProductCode.Text = Rceipt.ProductCode
+                txtTempPolNo.Text = Rceipt.TempPolicyNo
+                txtTempInsName.Text = Rceipt.TempInsuredName
+                cboProductClass.SelectedValue = Rceipt.TempProdCat
+                txtProductClass.Text = cboProductClass.SelectedValue
+                prodEnq = New ProductDetailsRepository
+                SetComboBinding(cboProduct, prodEnq.GetProductByCatCode(cboProductClass.SelectedValue), "ProductDesc", "ProductCode")
+                cboProduct.SelectedValue = Rceipt.TempProdCode
+                txtProduct.Text = cboProduct.SelectedValue
+                'If txtTempInsName.Text = "" Then
+                '    notFound.Visible = False
+                'End If
+
                 updateFlag = True
                 Session("updateFlag") = updateFlag
 
@@ -787,34 +840,34 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         txtReceiptNo.Enabled = False
     End Sub
     Protected Sub cmbCurrencyType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbCurrencyType.SelectedIndexChanged
-        lblError.Text = ""
-        txtCurrencyCode.Text = ""
-        If cmbCurrencyType.SelectedIndex <> 0 Then
-            txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
-        End If
+        'lblError.Text = ""
+        'txtCurrencyCode.Text = ""
+        'If cmbCurrencyType.SelectedIndex <> 0 Then
+        '    txtCurrencyCode.Text = cmbCurrencyType.SelectedValue
+        'End If
     End Sub
 
     Protected Sub cmbBranchCode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbBranchCode.SelectedIndexChanged
-        lblError.Text = ""
-        txtBranchCode.Text = ""
-        If cmbBranchCode.SelectedIndex <> 0 Then
-            txtBranchCode.Text = cmbBranchCode.SelectedValue
-        End If
+        'lblError.Text = ""
+        'txtBranchCode.Text = ""
+        'If cmbBranchCode.SelectedIndex <> 0 Then
+        '    txtBranchCode.Text = cmbBranchCode.SelectedValue
+        'End If
     End Sub
 
     Protected Sub cmbMode_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbMode.SelectedIndexChanged
-        lblError.Text = ""
-        txtMode.Text = ""
-        If cmbMode.SelectedIndex <> 0 Then
-            txtMode.Text = cmbMode.SelectedValue
-        End If
+        'lblError.Text = ""
+        'txtMode.Text = ""
+        'If cmbMode.SelectedIndex <> 0 Then
+        '    txtMode.Text = cmbMode.SelectedValue
+        'End If
     End Sub
     Protected Sub cmbReceiptType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cmbReceiptType.SelectedIndexChanged
-        lblError.Text = ""
-        txtReceiptCode.Text = ""
-        If cmbReceiptType.SelectedIndex <> 0 Then
-            txtReceiptCode.Text = cmbReceiptType.SelectedValue
-        End If
+        'lblError.Text = ""
+        'txtReceiptCode.Text = ""
+        'If cmbReceiptType.SelectedIndex <> 0 Then
+        '    txtReceiptCode.Text = cmbReceiptType.SelectedValue
+        'End If
     End Sub
 
     Protected Sub chkReceiptNo_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles chkReceiptNo.CheckedChanged
@@ -832,15 +885,15 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         If ((txtReceiptAmtLC.Text <> "") And IsNumeric(txtReceiptAmtLC.Text)) Then
             txtReceiptAmtLC.Text = Format(txtReceiptAmtLC.Text, "Standard")
             txtReceiptAmtFC.Text = txtReceiptAmtLC.Text
-
+            txtTransDesc2.Text = ""
             If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
                 Dim dt As DataSet = New DataSet()
                 Dim recRep1 As New ReceiptsRepository()
                 If txtPolRegularContrib.Text = "" Or txtPolRegularContrib.Text = "0.00" Then
-                    lblError.Text = "Regular Contrib cannot be 0 or empty, contact technical dept"
-                    lblError.Visible = True
-                    publicMsgs = "javascript:alert('" + lblError.Text + "')"
-                    Exit Sub
+                    'lblError.Text = "Regular Contrib cannot be 0 or empty, contact technical dept"
+                    'lblError.Visible = True
+                    'publicMsgs = "javascript:alert('" + lblError.Text + "')"
+                    'Exit Sub
                 Else
                     dt = recRep1.GetPaymentCoverDataSet(txtReceiptRefNo.Text, txtMOP.Text, txtPolicyEffDate.Text, CDbl(txtPolRegularContrib.Text), CDbl(txtReceiptAmtLC.Text))
                     If dt.Tables(0).Rows().Count <> 0 Then
@@ -929,17 +982,17 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             txtReceiptRefNo.Focus()
             Exit Sub
         End If
-        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
-            If txtInsuredCode.Text = "" Then
-                msg = "Insured code must not be empty, Please contact technical dept to update record"
-                ErrorInd = "Y"
-                lblError.Text = msg
-                lblError.Visible = True
-                publicMsgs = "javascript:alert('" + msg + "')"
-                txtInsuredCode.Focus()
-                Exit Sub
-            End If
-        End If
+        'If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+        '    If txtInsuredCode.Text = "" Then
+        '        msg = "Insured code must not be empty, Please contact technical dept to update record"
+        '        ErrorInd = "Y"
+        '        lblError.Text = msg
+        '        lblError.Visible = True
+        '        publicMsgs = "javascript:alert('" + msg + "')"
+        '        txtInsuredCode.Focus()
+        '        Exit Sub
+        '    End If
+        'End If
         If cmbMode.SelectedValue = "T" Then
             If txtTellerNo.Text = "" Then
                 msg = "Teller no must not be empty"
@@ -958,17 +1011,17 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         '    cmbCurrencyType.Focus()
         '    Exit Sub
         'End If
-        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
-            If txtAgentCode.Text = "" Then
-                msg = "Agent Code must not be empty, Please contact technical dept to update record"
-                ErrorInd = "Y"
-                lblError.Text = msg
-                lblError.Visible = True
-                publicMsgs = "javascript:alert('" + msg + "')"
-                txtAgentCode.Focus()
-                Exit Sub
-            End If
-        End If
+        'If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+        '    If txtAgentCode.Text = "" Then
+        '        msg = "Agent Code must not be empty, Please contact technical dept to update record"
+        '        ErrorInd = "Y"
+        '        lblError.Text = msg
+        '        lblError.Visible = True
+        '        publicMsgs = "javascript:alert('" + msg + "')"
+        '        txtAgentCode.Focus()
+        '        Exit Sub
+        '    End If
+        'End If
 
         If cmbMode.SelectedValue = "Q" Then
             If txtChequeNo.Text = "" Then
@@ -1010,17 +1063,17 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 Exit Sub
             End If
         End If
-        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
-            If txtPolRegularContrib.Text = "0.00" Then
-                msg = "Policy Regular Contrib must not be equal to 0.00, Please contact technical dept to update record"
-                ErrorInd = "Y"
-                lblError.Text = msg
-                lblError.Visible = True
-                publicMsgs = "javascript:alert('" + msg + "')"
-                txtPolRegularContrib.Focus()
-                Exit Sub
-            End If
-        End If
+        'If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+        '    If txtPolRegularContrib.Text = "0.00" Then
+        '        msg = "Policy Regular Contrib must not be equal to 0.00, Please contact technical dept to update record"
+        '        ErrorInd = "Y"
+        '        lblError.Text = msg
+        '        lblError.Visible = True
+        '        publicMsgs = "javascript:alert('" + msg + "')"
+        '        txtPolRegularContrib.Focus()
+        '        Exit Sub
+        '    End If
+        'End If
         If cmbCommissions.SelectedIndex = 0 Then
             msg = "Please select commission applicable"
             ErrorInd = "Y"
@@ -1030,17 +1083,17 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
             cmbCommissions.Focus()
             Exit Sub
         End If
-        If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
-            If txtMOP.Text = "" Then
-                msg = "Mode of payment must not be empty, Please contact technical dept to update record"
-                ErrorInd = "Y"
-                lblError.Text = msg
-                lblError.Visible = True
-                publicMsgs = "javascript:alert('" + msg + "')"
-                txtMOP.Focus()
-                Exit Sub
-            End If
-        End If
+        'If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+        '    If txtMOP.Text = "" Then
+        '        msg = "Mode of payment must not be empty, Please contact technical dept to update record"
+        '        ErrorInd = "Y"
+        '        lblError.Text = msg
+        '        lblError.Visible = True
+        '        publicMsgs = "javascript:alert('" + msg + "')"
+        '        txtMOP.Focus()
+        '        Exit Sub
+        '    End If
+        'End If
         If Not IsNumeric(txtReceiptAmtLC.Text) Then
             msg = "Receipt Amount LC must be numeric"
             ErrorInd = "Y"
@@ -1067,28 +1120,41 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         Dim recRep As New ReceiptsRepository()
         dt = recRep.GetPolicyInfoDataSet(txtReceiptRefNo.Text, cmbReceiptType.SelectedValue)
         If dt.Tables(0).Rows().Count <> 0 Then
-            txtInsuredCode.Text = dt.Tables(0).Rows(0).Item("TBIL_POLY_ASSRD_CD")
-            txtAgentCode.Text = dt.Tables(0).Rows(0).Item("TBIL_POLY_AGCY_CODE")
-            txtAssuredName.Text = dt.Tables(0).Rows(0).Item("Insured_Name")
-            txtAssuredAddress.Text = dt.Tables(0).Rows(0).Item("Insured_Address")
-            txtPayeeName.Text = dt.Tables(0).Rows(0).Item("Insured_Name")
-            txtPolRegularContrib.Text = Format(dt.Tables(0).Rows(0).Item("TBIL_POL_PRM_DTL_MOP_PRM_LC"), "Standard")
-            txtPolRegularContribH.Value = txtPolRegularContrib.Text
-            txtAgentName.Text = dt.Tables(0).Rows(0).Item("Agent_Name")
-            txtMOP.Text = dt.Tables(0).Rows(0).Item("Payment_Mode")
-            txtMOPDesc.Text = dt.Tables(0).Rows(0).Item("Payment_Mode_Desc")
-            txtFileNo.Text = dt.Tables(0).Rows(0).Item("File_No")
-            txtProductCode.Text = dt.Tables(0).Rows(0).Item("Product_Code")
-            txtPolicyEffDate.Text = dt.Tables(0).Rows(0).Item("TBIL_POLICY_EFF_DT")
-            If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
-                If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
-                    Dim message = "Please contact technical department, record not completed for " & lblRefNo.Text & "no " & txtReceiptRefNo.Text
-                    ErrorInd = "Y"
-                    publicMsgs = "javascript:alert('" + message + "')"
-                    txtReceiptRefNo.Focus()
-                    Exit Sub
-                End If
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("TBIL_POLY_ASSRD_CD")) Then _
+                                            txtInsuredCode.Text = dt.Tables(0).Rows(0).Item("TBIL_POLY_ASSRD_CD")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("TBIL_POLY_AGCY_CODE")) Then _
+                                            txtAgentCode.Text = dt.Tables(0).Rows(0).Item("TBIL_POLY_AGCY_CODE")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("Insured_Name")) Then _
+                                            txtAssuredName.Text = dt.Tables(0).Rows(0).Item("Insured_Name")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("Insured_Address")) Then _
+                                            txtAssuredAddress.Text = dt.Tables(0).Rows(0).Item("Insured_Address")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("Insured_Name")) Then _
+                                            txtPayeeName.Text = dt.Tables(0).Rows(0).Item("Insured_Name")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("TBIL_POL_PRM_DTL_MOP_PRM_LC")) Then
+                txtPolRegularContrib.Text = Format(dt.Tables(0).Rows(0).Item("TBIL_POL_PRM_DTL_MOP_PRM_LC"), "Standard")
+                txtPolRegularContribH.Value = txtPolRegularContrib.Text
             End If
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("Agent_Name")) Then _
+                                            txtAgentName.Text = dt.Tables(0).Rows(0).Item("Agent_Name")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("Payment_Mode")) Then _
+                                            txtMOP.Text = dt.Tables(0).Rows(0).Item("Payment_Mode")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("Payment_Mode_Desc")) Then _
+                                            txtMOPDesc.Text = dt.Tables(0).Rows(0).Item("Payment_Mode_Desc")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("File_No")) Then _
+                                            txtFileNo.Text = dt.Tables(0).Rows(0).Item("File_No")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("Product_Code")) Then _
+                                            txtProductCode.Text = dt.Tables(0).Rows(0).Item("Product_Code")
+            If Not IsDBNull(dt.Tables(0).Rows(0).Item("TBIL_POLICY_EFF_DT")) Then _
+                                            txtPolicyEffDate.Text = dt.Tables(0).Rows(0).Item("TBIL_POLICY_EFF_DT")
+            'If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+            '    If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
+            '        Dim message = "Please contact technical department, record not completed for " & lblRefNo.Text & "no " & txtReceiptRefNo.Text
+            '        ErrorInd = "Y"
+            '        publicMsgs = "javascript:alert('" + message + "')"
+            '        txtReceiptRefNo.Focus()
+            '        Exit Sub
+            '    End If
+            'End If
         End If
 
     End Sub
@@ -1385,4 +1451,53 @@ MyTestDate_Err1:
         Return pvbln
 
     End Function
+
+    Protected Sub cboProductClass_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cboProductClass.SelectedIndexChanged
+        cboProduct.Items.Clear()
+        Try
+            If Me.cboProductClass.SelectedIndex = -1 Or Me.cboProductClass.SelectedIndex = 0 Or _
+               Me.cboProductClass.SelectedItem.Value = "" Or Me.cboProductClass.SelectedItem.Value = "*" Then
+                Exit Sub
+            Else
+                strTmp_Value = Me.cboProductClass.SelectedItem.Value
+                txtProductClass.Text = Me.cboProductClass.SelectedItem.Value
+                prodEnq = New ProductDetailsRepository
+                'If myarrData.Count <> 2 Then
+                '    Me.lblError.Text = "Missing or Invalid " & Me.lblProductClass.Text
+                '    publicMsgs = "Javascript:alert('" & Me.lblError.Text & "')"
+                '    Exit Sub
+                'End If
+                Dim li As ListItem
+                li = New ListItem
+                li.Text = "Select"
+                li.Value = "0"
+                cboProduct.Items.Add(li)
+                SetComboBinding(cboProduct, prodEnq.GetProductByCatCode(strTmp_Value), "ProductDesc", "ProductCode")
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Protected Sub cboProduct_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cboProduct.SelectedIndexChanged
+        Try
+            If Me.cboProduct.SelectedIndex = -1 Or Me.cboProduct.SelectedIndex = 0 Or _
+               Me.cboProduct.SelectedItem.Value = "" Or Me.cboProduct.SelectedItem.Value = "*" Then
+                Exit Sub
+            Else
+                strTmp_Value = Me.cboProduct.SelectedItem.Value
+                txtProduct.Text = Me.cboProduct.SelectedItem.Value
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    'Protected Sub txtProductClass_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtProductClass.TextChanged
+    '    If txtProductClass.Text <> "" Then
+    '        cboProductClass.SelectedValue = txtProductClass.Text
+    '        prodEnq = New ProductDetailsRepository
+    '        SetComboBinding(cboProduct, prodEnq.GetProductByCatCode(txtProduct.Text), "ProductDesc", "ProductCode")
+    '    End If
+    'End Sub
 End Class

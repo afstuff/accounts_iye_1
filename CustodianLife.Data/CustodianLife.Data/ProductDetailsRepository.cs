@@ -5,6 +5,8 @@ using System.Text;
 using CustodianLife.Model;
 using CustodianLife.Repositories;
 using NHibernate;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace CustodianLife.Data
 {
@@ -71,6 +73,46 @@ namespace CustodianLife.Data
             {
 
                 return (ProductDetails)session.CreateQuery(hqlOptions).UniqueResult();
+            }
+        }
+
+        public IList<ProductDetails> GetProductByCatCode(string CatCode)
+        {
+            using (var session = GetSession())
+            {
+                var pDet = session.CreateCriteria<ProductDetails>()
+
+                                     .List<ProductDetails>().Where(c=>c.ProductCategory==CatCode).ToList<ProductDetails>();
+
+                return pDet;
+
+            }
+        }
+
+
+        public String GetProductByCatCodeClient(string CatCode)
+        {
+            //queries the generic lifecodes table and extract info for the branches only -- L02, 003
+            string query = "SELECT * "
+                          + "FROM TBIL_PRODUCT_DETL WHERE (TBIL_PRDCT_DTL_CAT='" + CatCode + "')";
+
+
+            return GetDataSet(query).GetXml();
+        }
+
+        private static DataSet GetDataSet(string qry)
+        {
+            using (var session = GetSession())
+            {
+                using (var conn = session.Connection as SqlConnection)
+                {
+                    var adapter = new SqlDataAdapter(qry, conn);
+                    var dataSet = new System.Data.DataSet();
+
+                    adapter.Fill(dataSet);
+
+                    return dataSet;
+                }
             }
         }
     }

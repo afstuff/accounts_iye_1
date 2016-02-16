@@ -12,5 +12,13 @@ namespace CustodianLife.Model
         public virtual string ProductCatCode { get; set; }
         public virtual string ProductCatDesc { get; set; }
         public virtual string ProductCatShortDesc { get; set; }
+
+        public virtual string PrdtCode_Desc
+        {
+            get
+            {
+                return ProductCatCode + "-" + ProductCatDesc;
+            }
+        }
     }
 }

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace CustodianLife.Model
 {
-    public class Receipts
+    public class ReceiptsMatch
     {
         public virtual int? rtId { get; set; }
-        public virtual string CompanyCode{ get; set; }
+        public virtual string CompanyCode { get; set; }
         public virtual Int32 BatchNo { get; set; }
         public virtual Int64 SerialNo { get; set; }
         public virtual String TransType { get; set; }
@@ -45,10 +45,6 @@ namespace CustodianLife.Model
         public virtual String OperId { get; set; }
         public virtual String FileNo { get; set; }
         public virtual String ProcDate { get; set; }
-        public virtual String TempPolicyNo { get; set; }
-        public virtual String TempInsuredName { get; set; }
-        public virtual String TempProdCode { get; set; }
-        public virtual String TempProdCat { get; set; }
 
 
     }
