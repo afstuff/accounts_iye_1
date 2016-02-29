@@ -75,7 +75,7 @@ namespace CustodianLife.Data
         }
         public Receipts GetByReceiptNo(String _receiptno)
         {
-            string hqlOptions = "from Receipts i where i.DocNo = '" + _receiptno +"'";
+            string hqlOptions = "from Receipts i where i.DocNo = '" + _receiptno + "'";
             using (var session = GetSession())
             {
 
@@ -437,6 +437,8 @@ namespace CustodianLife.Data
                 fld = "[TBIL_POLY_POLICY_NO]";
             else if (searchType == "D")
                 fld = "[TBIL_POLY_PROPSAL_NO]";
+            else
+                fld = "[TBIL_POLY_POLICY_NO]";
             string query = "SELECT "
                            + " [TBIL_POLY_PROPSAL_NO]"
                           + ",[TBIL_POLY_POLICY_NO]"
@@ -765,6 +767,7 @@ namespace CustodianLife.Data
         //    return GetDataSet(" ", command).GetXml();
         //}
 
+       //Not implemented in this solution
         public void UpdateUnCompletedRec(string criteriaValue)
         {
             String fld = String.Empty;
@@ -777,9 +780,70 @@ namespace CustodianLife.Data
             {
                 using (var conn = session.Connection as SqlConnection)
                 {
-                    //W denotes records
                     string stryquery = "UPDATE TBIL_POLICY_DET SET TBIL_POLY_FLAG='M'";
                     stryquery += " WHERE " + fld + " = '" + criteriaValue + "'";
+                    com = new SqlCommand(stryquery, conn);
+                    com.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public void GetUnCompletedReceiptRecords(int startBatchNo, int endBatchNo)
+        {
+            DateTime Eff_Date = DateTime.Now;
+            string Insured_Code = "";
+            string Agent_Code = "";
+            decimal Poly_Contrib = 0;
+            string Mop;
+            DataSet ds;
+            DataRow dr, dr2;
+            ds = new DataSet();
+            DataSet dt1 = new DataSet();
+
+            string query = "SELECT * "
+                          + "FROM CiFn_Get_Uncompleted_Receipt_Record("
+                          + startBatchNo + ","
+                          + endBatchNo + ","
+                          + "NULL,NULL,NULL)";
+            ds = GetDataSet(query);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+                {
+                    dr = ds.Tables[0].Rows[i];
+                    string refNo = dr["REF_NO"].ToString();
+                    string recType = dr["RECEIPT_TYPE"].ToString();
+                    dt1 = GetPolicyInfoDataSet(refNo, recType);
+                    if (dt1.Tables[0].Rows.Count > 0)
+                    {
+                        dr2 = dt1.Tables[0].Rows[0];
+                        Insured_Code = dr2["TBIL_POLY_ASSRD_CD"].ToString();
+                        Agent_Code = dr2["TBIL_POLY_AGCY_CODE"].ToString().ToString();
+                        Poly_Contrib = Convert.ToDecimal(dr2["TBIL_POL_PRM_DTL_MOP_PRM_LC"]);
+                        Mop = dr2["Payment_Mode"].ToString();
+                        if (dr2["TBIL_POLICY_EFF_DT"] != DBNull.Value)
+                            Eff_Date = Convert.ToDateTime(dr2["TBIL_POLICY_EFF_DT"]);
+                        else
+                            Eff_Date = Convert.ToDateTime("01/01/2014");
+                        UpdateReceiptFile(refNo, Insured_Code, Mop, Poly_Contrib, Agent_Code);
+                    }
+                }
+            }
+        }
+
+        public void UpdateReceiptFile(string refNo, string insCode, string mop, decimal polyContrib, string agentCode)
+        {
+            SqlCommand com;
+            using (var session = GetSession())
+            {
+                using (var conn = session.Connection as SqlConnection)
+                {
+                    string stryquery = "UPDATE TBFN_RECPT_FILE SET TBFN_ACCT_INS_CODE='" + insCode + "'";
+                    stryquery += ", TBFN_ACCT_POLY_MOP='" + mop + "'";
+                    stryquery += ", TBFN_ACCT_POLY_CONTRIB=" + polyContrib + "";
+                    stryquery += ", TBFN_ACCT_AGENT_CODE='" + agentCode + "'";
+                    stryquery += " WHERE TBFN_ACCT_REF_NO = '" + refNo + "'";
                     com = new SqlCommand(stryquery, conn);
                     com.ExecuteNonQuery();
                     conn.Close();

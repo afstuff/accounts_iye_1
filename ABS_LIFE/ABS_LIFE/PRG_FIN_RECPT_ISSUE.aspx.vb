@@ -66,7 +66,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
 
             SetComboBinding(cmbBranchCode, indLifeEnq.GetById("L02", "003"), "CodeItem_CodeLongDesc", "CodeItem")
             SetComboBinding(cmbCurrencyType, indLifeEnq.GetById("L02", "017"), "CodeItem_CodeLongDesc", "CodeItem")
-            SetComboBinding(cboProductClass, prodCatRepo.ProductCategories(), "PrdtCode_Desc", "ProductCatCode")
+            'SetComboBinding(cboProductClass, prodCatRepo.ProductCategories(), "PrdtCode_Desc", "ProductCatCode")
             txtSubAcctDebit.Text = "000000"
             txtSubAcctCredit.Text = "000000"
             cmbBranchCode.SelectedValue = "1501"
@@ -345,11 +345,11 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                     lblError.Visible = True
                     publicMsgs = "javascript:alert('" + msg + "')"
                 End If
-                If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
-                    If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
-                        rcRepo.UpdateUnCompletedRec(txtReceiptRefNo.Text)
-                    End If
-                End If
+                'If cmbReceiptType.SelectedValue = "P" Or cmbReceiptType.SelectedValue = "D" Then
+                '    If (txtInsuredCode.Text = "" Or txtAgentCode.Text = "" Or txtPolRegularContrib.Text = "0.00" Or txtMOP.Text = "") Then
+                '        rcRepo.UpdateUnCompletedRec(txtReceiptRefNo.Text)
+                '    End If
+                'End If
                 initializeFields()
                 txtReceiptNo.Enabled = False
             End If
@@ -529,6 +529,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
         cboProduct.SelectedIndex = 0
         txtProductClass.Text = cboProductClass.SelectedValue
         txtProduct.Text = cboProduct.SelectedValue
+        txtEntryDate.Text = Format(Now, "dd/MM/yyyy")
         'notFound.Visible = True
         updateFlag = False
         Session("updateFlag") = updateFlag 'ready for a new record
@@ -1378,7 +1379,7 @@ Partial Public Class PRG_FIN_RECPT_ISSUE
                 End If
 
             Case "02"
-                If (Val(strDteYY) \ 4) = 0 Then
+                If (Val(strDteYY) Mod 4) = 0 Then
                     If Val(strDteDD) > 29 Then
                         strDteMsg = strDteMsg & _
                             "  -> Invalid day in month. Month <" & strDteMM & ">" & _
