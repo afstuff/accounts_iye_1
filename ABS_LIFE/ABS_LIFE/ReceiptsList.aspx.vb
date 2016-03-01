@@ -23,12 +23,15 @@ Partial Public Class ReceiptsList
     Protected Sub butNew_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butNew.Click
         Response.Redirect("PRG_FIN_RECPT_ISSUE.aspx")
     End Sub
+    Protected Sub butClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butClose.Click
+        Response.Redirect("EntryMenu1.aspx")
+    End Sub
 
     Protected Sub butGO_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butGO.Click
 
     End Sub
 
-    Protected Sub butClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butClose.Click
-        Response.Redirect("EntryMenu1.aspx")
+    Protected Sub butExceptions_Click(ByVal sender As Object, ByVal e As EventArgs) Handles butExceptions.Click
+        Response.Redirect("RPT_FIN_UNCOMP_RECEIPTS_REC.aspx")
     End Sub
 End Class

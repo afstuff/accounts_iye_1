@@ -63,8 +63,13 @@
     </td><td><asp:TextBox ID="txtSearch" runat="server" Width="128px"></asp:TextBox><span id="dtChoose">                        
     <script language="JavaScript" type="text/javascript">
         new tcal({ 'formname': 'frmReceiptsList', 'controlname': 'txtSearch' });</script> </span><asp:Button ID="butGO" runat="server" Text="Go" Width="35px" Height="35px" /></td><td> 
+      
         <asp:Button
-            runat="server" ID="butNew" Text="New" Height="35px"/><asp:Button runat="server" ID="butClose" Text="Close" Height="35px"/>
+            runat="server" ID="butNew" Text="New" Height="35px"/>
+             <asp:Button
+            runat="server" ID="butExceptions" Text="Exception Prn" Height="35px"/>
+            <asp:Button runat="server" ID="butClose" Text="Close" Height="35px"/>
+        
         </td></tr>
     </table>
     

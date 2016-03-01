@@ -61,6 +61,15 @@ Partial Public Class ReceiptsList
     Protected WithEvents butNew As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''butExceptions control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents butExceptions As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''butClose control.
     '''</summary>
     '''<remarks>
